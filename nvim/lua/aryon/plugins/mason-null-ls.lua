@@ -30,9 +30,5 @@ return {
             sources = sources,
             diagnostics_format = "#{s}:#{c}: #{m}",
         })
-
-        vim.cmd([[
-            hi link NulllsInfoBorder FloatBorder
-        ]])
     end,
 }

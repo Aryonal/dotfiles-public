@@ -5,7 +5,7 @@ return {
     config = function()
         vim.opt.list = true
         vim.opt.listchars:append("space:⋅")
-        vim.opt.listchars:append("eol:↴")
+            vim.opt.listchars:append("eol:↴")
 
         require("ibl").setup({
             -- -- show_end_of_line = true,
@@ -19,25 +19,5 @@ return {
             --     "IndentBlanklineIndent",
             -- },
         })
-
-        -- Overrides color-schemes
-        -- local function f()
-        --     vim.cmd([[
-        --         hi link IndentBlanklineIndent Whitespace
-        --     ]])
-        -- end
-
-        -- f()
-
-        -- local au = require("utils.autocmd")
-
-        -- au.create_autocmd({
-        --     events = { "ColorScheme" },
-        --     group_name = "aryon/plugin/ui/indent-blankline.lua",
-        --     desc = "Override highlight groups",
-        --     callback = function()
-        --         f()
-        --     end,
-        -- })
     end,
 }

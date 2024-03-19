@@ -160,14 +160,9 @@ return {
 
         null_ls.setup({
             border = require("aryon.config").ui.float.border,
-            -- on_attach = nil,
             on_attach = lsp_lspconfig.on_attach,
             sources = sources,
             diagnostics_format = "#{s}:#{c}: #{m}",
         })
-
-        vim.cmd([[
-            hi link NulllsInfoBorder FloatBorder
-        ]])
     end,
 }

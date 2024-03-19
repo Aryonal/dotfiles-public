@@ -1,10 +1,10 @@
 local M = {}
 
--- Setup the float window border of lspconfig using command `:LspInfo`
+-- Setup the float window border of hover window
 --
 -- Example:
 -- ```lua
--- require("appearance").setup_lsp_float_borders("single")
+-- setup_lsp_float_borders("single")
 -- ```
 --
 -- `default_border` is a string of default border style of lspconfig float window. Example: `default_border = "single"`

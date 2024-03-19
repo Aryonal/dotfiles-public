@@ -152,7 +152,8 @@ return {
                         ["q"] = actions.close,
                         ["<C-\\>"] = actions.close,
                         -- ["<C-q>"] = trouble.open_with_trouble,
-                        ["<C-q>"] = trouble_ok and trouble.open_with_trouble or actions.send_to_qflist + actions.open_qflist,
+                        ["<C-q>"] = trouble_ok and trouble.open_with_trouble or
+                        actions.send_to_qflist + actions.open_qflist,
                         ["<CR>"] = actions.select_default + actions.center,
                         ["<C-e>"] = actions.preview_scrolling_down,
                         ["<C-y>"] = actions.preview_scrolling_up,
@@ -165,7 +166,8 @@ return {
                         -- ["<C-p>"] = false, -- default next entry
                         ["<C-\\>"] = actions.close,
                         -- ["<C-q>"] = trouble.open_with_trouble,
-                        ["<C-q>"] = trouble_ok and trouble.open_with_trouble or actions.send_to_qflist + actions.open_qflist,
+                        ["<C-q>"] = trouble_ok and trouble.open_with_trouble or
+                        actions.send_to_qflist + actions.open_qflist,
                         ["<CR>"] = actions.select_default + actions.center,
                         -- ["<C-e>"] = actions.preview_scrolling_down,
                         -- ["<C-y>"] = actions.preview_scrolling_up,
@@ -179,7 +181,7 @@ return {
                     "--line-number",
                     "--column",
                     "--smart-case",
-                    "--hidden", -- add hidden file grep
+                    "--hidden",      -- add hidden file grep
                     "--glob=!.git/", -- REF: https://github.com/BurntSushi/ripgrep/discussions/1578#discussioncomment-1723394
                     "--glob=!submodules/",
                     "--glob=!node_modules/",
@@ -198,7 +200,7 @@ return {
                         "rg",
                         "--files",
                         "--smart-case",
-                        "--hidden", -- add hidden file grep
+                        "--hidden",      -- add hidden file grep
                         "--glob=!.git/", -- REF: https://github.com/BurntSushi/ripgrep/discussions/1578#discussioncomment-1723394
                         "--glob=!submodules/",
                         "--glob=!node_modules/",
@@ -210,12 +212,12 @@ return {
                 },
                 git_status = {
                     git_icons = {
-                        added = icons.git_add, -- "+",
-                        changed = icons.git_unstaged, -- "~",
+                        added = icons.git_add,           -- "+",
+                        changed = icons.git_unstaged,    -- "~",
                         copied = ">",
-                        deleted = icons.git_deleted, -- "-",
-                        renamed = icons.git_renamed, -- "➡",
-                        unmerged = icons.git_unmerged, -- "‡",
+                        deleted = icons.git_deleted,     -- "-",
+                        renamed = icons.git_renamed,     -- "➡",
+                        unmerged = icons.git_unmerged,   -- "‡",
                         untracked = icons.git_untracked, -- "?",
                     },
                 },
@@ -230,7 +232,7 @@ return {
                 },
                 lsp_implementations = {
                     -- theme = "dropdown",
-                    show_line = false, -- show only filename and loc
+                    show_line = false,   -- show only filename and loc
                     jump_type = "never", -- never jump
                 },
                 lsp_definitions = {
@@ -256,7 +258,7 @@ return {
                 live_grep_args = {
                     initial_mode = "insert",
                     auto_quoting = true, -- enable/disable auto-quoting
-                    mappings = { -- extend mappings
+                    mappings = {         -- extend mappings
                         i = {
                             -- ["<C-k>"] = lga_actions.quote_prompt(),
                             ["<C-i>"] = lga_actions.quote_prompt({ postfix = " --iglob " }),
@@ -295,12 +297,5 @@ return {
             },
         }
         set_abbr_batch(abbrs)
-
-        -- vim.cmd([[
-        --     hi link TelescopeBorder FloatBorder
-        --     hi link TelescopePreviewBorder FloatBorder
-        --     hi link TelescopePromptBorder FloatBorder
-        --     hi link TelescopeResultBorder FloatBorder
-        -- ]])
     end,
 }

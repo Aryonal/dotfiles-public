@@ -37,11 +37,5 @@ return {
             -- under_cursor: whether or not to illuminate under the cursor
             under_cursor = true,
         })
-
-        vim.cmd([[
-            hi link IlluminatedWordText CursorLine
-            hi link IlluminatedWordRead CursorLine
-            hi link IlluminatedWordWrite CursorLine
-        ]])
     end,
 }

@@ -4,7 +4,6 @@ return {
     lazy = false,
     -- version = "*",
     config = function()
-        -- vim.cmd("hi clear")
         require("kanagawa").setup({
             overrides = function(colors)
                 local theme = colors.theme
@@ -31,9 +30,6 @@ return {
                     IlluminatedWordText = { link = "CursorLine" },
                     IlluminatedWordRead = { link = "CursorLine" },
                     IlluminatedWordWrite = { link = "CursorLine" },
-                    -- IlluminatedWordText = { fg = nil, bg = colors.theme.ui.bg_search },
-                    -- IlluminatedWordRead = { fg = nil, bg = colors.theme.ui.bg_search },
-                    -- IlluminatedWordWrite = { fg = nil, bg = colors.theme.ui.bg_search },
                     GitSignsCurrentLineBlame = { fg = colors.theme.ui.nontext, bold = true },
                     -- builtin
                     DiagnosticError = { fg = theme.diag.error, bg = err_bg },
@@ -41,12 +37,16 @@ return {
                     DiagnosticInfo = { fg = theme.diag.info, bg = info_bg },
                     DiagnosticHint = { fg = theme.diag.hint, bg = hint_bg },
                     DiagnosticOk = { fg = theme.diag.ok, bg = ok_bg },
+                    NonText = { link = "Whitespace" },
+                    -- transparent float
+                    NormalFloat = { bg = "none" },
+                    FloatBorder = { bg = "none" },
+                    FloatTitle = { bg = "none" },
                 }
             end,
             compile = false,
         })
 
         require("kanagawa").load("dragon") -- wave, dragon, lotus
-        -- vim.cmd("colorscheme kanagawa-dragon")
     end,
 }

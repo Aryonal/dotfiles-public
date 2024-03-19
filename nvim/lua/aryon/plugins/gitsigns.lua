@@ -15,7 +15,7 @@ return {
         require("gitsigns").setup({
             signs = {
                 add = { text = "+" },
-                untracked = { text = "." },
+                untracked = { text = "+" },
             },
             signcolumn = true, -- Toggle with `:Gitsigns toggle_signs`
             numhl = true,      -- Toggle with `:Gitsigns toggle_numhl`

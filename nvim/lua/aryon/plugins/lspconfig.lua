@@ -11,9 +11,5 @@ return {
         win.default_options = {
             border = require("aryon.config").ui.float.border,
         }
-
-        vim.cmd([[
-            hi link LspInfoBorder FloatBorder
-        ]])
     end,
 }
