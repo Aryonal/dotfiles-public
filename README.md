@@ -1,1 +1,3 @@
-# dotfiles-public
+# Dotfiles
+
+Public dotfiles for personal use.
