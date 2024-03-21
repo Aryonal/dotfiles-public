@@ -1,3 +1,21 @@
+local function toggle_telescope(harpoon_files, tel_conf)
+    local file_paths = {}
+    for _, item in ipairs(harpoon_files.items) do
+        table.insert(file_paths, item.value)
+    end
+
+    require("telescope.pickers")
+        .new({}, {
+            prompt_title = "Harpoon",
+            finder = require("telescope.finders").new_table({
+                results = file_paths,
+            }),
+            previewer = tel_conf.file_previewer({}),
+            sorter = tel_conf.generic_sorter({}),
+        })
+        :find()
+end
+
 return {
     "ThePrimeagen/harpoon",
     branch = "harpoon2",
@@ -5,49 +23,23 @@ return {
         "nvim-lua/plenary.nvim",
         "nvim-telescope/telescope.nvim",
     },
-    keys = { ";h" },
-    config = function()
-        local harpoon = require("harpoon")
-
-        harpoon:setup()
-
-        local set = require("utils.keymap").set
-
-        set({
-            mode = "n",
-            key = "ma",
-            cmd = function()
-                harpoon:list():append()
+    keys = {
+        {
+            ";h",
+            function()
+                toggle_telescope(require("harpoon"):list(), require("telescope.config").values)
+            end,
+            desc = "[Harpoon] Toggle Harpoon",
+        },
+        {
+            "ma",
+            function()
+                require("harpoon"):list():append()
             end,
             desc = "[Harpoon] Append",
-        })
-
-        -- basic telescope configuration
-        local conf = require("telescope.config").values
-        local function toggle_telescope(harpoon_files)
-            local file_paths = {}
-            for _, item in ipairs(harpoon_files.items) do
-                table.insert(file_paths, item.value)
-            end
-
-            require("telescope.pickers")
-                .new({}, {
-                    prompt_title = "Harpoon",
-                    finder = require("telescope.finders").new_table({
-                        results = file_paths,
-                    }),
-                    previewer = conf.file_previewer({}),
-                    sorter = conf.generic_sorter({}),
-                })
-                :find()
-        end
-        set({
-            mode = "n",
-            key = ";h",
-            cmd = function()
-                toggle_telescope(harpoon:list())
-            end,
-            desc = "[Telescope] Toggle Harpoon",
-        })
+        },
+    },
+    config = function()
+        require("harpoon"):setup()
     end,
 }

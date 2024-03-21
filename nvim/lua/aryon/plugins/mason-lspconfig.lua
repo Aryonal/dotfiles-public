@@ -2,6 +2,7 @@ return {
     "williamboman/mason-lspconfig.nvim",
     dependencies = {
         "williamboman/mason.nvim",
+        "folke/neodev.nvim", -- ensure before lspconfig setup
     },
     config = function()
         local mason_lspconfig = require("mason-lspconfig")

@@ -12,7 +12,7 @@ local function vim_enter_directory_setup(args)
     if is_directory then
         -- -- create a new, empty buffer
         -- vim.cmd.new()
-        -- -- wipe the directory buffer
+        -- wipe the directory buffer
         vim.cmd.bw(args.buf)
         -- change to the directory
         vim.cmd.cd(args.file)
@@ -43,7 +43,7 @@ local function vim_enter_directory_setup(args)
     -- end
 end
 
-local custom_aug = vim.api.nvim_create_augroup("aryon/setup/autocmd.lua", { clear = true })
+local custom_aug = vim.api.nvim_create_augroup("aryon/autocmd.lua", { clear = true })
 
 vim.api.nvim_create_autocmd({ "VimEnter" }, {
     group = custom_aug,

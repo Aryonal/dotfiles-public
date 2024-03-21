@@ -1,9 +1,11 @@
 return {
     "nvim-lualine/lualine.nvim",
     enabled = true,
-    dependencies = { "nvim-tree/nvim-web-devicons" },
+    dependencies = {
+        "nvim-tree/nvim-web-devicons",
+    },
     config = function()
-        local ft = require("share.filetypes")
+        local ft = require("share.ft")
         local icons = require("share.icons")
         local path_util = require("utils.path")
 

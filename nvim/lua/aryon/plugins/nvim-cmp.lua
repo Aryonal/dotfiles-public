@@ -2,16 +2,32 @@ return {
     "hrsh7th/nvim-cmp",
     dependencies = {
         "hrsh7th/cmp-nvim-lsp",
-        -- "hrsh7th/cmp-buffer",
         "hrsh7th/cmp-path",
         "hrsh7th/cmp-cmdline",
-        "hrsh7th/cmp-nvim-lsp-signature-help",
-        "L3MON4D3/LuaSnip",
-        "saadparwaiz1/cmp_luasnip",
-        "rafamadriz/friendly-snippets",
         "hrsh7th/cmp-nvim-lua",
-        "zbirenbaum/copilot-cmp",
+        {
+            "zbirenbaum/copilot-cmp",
+            dependencies = {
+                "zbirenbaum/copilot.lua",
+            },
+            config = function()
+                require("copilot_cmp").setup()
+            end,
+        },
+        {
+            "L3MON4D3/LuaSnip",
+            dependencies = {
+                "rafamadriz/friendly-snippets",
+            },
+            version = "*",
+            -- install jsregexp (optional!).
+            build = "make install_jsregexp",
+            config = function()
+                require("luasnip.loaders.from_vscode").lazy_load()
+            end,
+        },
     },
+    event = { "InsertEnter", "CmdlineEnter" },
     config = function()
         local luasnip = require("luasnip") ---@diagnostic disable-line: different-requires
         local cmp = require("cmp")
@@ -205,8 +221,6 @@ return {
                 { name = "path" },
                 { name = "nvim_lsp" },
                 { name = "luasnip" },
-                { name = "nvim_lsp_signature_help" },
-                -- { name = "buffer", keyword_length = 3 },
                 { name = "nvim_lua" },
             }
         end

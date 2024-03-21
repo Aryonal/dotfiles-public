@@ -3,6 +3,7 @@ return {
     cmd = {
         "Spectre",
     },
+    enabled = false,
     config = function()
         require("spectre").setup({
             default = {

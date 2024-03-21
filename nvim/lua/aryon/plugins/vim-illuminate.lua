@@ -1,7 +1,7 @@
 return {
     "RRethy/vim-illuminate", -- To highlight occurrences under cursor
     config = function()
-        local ft = require("share.filetypes")
+        local ft = require("share.ft")
         local cfg = require("aryon.config")
 
         -- default configuration

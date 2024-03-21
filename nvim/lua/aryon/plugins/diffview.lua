@@ -27,11 +27,6 @@ return {
             ":DiffviewClose<CR>",
             desc = "[Diffview] Close",
         },
-        -- {
-        --     name = "dh",
-        --     ":DiffviewFileHistory<CR>",
-        --     desc = "Diffview file history",
-        -- },
         {
             keymaps.history_current_file,
             ":DiffviewFileHistory %%<CR>",
@@ -228,12 +223,5 @@ return {
             },
         }
         create_abbr_batch(abbrs)
-
-        local set_keymap = require("utils.keymap").set
-        set_keymap({
-            key = keymaps.open,
-            cmd = "<cmd>DiffviewOpen<CR>",
-            desc = "[DiffView] Open",
-        })
     end,
 }

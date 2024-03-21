@@ -4,7 +4,7 @@ function M.on_attach(client, bufnr)
     -- Enable completion triggered by <c-x><c-o>
     -- vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
 
-    local m = require("share.filetypes").lsp_on_attach_exclude_map
+    local m = require("share.ft").lsp_on_attach_exclude_map
 
     if m[vim.bo.filetype] then
         return

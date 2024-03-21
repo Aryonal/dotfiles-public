@@ -18,5 +18,10 @@ return {
                 ["."] = false,
             },
         })
+
+        -- FIXME: error message when opening specific file
+        -- ```
+        -- [Copilot] copilot_node_command(node) is not executable
+        -- ```
     end,
 }

@@ -63,11 +63,11 @@ return {
             ":Telescope find_files<CR>",
             desc = "[Telescope] Find files",
         },
-        {
-            ";d",
-            ":Telescope file_browser<CR>",
-            desc = "[Telescope] File browser",
-        },
+        -- {
+        --     ";d",
+        --     ":Telescope file_browser<CR>",
+        --     desc = "[Telescope] File browser",
+        -- },
         {
             ";s",
             "<cmd>Telescope grep_string<CR>",
@@ -166,8 +166,7 @@ return {
                         -- ["<C-p>"] = false, -- default next entry
                         ["<C-\\>"] = actions.close,
                         -- ["<C-q>"] = trouble.open_with_trouble,
-                        ["<C-q>"] = trouble_ok and trouble.open_with_trouble or
-                        actions.send_to_qflist + actions.open_qflist,
+                        ["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
                         ["<CR>"] = actions.select_default + actions.center,
                         -- ["<C-e>"] = actions.preview_scrolling_down,
                         -- ["<C-y>"] = actions.preview_scrolling_up,
@@ -212,13 +211,13 @@ return {
                 },
                 git_status = {
                     git_icons = {
-                        added = icons.git_add,           -- "+",
-                        changed = icons.git_unstaged,    -- "~",
+                        added = icons.git_add,
+                        changed = icons.git_unstaged,
                         copied = ">",
-                        deleted = icons.git_deleted,     -- "-",
-                        renamed = icons.git_renamed,     -- "➡",
-                        unmerged = icons.git_unmerged,   -- "‡",
-                        untracked = icons.git_untracked, -- "?",
+                        deleted = icons.git_deleted,
+                        renamed = icons.git_renamed,
+                        unmerged = icons.git_unmerged,
+                        untracked = icons.git_untracked,
                     },
                 },
                 live_grep = {
@@ -252,6 +251,10 @@ return {
                 },
                 resume = {
                     initial_mode = "normal",
+                },
+                current_buffer_fuzzy_find = {
+                    initial_mode = "insert",
+                    show_line = false,
                 },
             },
             extensions = {

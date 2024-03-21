@@ -34,7 +34,7 @@ o.colorcolumn = tostring(style.MAX_LENGTH)
 
 -- o.equalalways = false
 
-vim.opt.wildignore:append({ "*/node_modules/*" })
+vim.opt.wildignore:append({ "*/node_modules/*", "*/vendor/*" })
 
 -- window-local options
 -- wo.cursorcolumn = true
