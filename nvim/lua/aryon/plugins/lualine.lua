@@ -4,6 +4,7 @@ return {
     dependencies = {
         "nvim-tree/nvim-web-devicons",
     },
+    -- lazy = false,
     config = function()
         local ft = require("share.ft")
         local icons = require("share.icons")

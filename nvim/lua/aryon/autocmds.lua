@@ -10,7 +10,7 @@ local function vim_enter_directory_setup(args)
     local no_name = args.file == "" and vim.bo[args.buf].buftype == ""
 
     if is_directory then
-        -- -- create a new, empty buffer
+        -- create a new, empty buffer
         -- vim.cmd.new()
         -- wipe the directory buffer
         vim.cmd.bw(args.buf)

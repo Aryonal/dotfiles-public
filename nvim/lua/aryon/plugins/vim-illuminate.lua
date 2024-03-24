@@ -1,5 +1,6 @@
 return {
     "RRethy/vim-illuminate", -- To highlight occurrences under cursor
+    event = "BufRead",
     config = function()
         local ft = require("share.ft")
         local cfg = require("aryon.config")

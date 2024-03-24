@@ -49,7 +49,11 @@ end
 local function get_lazy_plugins(plugins)
     local pl = {}
     for _, p in ipairs(plugins) do
-        table.insert(pl, to_lazy_format(p))
+        if require("utils.lua").is_array(p) then
+            pl = vim.list_extend(pl, get_lazy_plugins(p))
+        else
+            table.insert(pl, to_lazy_format(p))
+        end
     end
 
     return pl
@@ -60,7 +64,6 @@ local default_opts = {
     defaults = {
         lazy = false, -- should plugins be lazy-loaded?
         version = nil,
-        -- version = "*", -- enable this to try installing the latest stable versions of plugins
     },
     lockfile = lazylock,
     ui = {
@@ -68,7 +71,17 @@ local default_opts = {
     },
     performance = {
         rtp = {
-            reset = false,
+            reset = true,
+            disabled_plugins = {
+                "gzip",
+                "matchit",
+                "matchparen",
+                "netrwPlugin",
+                "tarPlugin",
+                "tohtml",
+                "tutor",
+                "zipPlugin",
+            },
         },
     },
 }

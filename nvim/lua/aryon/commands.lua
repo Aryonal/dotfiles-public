@@ -34,7 +34,7 @@ local cmds = {
         cmd = "CopyDirAbs",
         desc = "Copy absolute path of current buffer directory",
         exec = function()
-            local path = vim.fn.expand("%:hp")
+            local path = vim.fn.expand("%:ph")
             vim.fn.setreg("+", path)
             vim.notify('Copied "' .. path .. '" to the clipboard!')
         end,
