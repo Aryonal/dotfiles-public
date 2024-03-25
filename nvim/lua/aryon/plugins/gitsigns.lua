@@ -1,6 +1,7 @@
 return {
     "lewis6991/gitsigns.nvim",
     version = "*", -- To use the latest release
+    event = { "BufRead", "BufNewFile" },
     config = function()
         local bmap = require("utils.keymap").set_buffer
         local c = require("aryon.config").keymaps
@@ -142,7 +143,7 @@ return {
                 -- map("n", "<leader>td", gs.toggle_deleted)
 
                 -- Text object
-                map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", {desc = "[Gitsigns] inner hunk"})
+                map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", { desc = "[Gitsigns] inner hunk" })
             end,
         })
 

@@ -1,11 +1,7 @@
 return {
     "j-hui/fidget.nvim",
-    tag = "legacy",
+    event = "LspAttach",
     config = function()
-        require("fidget").setup({
-            window = {
-                relative = "win", -- where to anchor, either "win" or "editor"
-            },
-        })
+        require("fidget").setup({})
     end,
 }

@@ -61,7 +61,7 @@ return {
                     lspconfig.gopls.setup(lsp.gopls)
                 elseif server == "sumneko_lua" then -- setup sumneko_lua
                     lspconfig.sumneko_lua.setup(lsp.sumneko)
-                elseif server == "lua_ls" then -- setup lua_ls, renamed from sumneko
+                elseif server == "lua_ls" then      -- setup lua_ls, renamed from sumneko
                     lspconfig.lua_ls.setup(lsp.sumneko)
                 else
                     -- other servers

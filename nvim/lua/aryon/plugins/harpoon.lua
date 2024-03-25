@@ -40,6 +40,7 @@ return {
         },
     },
     config = function()
+        ---@diagnostic disable-next-line: missing-parameter
         require("harpoon"):setup()
     end,
 }

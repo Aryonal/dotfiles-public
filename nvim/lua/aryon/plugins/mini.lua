@@ -3,6 +3,13 @@ return {
         "echasnovski/mini.comment",
         version = "*",
         event = "BufRead",
+        keys = {
+            {
+                "<C-c>",
+                mode = { "n", "v" },
+                desc = "[Comment] Toggle"
+            },
+        },
         config = function()
             require("mini.comment").setup({
                 mappings = {

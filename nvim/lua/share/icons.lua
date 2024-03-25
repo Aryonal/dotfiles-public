@@ -62,6 +62,7 @@ return {
         Event = "",
         Operator = "",
         TypeParameter = "",
+        Copilot = "",
     },
     -- borders
     rounded_border = {
@@ -96,14 +97,14 @@ return {
     },
     border_with_highlights = function(border)
         return {
-            { border.top_left, "FloatBorder" },
-            { border.top, "FloatBorder" },
-            { border.top_right, "FloatBorder" },
-            { border.right, "FloatBorder" },
+            { border.top_left,     "FloatBorder" },
+            { border.top,          "FloatBorder" },
+            { border.top_right,    "FloatBorder" },
+            { border.right,        "FloatBorder" },
             { border.bottom_right, "FloatBorder" },
-            { border.bottom, "FloatBorder" },
-            { border.bottom_left, "FloatBorder" },
-            { border.left, "FloatBorder" },
+            { border.bottom,       "FloatBorder" },
+            { border.bottom_left,  "FloatBorder" },
+            { border.left,         "FloatBorder" },
         }
     end,
 }

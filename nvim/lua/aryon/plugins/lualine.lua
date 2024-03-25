@@ -195,7 +195,7 @@ return {
             winbar = {
                 lualine_a = {},
                 lualine_b = get_file_navigation_components(),
-                lualine_c = {},
+                lualine_c = get_aerial_component(),
                 lualine_x = {},
                 lualine_y = {},
                 lualine_z = {},

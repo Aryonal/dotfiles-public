@@ -23,7 +23,7 @@ local all_modes = { "n", "i", "v", "t", "c" }
 local fixed_bindings = {
     { key = "p",                    cmd = [["_dP]],            desc = "Do Not Cut",                   mode = "v" },
     { key = "c",                    cmd = [["_c]],             desc = "Do Not Cut",                   mode = { "n", "v" } },
-    { key = "d",                    cmd = [["_d]],             desc = "Do Not Cut",                   mode = { "n", "v" } },
+    -- { key = "d",                    cmd = [["_d]],             desc = "Do Not Cut",                   mode = { "n", "v" } },
     { key = "<C-y>",                cmd = "5<C-y>",            desc = "Scroll Up (Faster)",           mode = { "n", "v" } },
     { key = "<C-e>",                cmd = "5<C-e>",            desc = "Scroll Down (Faster)",         mode = { "n", "v" } },
     { key = "<C-w>>",               cmd = "5<C-w>>",           desc = "[Window] Width incr (Faster)" },

@@ -1,32 +1,64 @@
 return {
     {
+        "zbirenbaum/copilot.lua",
+        cmd = "Copilot",
+        lazy = true,
+        config = function()
+            require("copilot").setup({
+                suggestion = { enabled = false },
+                panel = { enabled = false },
+                filetypes = {
+                    yaml = false,
+                    markdown = false,
+                    help = false,
+                    gitcommit = false,
+                    gitrebase = false,
+                    hgcommit = false,
+                    svn = false,
+                    cvs = false,
+                    ["."] = false,
+                },
+            })
+
+            -- FIXME: error message when opening specific file
+            -- ```
+            -- [Copilot] copilot_node_command(node) is not executable
+            -- ```
+        end,
+    },
+    {
+        "zbirenbaum/copilot-cmp",
+        dependencies = {
+            "zbirenbaum/copilot.lua",
+        },
+        lazy = true,
+        config = function()
+            require("copilot_cmp").setup()
+        end,
+    },
+    {
+        "L3MON4D3/LuaSnip",
+        dependencies = {
+            "rafamadriz/friendly-snippets",
+        },
+        version = "*",
+        lazy = true,
+        -- install jsregexp (optional!).
+        build = "make install_jsregexp",
+        config = function()
+            require("luasnip.loaders.from_vscode").lazy_load()
+        end,
+    },
+    {
         "hrsh7th/nvim-cmp",
         dependencies = {
             "hrsh7th/cmp-nvim-lsp",
             "hrsh7th/cmp-path",
             "hrsh7th/cmp-cmdline",
             "hrsh7th/cmp-nvim-lua",
-            {
-                "zbirenbaum/copilot-cmp",
-                dependencies = {
-                    "zbirenbaum/copilot.lua",
-                },
-                config = function()
-                    require("copilot_cmp").setup()
-                end,
-            },
-            {
-                "L3MON4D3/LuaSnip",
-                dependencies = {
-                    "rafamadriz/friendly-snippets",
-                },
-                version = "*",
-                -- install jsregexp (optional!).
-                build = "make install_jsregexp",
-                config = function()
-                    require("luasnip.loaders.from_vscode").lazy_load()
-                end,
-            },
+            "zbirenbaum/copilot-cmp",
+            "L3MON4D3/LuaSnip",
+            "onsails/lspkind.nvim",
         },
         event = { "InsertEnter", "CmdlineEnter" },
         config = function()
@@ -65,7 +97,7 @@ return {
             end
 
             local function get_default_view_setup()
-                return { -- REF: https://github.com/hrsh7th/nvim-cmp/wiki/Menu-Appearance#basic-customisations
+                return {                -- REF: https://github.com/hrsh7th/nvim-cmp/wiki/Menu-Appearance#basic-customisations
                     entries = "custom", -- can be "custom", "wildmenu" or "native"
                 }
             end
@@ -94,16 +126,14 @@ return {
                 if lspkind_ok then
                     return {
                         format = lspkind.cmp_format({
-                            mode = "symbol_text", -- show only symbol annotations
-                            maxwidth = 50, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
+                            mode = "symbol_text",  -- show only symbol annotations
+                            maxwidth = 50,         -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
                             ellipsis_char = "...", -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
                             preset = "codicons",
+                            symbol_map = {
+                                Copilot = "",
+                            },
                             menu = source_map,
-                            -- The function below will be called before any actual modifications from lspkind
-                            -- so that you can provide more controls on popup customization. (See [#30](https://github.com/onsails/lspkind-nvim/pull/30))
-                            -- before = function(entry, vim_item)
-                            --     return vim_item
-                            -- end,
                         }),
                     }
                 end
@@ -292,6 +322,9 @@ return {
                     { name = "path" },
                 },
             })
+
+            -- setup hl for copilot
+            vim.api.nvim_set_hl(0, "CmpItemKindCopilot", { fg = "#6CC644" })
         end,
     },
     {
