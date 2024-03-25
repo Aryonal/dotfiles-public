@@ -84,7 +84,7 @@ return {
                 },
                 icon = {
                     folder_closed = icons.arrow_right, --"",
-                    folder_open = icons.arrow_open, --"",
+                    folder_open = icons.arrow_open,    --"",
                     folder_empty = icons.arrow_void,
                     -- The next two settings are only a fallback, if you use nvim-web-devicons and configure default icons there
                     -- then these will never be used.
@@ -103,16 +103,16 @@ return {
                 git_status = {
                     symbols = {
                         -- Change type
-                        added = "", -- or "✚", but this is redundant info if you use git_status_colors on the name
-                        modified = "", -- or "", but this is redundant info if you use git_status_colors on the name
-                        deleted = icons.git_deleted, -- or "✖", -- this can only be used in the git_status source
-                        renamed = icons.git_renamed, -- or "", -- this can only be used in the git_status source
+                        added = "",                      -- or "✚", but this is redundant info if you use git_status_colors on the name
+                        modified = "",                   -- or "", but this is redundant info if you use git_status_colors on the name
+                        deleted = icons.git_deleted,     -- or "✖", -- this can only be used in the git_status source
+                        renamed = icons.git_renamed,     -- or "", -- this can only be used in the git_status source
                         -- Status type
                         untracked = icons.git_untracked, -- "", -- icons.git_untracked,
-                        ignored = icons.git_ignored, -- or "",
-                        unstaged = icons.git_unstaged, -- or "",
-                        staged = icons.git_staged, -- or "",
-                        conflict = icons.git_conflict, -- or "",
+                        ignored = icons.git_ignored,     -- or "",
+                        unstaged = icons.git_unstaged,   -- or "",
+                        staged = icons.git_staged,       -- or "",
+                        conflict = icons.git_conflict,   -- or "",
                     },
                 },
             },
@@ -160,7 +160,7 @@ return {
                     [k.vim.terminal.toggle] = "close_window", -- "close_window",
                     [k.file.refresh_list[1]] = "refresh",
                     [k.file.refresh_list[2]] = "refresh",
-                    [k.file.open_in_split] = "open_split", -- "open_split" or "split_with_window_picker",
+                    [k.file.open_in_split] = "open_split",   -- "open_split" or "split_with_window_picker",
                     [k.file.open_in_vsplit] = "open_vsplit", -- "open_vsplit" or "vsplit_with_window_picker",
                     [k.file.open_in_tab] = "open_tabnew",
                     [k.tree.focus] = "jump_previous",
@@ -168,7 +168,7 @@ return {
                     ["<space>"] = { "toggle_node" },
                     ["<2-LeftMouse>"] = "open", -- "open" or "open_with_window_picker",
                     -- ["<cr>"] = "open_drop",
-                    ["<cr>"] = "open", -- "open" or "open_with_window_picker",
+                    ["<cr>"] = "open",          -- "open" or "open_with_window_picker",
                     -- ["<esc>"] = "revert_preview",
                     ["<esc>"] = "close_window",
                     ["<BS>"] = "close_node",
@@ -186,11 +186,11 @@ return {
                     ["e"] = "rename",
                     ["l"] = "focus_preview",
                     ["p"] = "paste_from_clipboard",
-                    ["S"] = "", -- default "split_with_window_picker",
-                    ["s"] = "", -- default "vsplit_with_window_picker",
-                    ["t"] = "", -- default "open_tabnew"
+                    ["S"] = "",     -- default "split_with_window_picker",
+                    ["s"] = "",     -- default "vsplit_with_window_picker",
+                    ["t"] = "",     -- default "open_tabnew"
                     ["m"] = "move", -- takes text input for destination, also accepts the optional config.show_path option like "add".
-                    ["w"] = "", -- "open_with_window_picker",
+                    ["w"] = "",     -- "open_with_window_picker",
                     ["x"] = "cut_to_clipboard",
                     ["y"] = "copy_to_clipboard",
                     -- ["z"] = "close_all_nodes",
@@ -321,9 +321,9 @@ return {
                     {
                         "container",
                         content = {
-                            { "name", zindex = 10 },
+                            { "name",       zindex = 10 },
                             { "git_status", zindex = 10, align = "left", hide_when_expanded = true },
-                            { "clipboard", zindex = 10 },
+                            { "clipboard",  zindex = 10 },
                             {
                                 "diagnostics",
                                 zindex = 20,
@@ -345,11 +345,11 @@ return {
                     {
                         "container",
                         content = {
-                            { "name", zindex = 10 },
-                            { "git_status", zindex = 10, align = "left" },
-                            { "clipboard", zindex = 10 },
-                            { "bufnr", zindex = 10 },
-                            { "modified", zindex = 20, align = "right" },
+                            { "name",        zindex = 10 },
+                            { "git_status",  zindex = 10, align = "left" },
+                            { "clipboard",   zindex = 10 },
+                            { "bufnr",       zindex = 10 },
+                            { "modified",    zindex = 20, align = "right" },
                             { "diagnostics", zindex = 20, align = "right" },
                         },
                     },

@@ -32,13 +32,12 @@ return {
     "nvim-telescope/telescope.nvim",
     dependencies = {
         { "nvim-lua/plenary.nvim" },
-        -- { "nvim-telescope/telescope-file-browser.nvim" },
         { "tsakirist/telescope-lazy.nvim" },
+        { "nvim-telescope/telescope-live-grep-args.nvim" },
         {
-            "nvim-telescope/telescope-live-grep-args.nvim",
-            version = "^1.0.0",
+            "nvim-telescope/telescope-fzf-native.nvim",
+            build = "make",
         },
-        { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
     },
     keys = {
         {
@@ -153,7 +152,7 @@ return {
                         ["<C-\\>"] = actions.close,
                         -- ["<C-q>"] = trouble.open_with_trouble,
                         ["<C-q>"] = trouble_ok and trouble.open_with_trouble or
-                        actions.send_to_qflist + actions.open_qflist,
+                            actions.send_to_qflist + actions.open_qflist,
                         ["<CR>"] = actions.select_default + actions.center,
                         ["<C-e>"] = actions.preview_scrolling_down,
                         ["<C-y>"] = actions.preview_scrolling_up,
@@ -191,9 +190,11 @@ return {
             },
             pickers = {
                 builtin = {
+                    -- theme = "dropdown",
                     initial_mode = "insert",
                 },
                 find_files = {
+                    -- theme = "dropdown",
                     initial_mode = "insert",
                     find_command = { -- find_files respects gitignore
                         "rg",
@@ -207,9 +208,11 @@ return {
                     },
                 },
                 commands = {
+                    -- theme = "dropdown",
                     initial_mode = "insert",
                 },
                 git_status = {
+                    -- theme = "dropdown",
                     git_icons = {
                         added = icons.git_add,
                         changed = icons.git_unstaged,
@@ -221,12 +224,15 @@ return {
                     },
                 },
                 live_grep = {
+                    -- theme = "dropdown",
                     initial_mode = "insert",
                 },
                 grep_string = {
+                    -- theme = "dropdown",
                     initial_mode = "normal",
                 },
                 help_tags = {
+                    -- theme = "dropdown",
                     initial_mode = "insert",
                 },
                 lsp_implementations = {
@@ -250,15 +256,18 @@ return {
                     show_line = false,
                 },
                 resume = {
+                    -- theme = "dropdown",
                     initial_mode = "normal",
                 },
                 current_buffer_fuzzy_find = {
+                    -- theme = "dropdown",
                     initial_mode = "insert",
                     show_line = false,
                 },
             },
             extensions = {
                 live_grep_args = {
+                    -- theme = "dropdown",
                     initial_mode = "insert",
                     auto_quoting = true, -- enable/disable auto-quoting
                     mappings = {         -- extend mappings
@@ -268,7 +277,14 @@ return {
                         },
                     },
                 },
+                fzf = {
+                    fuzzy = true,                   -- false will only do exact matching
+                    override_generic_sorter = true, -- override the generic sorter
+                    override_file_sorter = true,    -- override the file sorter
+                    case_mode = "smart_case",       -- or "ignore_case" or "respect_case"
+                },
                 lazy = {
+                    -- theme = "dropdown",
                     -- Whether or not to show the icon in the first column
                     show_icon = true,
                     -- Mappings for the actions

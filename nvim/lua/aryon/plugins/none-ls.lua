@@ -60,7 +60,7 @@ return {
         -- General
         _append_source(sources, "diagnostics", "semgrep")
         _append_source(sources, "diagnostics", "codespell")
-        _append_source(sources, "formatting", "codespell")
+        -- _append_source(sources, "formatting", "codespell")
         _append_source(sources, "formatting", "prettier", { "./node_modules/.bin/prettier", "prettier" }, {
             prefer_local = "node_modules/.bin",
         })
@@ -72,16 +72,18 @@ return {
 
         -- Golang
         -- _append_source(sources, "formatting", "goimports", "goimports", {
-        --     extra_args = { "-local", style.go.company_prefix },
+        --     extra_args = { "-local", style.go.org_prefix },
         -- })
         _append_source(sources, "formatting", "gofumpt")
-        _append_source(sources, "formatting", "goimports_reviser", "goimports-reviser", {
-            args = { "-company-prefixes", style.go.company_prefix, "-rm-unused", "-format", "$FILENAME" },
-        })
+        local _args = { "-rm-unused", "-format", "$FILENAME" }
+        if style.go.org_prefix then
+            _args = vim.list_extend({ "-company-prefixes", style.go.org_prefix }, _args)
+        end
+        _append_source(sources, "formatting", "goimports_reviser", "goimports-reviser", { args = _args })
         _append_source(sources, "formatting", "golines", "golines", {
             extra_args = { "-m", tostring(style.go.MAX_LENGTH), "-w" },
         })
-        _append_source(sources, "diagnostics", "golangci_lint", "golangci-lint")
+        -- _append_source(sources, "diagnostics", "golangci_lint", "golangci-lint")
         -- _append_source(sources, "diagnostics", "staticcheck")
         -- _append_source(sources, "diagnostics", "revive") -- it's laggy
 
@@ -107,16 +109,16 @@ return {
 
         -- SQL
         _append_source(sources, "diagnostics", "sqlfluff", "sqlfluff", {
-            extra_args = { "--dialect", "mysql" },
+            extra_args = { "--dialect", style.sql.dialect },
         })
         -- _append_source(sources, "formatting", "sqlfluff", "sqlfluff", {
-        --     extra_args = { "--dialect", "mysql" },
+        --     extra_args = { "--dialect", style.sql.dialect },
         -- })
         -- _append_source(sources, "formatting", "sqlfmt")
         -- _append_source(sources, "formatting", "sql_formatter", "sql-formatter")
 
         -- Lua
-        _append_source(sources, "formatting", "stylua")
+        -- _append_source(sources, "formatting", "stylua") -- use lua_ls builtin
 
         -- Python
         _append_source(sources, "formatting", "black")

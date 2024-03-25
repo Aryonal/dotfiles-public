@@ -27,10 +27,14 @@ function M.shorten_path(path, sep, max_len)
     return table.concat(segments, sep)
 end
 
-function M.get_cwd()
+---get current working directory path, and shorten it
+---@param l integer maximum length of the full filename string, default 68
+---@return string
+function M.get_cwd_short(l)
     -- REF: https://github.com/nvim-lualine/lualine.nvim/blob/ad4f4ff7515990b5b2a01bc3933346e11ebf0301/lua/lualine/extensions/nerdtree.lua#L4
     local pth = vim.fn.fnamemodify(vim.fn.getcwd(), ":~")
-    return M.shorten_path(pth, "/", 68)
+    l = l or 68
+    return M.shorten_path(pth, "/", l)
 end
 
 function M.get_session_folder()
@@ -59,9 +63,9 @@ function M.path_as_filename(path)
     return string.gsub(path, "/", ".") -- Replace slashes with dots
 end
 
--- scan_directory will scan the given directory and call the given function for each file
--- @param path string
--- @param fn function
+---scan_directory will scan the given directory and call the given function for each file
+---@param path string
+---@param fn function
 -- fn will be called with the following parameters:
 -- - name: string
 -- - type: string

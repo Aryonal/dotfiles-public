@@ -8,7 +8,7 @@
 local abbrs = {
     {
         name = "ff",
-        cmd = "lua vim.lsp.buf.format({ async = true })",
+        cmd = "lua vim.lsp.buf.format({ async = false })",
         desc = "Lsp format",
     },
 }

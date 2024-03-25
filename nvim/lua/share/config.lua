@@ -3,8 +3,10 @@ local cfg = {
         MAX_LENGTH = 132, -- magic number
         go = {
             MAX_LENGTH = 132,
-            company_prefix = "", -- patch in secret
         },
+        sql = {
+            dialect = "mysql",
+        }
     },
     colors = {
         background = "dark",

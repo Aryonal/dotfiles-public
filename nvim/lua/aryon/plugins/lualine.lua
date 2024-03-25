@@ -163,13 +163,15 @@ return {
             },
             tabline = {
                 lualine_a = {
-                    path_util.get_cwd,
+                    function()
+                        return path_util.get_cwd_short(40)
+                    end,
                 },
                 lualine_b = {
                     {
                         "tabs",
                         max_length = vim.o.columns, -- Maximum width of tabs component.
-                        mode = 2, -- 0: Shows tab_nr
+                        mode = 2,                   -- 0: Shows tab_nr
                         -- 1: Shows tab_name
                         -- 2: Shows tab_nr + tab_name
                         path = 1, -- 1: relative
@@ -181,12 +183,12 @@ return {
                 lualine_c = {},
                 lualine_x = {},
                 lualine_y = {
-                    {
-                        "windows",
-                        mode = 2,
-                        max_length = vim.o.columns / 3,
-                        disabled_filetypes = ft.lualine_exclude,
-                    },
+                    -- {
+                    --     "windows",
+                    --     mode = 2,
+                    --     max_length = vim.o.columns / 3,
+                    --     disabled_filetypes = ft.lualine_exclude,
+                    -- },
                 },
                 lualine_z = {},
             },

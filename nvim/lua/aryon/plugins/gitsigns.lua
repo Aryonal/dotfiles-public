@@ -49,7 +49,7 @@ return {
             -- yadm = {
             --   enable = false
             -- },
-            on_attach = function(bufnr) -- TODO: move keys to lua/aryon/config/keymaps.lua
+            on_attach = function(bufnr)
                 local gs = package.loaded.gitsigns
 
                 local function map(mode, l, r, opts)
@@ -142,7 +142,7 @@ return {
                 -- map("n", "<leader>td", gs.toggle_deleted)
 
                 -- Text object
-                map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>")
+                map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", {desc = "[Gitsigns] inner hunk"})
             end,
         })
 

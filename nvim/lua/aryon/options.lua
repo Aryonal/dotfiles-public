@@ -1,4 +1,4 @@
-local o = vim.o -- options
+local o = vim.o   -- options
 local wo = vim.wo -- window options
 -- local bo = vim.bo -- buffer options
 

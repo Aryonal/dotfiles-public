@@ -2,8 +2,8 @@ return {
     {
         "nvim-treesitter/nvim-treesitter",
         build = ":TSUpdate",
-        event = "BufRead",
         config = function()
+            ---@diagnostic disable-next-line: missing-fields
             require("nvim-treesitter.configs").setup({
                 ensure_installed = "all",
                 sync_install = false,
@@ -16,7 +16,7 @@ return {
                     -- disable highlighting for the `tex` filetype, you need to include `latex` in this list as this is
                     -- the name of the parser)
                     -- list of language that will be disabled
-                    disable = { "go", "lua" }, -- use lsp
+                    -- disable = { "go", "lua" }, -- use lsp
                     -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
                     -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
                     -- Using this option may slow down your editor, and you may see some duplicate highlights.
@@ -28,7 +28,6 @@ return {
     },
     {
         "nvim-treesitter/nvim-treesitter-context",
-        event = "BufRead",
         config = function()
             require("treesitter-context").setup({
                 -- max_lines = 0, -- How many lines the window should span. Values <= 0 mean no limit.
@@ -53,7 +52,6 @@ return {
     },
     {
         "nvim-treesitter/nvim-treesitter-textobjects",
-        event = "BufRead",
         config = function()
             require("nvim-treesitter.configs").setup({
                 textobjects = {
