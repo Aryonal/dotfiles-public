@@ -1,15 +1,15 @@
 return {
     {
-        'echasnovski/mini.comment',
-        version = '*',
+        "echasnovski/mini.comment",
+        version = "*",
         event = "BufRead",
         config = function()
-            require('mini.comment').setup({
+            require("mini.comment").setup({
                 mappings = {
                     comment = "<C-c>",
-                    comment_line = '<C-c>',
-                    comment_visual = '<C-c>',
-                    textobject = 'gc',
+                    comment_line = "<C-c>",
+                    comment_visual = "<C-c>",
+                    textobject = "gc",
                 },
             })
         end
@@ -51,19 +51,19 @@ return {
             require("mini.pairs").setup({
                 modes = { insert = true, command = false, terminal = false },
                 mappings = {
-                    ['('] = { action = 'open', pair = '()', neigh_pattern = '[^\\].' },
-                    ['['] = { action = 'open', pair = '[]', neigh_pattern = '[^\\].' },
-                    ['{'] = { action = 'open', pair = '{}', neigh_pattern = '[^\\].' },
-                    ['<'] = { action = 'open', pair = '<>', neigh_pattern = '[^\\].' },
+                    ["("] = { action = "open", pair = "()", neigh_pattern = "[^\\]." },
+                    ["["] = { action = "open", pair = "[]", neigh_pattern = "[^\\]." },
+                    ["{"] = { action = "open", pair = "{}", neigh_pattern = "[^\\]." },
+                    ["<"] = { action = "open", pair = "<>", neigh_pattern = "[^\\]." },
 
-                    [')'] = { action = 'close', pair = '()', neigh_pattern = '[^\\].' },
-                    [']'] = { action = 'close', pair = '[]', neigh_pattern = '[^\\].' },
-                    ['}'] = { action = 'close', pair = '{}', neigh_pattern = '[^\\].' },
-                    ['>'] = { action = 'close', pair = '<>', neigh_pattern = '[^\\].' },
+                    [")"] = { action = "close", pair = "()", neigh_pattern = "[^\\]." },
+                    ["]"] = { action = "close", pair = "[]", neigh_pattern = "[^\\]." },
+                    ["}"] = { action = "close", pair = "{}", neigh_pattern = "[^\\]." },
+                    [">"] = { action = "close", pair = "<>", neigh_pattern = "[^\\]." },
 
-                    ['"'] = { action = 'closeopen', pair = '""', neigh_pattern = '[^"\\].', register = { cr = false } },
-                    ["'"] = { action = 'closeopen', pair = "''", neigh_pattern = '[^%a\\].', register = { cr = false } },
-                    ['`'] = { action = 'closeopen', pair = '``', neigh_pattern = '[^`\\].', register = { cr = false } },
+                    ['"'] = { action = "closeopen", pair = '""', neigh_pattern = '[^"\\].', register = { cr = false } },
+                    ["'"] = { action = "closeopen", pair = "''", neigh_pattern = "[^%a\\].", register = { cr = false } },
+                    ["`"] = { action = "closeopen", pair = "``", neigh_pattern = "[^`\\].", register = { cr = false } },
                 },
             })
         end
