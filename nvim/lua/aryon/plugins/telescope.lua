@@ -42,24 +42,24 @@ return {
     keys = {
         {
             ";t",
-            ":Telescope<CR>",
+            "<cmd>Telescope<CR>",
             desc = "[Telescope] Telescope",
         },
         {
             ";g",
-            ":Telescope git_status<CR>",
+            "<cmd>Telescope git_status<CR>",
             -- ":Neotree reveal focus git_status<CR>",
             desc = "[Telescope] Git status",
         },
         {
             ";b",
-            ":Telescope buffers<CR>",
+            "<cmd>Telescope buffers<CR>",
             -- ":Neotree reveal focus buffers<CR>",
             desc = "[Telescope] Buffers",
         },
         {
             ";f",
-            ":Telescope find_files<CR>",
+            "<cmd>Telescope find_files<CR>",
             desc = "[Telescope] Find files",
         },
         -- {
@@ -75,55 +75,72 @@ return {
         },
         {
             ";s",
-            ":Telescope grep_string<CR>",
+            "<cmd>Telescope grep_string<CR>",
             desc = "[Telescope] Grep string",
         },
         {
             ";r",
             -- ":Telescope live_grep<CR>", -- use telescope-rg instead
-            ":lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>",
+            "<cmd>lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>",
             desc = "[Telescope] Live grep",
         },
         {
             ";?",
-            ":Telescope help_tags<CR>",
+            "<cmd>Telescope help_tags<CR>",
             desc = "[Telescope] Help tags",
         },
         {
             ";;",
-            ":Telescope resume<CR>",
+            "<cmd>Telescope resume<CR>",
             desc = "[Telescope] Resume",
         },
         {
             ";:",
-            ":Telescope commands<CR>",
+            "<cmd>Telescope commands<CR>",
             desc = "[Telescope] Commands",
         },
         -- LSP
         {
             c.lsp.goto_definition,
-            ":Telescope lsp_definitions<CR>",
+            "<cmd>Telescope lsp_definitions<CR>",
             desc = "[LSP] Definition",
         },
         {
             c.lsp.show_diagnostics_float_buffer,
-            ":Telescope diagnostics bufnr=0<CR>",
+            "<cmd>Telescope diagnostics bufnr=0<CR>",
             desc = "[LSP] Diagnostics (buffer)",
         },
         {
             c.lsp.goto_references,
-            ":Telescope lsp_references<CR>",
+            "<cmd>Telescope lsp_references<CR>",
             desc = "[LSP] References",
         },
         {
             c.lsp.goto_implementations,
-            ":Telescope lsp_implementations<CR>",
+            "<cmd>Telescope lsp_implementations<CR>",
             desc = "[LSP] Implementations",
         },
         {
             c.lsp.goto_type_defenitions,
-            ":Telescope lsp_type_definitions<CR>",
+            "<cmd>Telescope lsp_type_definitions<CR>",
             desc = "[LSP] Type definitions",
+        },
+        -- copilot chat
+        {
+            ";ch",
+            function()
+                local actions = require("CopilotChat.actions")
+                require("CopilotChat.integrations.telescope").pick(actions.help_actions())
+            end,
+            desc = "[CopilotChat] Help actions",
+        },
+        {
+            ";cp",
+            function()
+                local actions = require("CopilotChat.actions")
+                require("CopilotChat.integrations.telescope").pick(actions.prompt_actions())
+            end,
+            desc = "[CopilotChat] Prompt actions",
         },
     },
     cmd = {

@@ -60,7 +60,7 @@ return {
                 --   -- border = 'single' | 'double' | 'shadow' | 'curved' | ... other options supported by win open
                 width = function()
                     local w = vim.o.columns
-                    return math.min(math.max(132, math.ceil(w * 0.8)), math.floor(w * 0.9))
+                    return math.min(math.max(120, math.ceil(w * 0.8)), math.floor(w * 0.9))
                 end,
                 height = function()
                     local h = vim.o.lines

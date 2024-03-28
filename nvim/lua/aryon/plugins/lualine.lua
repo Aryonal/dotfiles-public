@@ -16,7 +16,7 @@ return {
         local gitsigns_ok, _ = pcall(require, "gitsigns")
 
         local function winnr()
-            return vim.api.nvim_win_get_number(0) .. ":"
+            return vim.api.nvim_win_get_number(0)
         end
 
         local function indentation()
@@ -28,7 +28,7 @@ return {
             end
             local shifts = vim.bo.shiftwidth
 
-            return spacetab .. ":" .. indents .. ":" .. shifts
+            return spacetab .. " " .. indents .. ":" .. shifts
         end
 
         local function get_aerial_component()
@@ -46,11 +46,11 @@ return {
         end
 
         local function get_git_branch_component()
-            -- gitsigns is only enabled when entring a buffer
-            -- if gitsigns_ok then
-            --     return { "b:gitsigns_head", icon = icons.git_branch, icons_enabled = true } -- branch using gitsigns
-            -- end
-            return { "branch", icon = icons.git_branch, icons_enabled = true }
+            return {
+                "branch",
+                icon = icons.git_branch,
+                icons_enabled = true,
+            }
         end
 
         local function get_diff_component()
@@ -143,7 +143,7 @@ return {
                     winbar = ft.lualine_winbar_exclude,
                 },
                 padding = { left = 1, right = 1 },
-                globalstatus = true,
+                globalstatus = false,
             },
             sections = {
                 lualine_a = { get_git_branch_component() },
@@ -163,33 +163,20 @@ return {
             },
             tabline = {
                 lualine_a = {
-                    function()
-                        return path_util.get_cwd_short(40)
-                    end,
+                    function() return path_util.get_cwd_short(32) end,
                 },
                 lualine_b = {
                     {
                         "tabs",
-                        max_length = vim.o.columns, -- Maximum width of tabs component.
-                        mode = 2,                   -- 0: Shows tab_nr
-                        -- 1: Shows tab_name
-                        -- 2: Shows tab_nr + tab_name
-                        path = 1, -- 1: relative
-                        -- 2: absolute
-                        -- 3: shortened absolute
-                        -- 4: file name
+                        tab_max_length = 32,
+                        max_length = vim.o.columns,
+                        mode = 2, -- 0: Shows tab_nr 1: Shows tab_name 2: Shows tab_nr + tab_name
+                        path = 1, -- 1: relative 2: absolute 3: shortened absolute 4: file name
                     },
                 },
                 lualine_c = {},
                 lualine_x = {},
-                lualine_y = {
-                    -- {
-                    --     "windows",
-                    --     mode = 2,
-                    --     max_length = vim.o.columns / 3,
-                    --     disabled_filetypes = ft.lualine_exclude,
-                    -- },
-                },
+                lualine_y = {},
                 lualine_z = {},
             },
             winbar = {
@@ -202,8 +189,8 @@ return {
             },
             inactive_winbar = {
                 lualine_a = {},
-                lualine_b = get_file_navigation_components(),
-                lualine_c = {},
+                lualine_b = {},
+                lualine_c = get_file_navigation_components(),
                 lualine_x = {},
                 lualine_y = {},
                 lualine_z = {},

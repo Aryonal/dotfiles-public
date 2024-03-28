@@ -1,8 +1,8 @@
 local cfg = {
     code_style = {
-        MAX_LENGTH = 132, -- magic number
+        MAX_LENGTH = 120, -- magic number
         go = {
-            MAX_LENGTH = 132,
+            MAX_LENGTH = 120,
         },
         sql = {
             dialect = "mysql",

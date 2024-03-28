@@ -14,22 +14,22 @@ return {
     keys = {
         {
             keymaps.open,
-            ":DiffviewOpen<CR>",
+            "<cmd>DiffviewOpen<CR>",
             desc = "[Diffview] Open",
         },
         {
             keymaps.diff_head,
-            ":DiffviewOpen origin/HEAD<CR>",
+            "<cmd>DiffviewOpen origin/HEAD<CR>",
             desc = "[Diffview] Open diff to origin/HEAD",
         },
         {
             keymaps.close,
-            ":DiffviewClose<CR>",
+            "<cmd>DiffviewClose<CR>",
             desc = "[Diffview] Close",
         },
         {
             keymaps.history_current_file,
-            ":DiffviewFileHistory %%<CR>",
+            "<cmd>DiffviewFileHistory %%<CR>",
             desc = "[Diffview] Current file history",
         },
     },

@@ -37,6 +37,15 @@ function M.get_cwd_short(l)
     return M.shorten_path(pth, "/", l)
 end
 
+---get file path, and shorten it
+---@param l integer: maximum length of the full filename string, default 68
+---@return string
+function M.get_file_path_short(l)
+    local pth = vim.fn.expand("%")
+    l = l or 68
+    return M.shorten_path(pth, "/", l)
+end
+
 function M.get_session_folder()
     local wd = vim.fn.getcwd()
     local datapath = vim.fn.stdpath("data")
