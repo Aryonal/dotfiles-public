@@ -3,7 +3,7 @@ return {
     dependencies = {
         "onsails/lspkind.nvim",
     },
-    event = "BufRead",
+    event = { "BufReadPost", "BufWritePost", "BufNewFile" },
     config = function()
         local bmap = require("utils.keymap").set_buffer
         local c = require("aryon.config").keymaps

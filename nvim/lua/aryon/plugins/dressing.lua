@@ -1,5 +1,19 @@
 return {
     "stevearc/dressing.nvim",
+    lazy = true,
+    -- REF: https://github.com/LazyVim/LazyVim/blob/50b7f426f287ecfc542dd9c197e430b0aca8af04/lua/lazyvim/plugins/ui.lua#L41
+    init = function()
+        ---@diagnostic disable-next-line: duplicate-set-field
+        vim.ui.select = function(...)
+            require("lazy").load({ plugins = { "dressing.nvim" } })
+            return vim.ui.select(...)
+        end
+        ---@diagnostic disable-next-line: duplicate-set-field
+        vim.ui.input = function(...)
+            require("lazy").load({ plugins = { "dressing.nvim" } })
+            return vim.ui.input(...)
+        end
+    end,
     config = function()
         require("dressing").setup({
             input = {

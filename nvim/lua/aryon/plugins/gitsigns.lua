@@ -1,7 +1,7 @@
 return {
     "lewis6991/gitsigns.nvim",
     version = "*", -- To use the latest release
-    event = { "BufRead", "BufNewFile" },
+    event = { "BufReadPost", "BufWritePost", "BufNewFile" },
     config = function()
         local bmap = require("utils.keymap").set_buffer
         local c = require("aryon.config").keymaps

@@ -1,7 +1,7 @@
 return {
     "lukas-reineke/indent-blankline.nvim",
     main = "ibl",
-    opts = {},
+    event = { "BufReadPost", "BufWritePost", "BufNewFile" },
     config = function()
         vim.opt.list = true
         vim.opt.listchars:append("space:⋅")

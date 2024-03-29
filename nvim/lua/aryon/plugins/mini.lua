@@ -2,7 +2,7 @@ return {
     {
         "echasnovski/mini.comment",
         version = "*",
-        event = "BufRead",
+        event = { "BufReadPost", "BufWritePost", "BufNewFile" },
         keys = {
             {
                 "<C-c>",
@@ -24,7 +24,7 @@ return {
     {
         "echasnovski/mini.splitjoin",
         version = false,
-        event = "BufRead",
+        event = { "BufReadPost", "BufWritePost", "BufNewFile" },
         keys = {
             {
                 "<leader>j",

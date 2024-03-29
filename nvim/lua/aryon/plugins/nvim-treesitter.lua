@@ -1,6 +1,9 @@
 return {
     {
         "nvim-treesitter/nvim-treesitter",
+        dependencies = {
+            "nvim-treesitter/nvim-treesitter-textobjects",
+        },
         build = ":TSUpdate",
         config = function()
             ---@diagnostic disable-next-line: missing-fields
@@ -23,37 +26,6 @@ return {
                     -- Instead of true it can also be a list of languages
                     additional_vim_regex_highlighting = false,
                 },
-            })
-        end,
-    },
-    {
-        "nvim-treesitter/nvim-treesitter-context",
-        config = function()
-            require("treesitter-context").setup({
-                -- max_lines = 0, -- How many lines the window should span. Values <= 0 mean no limit.
-                patterns = { -- Match patterns for TS nodes. These get wrapped to match at word boundaries.
-                    -- For all filetypes
-                    -- Note that setting an entry here replaces all other patterns for this entry.
-                    -- By setting the 'default' entry below, you can control which nodes you want to
-                    -- appear in the context window.
-                    default = {
-                        "class",
-                        "function",
-                        "method",
-                        "for",
-                        "while",
-                        "if",
-                        -- 'switch', -- this won't be used
-                        -- 'case',
-                    },
-                },
-            })
-        end,
-    },
-    {
-        "nvim-treesitter/nvim-treesitter-textobjects",
-        config = function()
-            require("nvim-treesitter.configs").setup({
                 textobjects = {
                     select = {
                         enable = true,
@@ -90,6 +62,33 @@ return {
                         goto_previous = {
                             ["[["] = { query = "@block.*", desc = "[TS] Previous block" },
                         },
+                    },
+                },
+            })
+        end,
+    },
+    {
+        "nvim-treesitter/nvim-treesitter-context",
+        -- REF: https://github.com/LazyVim/LazyVim/blob/50b7f426f287ecfc542dd9c197e430b0aca8af04/lua/lazyvim/plugins/treesitter.lua#L120
+        -- event = "LazyFile",
+        event = { "BufReadPost", "BufWritePost", "BufNewFile" },
+        config = function()
+            require("treesitter-context").setup({
+                -- max_lines = 0, -- How many lines the window should span. Values <= 0 mean no limit.
+                patterns = { -- Match patterns for TS nodes. These get wrapped to match at word boundaries.
+                    -- For all filetypes
+                    -- Note that setting an entry here replaces all other patterns for this entry.
+                    -- By setting the 'default' entry below, you can control which nodes you want to
+                    -- appear in the context window.
+                    default = {
+                        "class",
+                        "function",
+                        "method",
+                        "for",
+                        "while",
+                        "if",
+                        -- 'switch', -- this won't be used
+                        -- 'case',
                     },
                 },
             })
