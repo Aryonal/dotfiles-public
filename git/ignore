@@ -1,0 +1,17 @@
+# IDE
+.vscode
+.idea
+
+# LOCAL
+.local*
+.test*
+
+# Python
+*/**/.py[cod]
+*/**/__pycache__
+
+# Python Pre-commit
+.pre-commit-config.yaml
+
+# macOS
+.DS_Store
