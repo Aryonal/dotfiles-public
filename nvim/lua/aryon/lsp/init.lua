@@ -6,62 +6,24 @@ local capabilities = require("share.lsp").capabilities
 local on_attach_builder = require("share.lsp").build_on_attach
 
 local function attach_keymaps(bufnr)
+    -- Mappings.
+    local keymaps = {
+        { key = "<leader>wa", cmd = vim.lsp.buf.add_workspace_folder,                                         desc = "[LSP] Add workspace folders" },
+        { key = "<leader>wr", cmd = vim.lsp.buf.remove_workspace_folder,                                      desc = "[LSP] Remove workspace folders" },
+        { key = "<leader>wl", cmd = "<cmd> lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>", desc = "[LSP] List workspace folders" },
+        { key = "<leader>f",  cmd = function() vim.lsp.buf.format({ async = false }) end,                     desc = "[LSP] Formatting" },
+        { key = "<leader>f",  cmd = function() vim.lsp.buf.format({ async = false }) end,                     desc = "[LSP] Formatting",              mode = "v" },
+        { key = "<leader>rn", cmd = vim.lsp.buf.rename,                                                       desc = "[LSP] Rename" },
+        { key = "<leader>ca", cmd = vim.lsp.buf.code_action,                                                  desc = "[LSP] Code action" },
+        { key = "<leader>sg", cmd = vim.lsp.buf.signature_help,                                               desc = "[LSP] Signature" },
+        { key = "<C-s>",      cmd = vim.lsp.buf.signature_help,                                               desc = "[I][LSP] Signature",            mode = "i" },
+    }
+
     -- setup on_attach function for lsp
     local bmap = require("utils.keymap").set_buffer
-
-    -- Mappings.
-    bmap({
-        key = "<leader>wa",
-        cmd = "<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>",
-        desc = "[LSP] Add workspace folders",
-    }, bufnr)
-    bmap({
-        key = "<leader>wr",
-        cmd = "<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>",
-        desc = "[LSP] Remove workspace folders",
-    }, bufnr)
-    bmap({
-        key = "<leader>wl",
-        cmd = "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>",
-        desc = "[LSP] List workspace folders",
-    }, bufnr)
-    bmap({
-        key = "<leader>f",
-        cmd = function()
-            vim.lsp.buf.format({ async = false })
-        end,
-        desc = "[LSP] Formatting",
-    }, bufnr)
-    bmap({
-        key = "<leader>f",
-        mode = "v",
-        cmd = function()
-            vim.lsp.buf.format({ async = false })
-        end,
-        desc = "[LSP] Formatting",
-    }, bufnr)
-
-    bmap({
-        key = "<leader>rn",
-        cmd = "<cmd>lua vim.lsp.buf.rename()<CR>",
-        desc = "[LSP] Rename",
-    }, bufnr)
-    bmap({
-        key = "<leader>ca",
-        cmd = "<cmd>lua vim.lsp.buf.code_action()<CR>",
-        desc = "[LSP] Code action",
-    }, bufnr)
-    bmap({
-        key = "<leader>sg",
-        cmd = "<cmd>lua vim.lsp.buf.signature_help()<CR>",
-        desc = "[LSP] Signature",
-    }, bufnr)
-    bmap({
-        key = "<C-s>",
-        cmd = "<cmd>lua vim.lsp.buf.signature_help()<CR>",
-        mode = "i",
-        desc = "[I][LSP] Signature",
-    }, bufnr)
+    for _, keymap in ipairs(keymaps) do
+        bmap(keymap, bufnr)
+    end
 end
 
 local function on_attach(client, bufnr)
