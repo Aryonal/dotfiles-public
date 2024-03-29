@@ -13,6 +13,8 @@ local cfg = {
     },
     lsp = {
         ensured_servers = {},
+        semantic_tokens = false,
+        inlay_hints = false, -- FIX: enabled in > v0.10.0
     },
     vim = {
         default_delay_ms = 300,
@@ -34,7 +36,7 @@ local cfg = {
                 close = { "<Esc>", "q" },
             },
             terminal = {
-                toggle = [[<C-\>]],
+                toggle = [[<C-\><C-\>]],
             },
         },
         lsp = {

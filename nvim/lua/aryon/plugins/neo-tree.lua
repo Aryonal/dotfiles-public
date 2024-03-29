@@ -266,7 +266,9 @@ return {
                     telescope_grep = function(state)
                         local node = state.tree:get_node()
                         local path = node:get_id()
-                        require("telescope.builtin").live_grep(getTelescopeOpts(state, path))
+                        require("telescope").extensions.live_grep_args.live_grep_args(getTelescopeOpts(state, path))
+                        -- TODO: fallback to builtin
+                        -- require("telescope.builtin").live_grep(getTelescopeOpts(state, path))
                     end,
                 },
             },

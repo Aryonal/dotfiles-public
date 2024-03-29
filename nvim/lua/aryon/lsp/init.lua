@@ -1,7 +1,9 @@
 local M = {}
 
+local cfg = require("aryon.config")
+
 local capabilities = require("share.lsp").capabilities
-local on_attach_share = require("share.lsp").on_attach
+local on_attach_builder = require("share.lsp").build_on_attach
 
 local function attach_keymaps(bufnr)
     -- setup on_attach function for lsp
@@ -63,15 +65,22 @@ local function attach_keymaps(bufnr)
 end
 
 local function on_attach(client, bufnr)
-    on_attach_share(client, bufnr)
+    on_attach_builder(cfg)(client, bufnr)
     attach_keymaps(bufnr)
 end
 
+-- TODO: use `LspAttach` event
 M.on_attach = on_attach
 M.capabilities = capabilities
 
 M.gopls = {
     on_attach = function(client, bufnr)
+        on_attach(client, bufnr)
+
+        -- gopls semantic tokens support
+        if not cfg.lsp.semantic_tokens then
+            return
+        end
         if not client.server_capabilities.semanticTokensProvider then
             local semantic = client.config.capabilities.textDocument.semanticTokens
             client.server_capabilities.semanticTokensProvider = {
@@ -80,7 +89,6 @@ M.gopls = {
                 range = true,
             }
         end
-        on_attach(client, bufnr)
     end,
     capabilities = capabilities,
     settings = {

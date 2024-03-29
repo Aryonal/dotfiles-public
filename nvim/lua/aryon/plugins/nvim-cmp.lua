@@ -72,7 +72,8 @@ return {
             local function has_words_before()
                 ---@diagnostic disable-next-line: deprecated
                 local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-                return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+                return col ~= 0 and
+                    vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
             end
 
             local function get_snippet_setup()
@@ -129,7 +130,7 @@ return {
                             mode = "symbol_text",  -- show only symbol annotations
                             maxwidth = 50,         -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
                             ellipsis_char = "...", -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
-                            preset = "codicons",
+                            preset = "default",
                             symbol_map = {
                                 Copilot = "",
                             },
@@ -221,7 +222,9 @@ return {
                     ["<Tab>"] = cmp.mapping(next_item_prompt, { "i", "s" }),
                     ["<S-Tab>"] = cmp.mapping(prev_item, { "i", "s" }),
                     ["<Down>"] = cmp.mapping(next_item, { "i", "s" }),
+                    ["<C-n>"] = cmp.mapping(next_item, { "i", "s" }),
                     ["<Up>"] = cmp.mapping(prev_item, { "i", "s" }),
+                    ["<C-p>"] = cmp.mapping(prev_item, { "i", "s" }),
                 }
             end
 
@@ -324,7 +327,7 @@ return {
             })
 
             -- setup hl for copilot
-            vim.api.nvim_set_hl(0, "CmpItemKindCopilot", { fg = "#6CC644" })
+            vim.api.nvim_set_hl(0, "CmpItemKindCopilot", { fg = "#72c44d" })
         end,
     },
     {
