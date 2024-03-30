@@ -8,22 +8,9 @@ return {
         "nvim-lua/plenary.nvim",
         "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
         "MunifTanjim/nui.nvim",
-        -- {
-        --     "s1n7ax/nvim-window-picker",
-        --     version = "2.*",
-        -- },
-        -- {
-        --     "antosha417/nvim-lsp-file-operations",
-        --     dependencies = { "nvim-lua/plenary.nvim" },
-        --     config = function() end,
-        -- },
     },
     keys = {
-        {
-            k.tree.focus,
-            "<cmd>Neotree reveal focus<cr>",
-            desc = "[NeoTree] Focus",
-        },
+        { k.tree.focus, "<cmd>Neotree reveal focus<cr>", desc = "[NeoTree] Focus" },
     },
     cmd = {
         "Neotree",
@@ -157,6 +144,7 @@ return {
                     [k.file.delete] = "delete",
                     [k.file.rename] = "rename",
                     [k.vim.float.close[2]] = "close_window",
+                    [k.vim.float.close[3]] = "close_window",
                     [k.vim.terminal.toggle] = "close_window", -- "close_window",
                     [k.file.refresh_list[1]] = "refresh",
                     [k.file.refresh_list[2]] = "refresh",

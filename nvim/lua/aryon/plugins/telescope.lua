@@ -166,10 +166,9 @@ return {
                 mappings = {
                     n = {
                         ["q"] = actions.close,
-                        ["<C-\\>"] = actions.close,
-                        -- ["<C-q>"] = trouble.open_with_trouble,
-                        ["<C-q>"] = trouble_ok and trouble.open_with_trouble or
-                            actions.send_to_qflist + actions.open_qflist,
+                        ["<C-c>"] = actions.close,
+                        -- [c.vim.terminal.toggle] = actions.close,
+                        ["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
                         ["<CR>"] = actions.select_default + actions.center,
                         ["<C-e>"] = actions.preview_scrolling_down,
                         ["<C-y>"] = actions.preview_scrolling_up,
@@ -180,7 +179,8 @@ return {
                         -- ["<C-w>"] = false, -- default delete a word
                         -- ["<C-n>"] = false, -- default previous entry
                         -- ["<C-p>"] = false, -- default next entry
-                        ["<C-\\>"] = actions.close,
+                        -- ["<C-\\>"] = actions.close,
+                        ["<C-c>"] = actions.close,
                         -- ["<C-q>"] = trouble.open_with_trouble,
                         ["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
                         ["<CR>"] = actions.select_default + actions.center,

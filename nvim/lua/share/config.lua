@@ -33,7 +33,7 @@ local cfg = {
         -- editor/IDE features
         vim = {
             float = {
-                close = { "<Esc>", "q" },
+                close = { "<Esc>", "q", "<C-c>" },
             },
             terminal = {
                 toggle = [[<C-\><C-\>]],

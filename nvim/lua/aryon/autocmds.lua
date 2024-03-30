@@ -52,11 +52,15 @@ vim.api.nvim_create_autocmd({ "VimEnter" }, {
 })
 
 if config.auto_load_session_local then
-    vim.api.nvim_create_autocmd({ "UIEnter" }, {
+    vim.api.nvim_create_autocmd({ "VimEnter" }, {
         group = custom_aug,
         desc = "Load session on enter",
         callback = function()
-            vim.cmd(string.format("source %s", config.session_file))
+            local session_folder = vim.fn.stdpath("state") .. "/sessions"
+            local cw = vim.fn.getcwd()
+            cw = require("utils.path").strip_path(cw)
+            local session_file = session_folder .. "/" .. require("utils.path").path_as_filename(cw) .. ".vim"
+            vim.cmd(string.format("source %s", session_file))
         end,
     })
 end
