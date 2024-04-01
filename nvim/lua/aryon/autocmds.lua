@@ -5,7 +5,7 @@ local function vim_enter_directory_setup(args)
     -- buffer is a directory
     local is_directory = vim.fn.isdirectory(args.file) == 1
     -- buffer is a real file on the disk
-    local real_file = vim.fn.filereadable(args.file) == 1
+    local is_real_file = vim.fn.filereadable(args.file) == 1
     -- buffer is a [No Name]
     local no_name = args.file == "" and vim.bo[args.buf].buftype == ""
 
@@ -18,7 +18,7 @@ local function vim_enter_directory_setup(args)
         vim.cmd.cd(args.file)
     end
 
-    if real_file then
+    if is_real_file then
         -- change to directory of file
         vim.cmd.cd(vim.fs.dirname(args.file))
         return

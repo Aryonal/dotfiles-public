@@ -97,7 +97,7 @@ return {
             only_local = "node_modules/.bin",
         })
         -- _append_source(sources, "diagnostics", "eslint_d")
-        _append_source(sources, "diagnostics", "tsc")
+        -- _append_source(sources, "diagnostics", "tsc")
         -- _append_source(sources, "diagnostics", "xo")
         -- _append_source(sources, "formatting", "eslint",{"./node_modules/.bin/eslint", "eslint"}, {
         --     only_local = "node_modules/.bin",

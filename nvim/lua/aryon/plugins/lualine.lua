@@ -15,6 +15,23 @@ return {
 
         local gitsigns_ok, _ = pcall(require, "gitsigns")
 
+        --- @param trunc_width number trunctates component when screen width is less then trunc_width
+        --- @param trunc_len number truncates component to trunc_len number of chars
+        --- @param hide_width number hides component when window width is smaller then hide_width
+        --- @param no_ellipsis boolean whether to disable adding '...' at end after truncation
+        --- return function that can format the component accordingly
+        local function trunc(trunc_width, trunc_len, hide_width, no_ellipsis)
+            return function(str)
+                local win_width = vim.fn.winwidth(0)
+                if hide_width and win_width < hide_width then
+                    return ""
+                elseif trunc_width and trunc_len and win_width < trunc_width and #str > trunc_len then
+                    return str:sub(1, trunc_len) .. (no_ellipsis and "" or "...")
+                end
+                return str
+            end
+        end
+
         local function winnr()
             return vim.api.nvim_win_get_number(0)
         end
@@ -23,8 +40,11 @@ return {
             local spacetab = "Tab"
             local indents = vim.bo.tabstop
             if vim.bo.expandtab then
-                spacetab = "Space"
+                spacetab = ""
                 indents = vim.bo.softtabstop
+                if indents < 0 then
+                    indents = vim.bo.shiftwidth
+                end
             end
             local shifts = vim.bo.shiftwidth
 
@@ -50,6 +70,7 @@ return {
                 "branch",
                 icon = icons.git_branch,
                 icons_enabled = true,
+                fmt = trunc(80, 16, 60),
             }
         end
 

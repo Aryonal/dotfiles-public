@@ -11,6 +11,7 @@ local plugins = {
                     hl.NulllsInfoBorder = { link = "FloatBorder" }
                     hl.LspInfoBorder = { link = "FloatBorder" }
                     hl.GitSignsCurrentLineBlame = { link = "Comment" }
+                    hl.EndOfBuffer = { link = "NonText" }
 
                     local darken = require("nord.utils").darken
                     local amount = 0.20
