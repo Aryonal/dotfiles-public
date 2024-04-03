@@ -165,8 +165,9 @@ return {
                 -- border = false,
                 mappings = {
                     n = {
-                        ["q"] = actions.close,
-                        ["<C-c>"] = actions.close,
+                        [c.vim.float.close[1]] = actions.close,
+                        [c.vim.float.close[2]] = actions.close,
+                        [c.vim.float.close[3]] = actions.close,
                         -- [c.vim.terminal.toggle] = actions.close,
                         ["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
                         ["<CR>"] = actions.select_default + actions.center,
@@ -180,7 +181,7 @@ return {
                         -- ["<C-n>"] = false, -- default previous entry
                         -- ["<C-p>"] = false, -- default next entry
                         -- ["<C-\\>"] = actions.close,
-                        ["<C-c>"] = actions.close,
+                        [c.vim.float.close[3]] = actions.close,
                         -- ["<C-q>"] = trouble.open_with_trouble,
                         ["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
                         ["<CR>"] = actions.select_default + actions.center,
@@ -207,6 +208,10 @@ return {
             },
             pickers = {
                 builtin = {
+                    -- theme = "dropdown",
+                    initial_mode = "insert",
+                },
+                buffers = {
                     -- theme = "dropdown",
                     initial_mode = "insert",
                 },

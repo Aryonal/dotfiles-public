@@ -1,22 +1,4 @@
--- global keymaps
--- REF: https://github.com/brainfucksec/neovim-lua/blob/main/nvim/lua/core/keymaps.lua
--- vim.g.mapleader = consts.LEADER
-
--- structure of bind
--- ```
--- {
---   mode = "n",
---   key = "<Left>",
---   cmd = "<C-w>h",
---   desc = "Window navigates left",
---   opts = {
---     buffer = nil,
---     silent = true,
---     noremap = true,
---     nowait = false,
---   }
--- }
--- ````
+local cfg = require("aryon.config")
 
 local all_modes = { "n", "i", "v", "t", "c" }
 
@@ -42,13 +24,14 @@ local fixed_bindings = {
     { key = "<C-w><",               cmd = "5<C-w><",           desc = "[Window] Width decr (Faster)" },
     { key = "<C-w>>",               cmd = "5<C-w>>",           desc = "[Window] Width incr (Faster)" },
     { key = "<C-y>",                cmd = "5<C-y>",            desc = "Scroll Up (Faster)",           mode = { "n", "v" } },
-    { key = "<Space>",              cmd = "za",                desc = "Toggle folding" },
+    { key = cfg.keymaps.ed.fold,    cmd = "za",                desc = "Toggle folding" },
     { key = "c",                    cmd = [["_c]],             desc = "Do Not Cut",                   mode = { "n", "v" } },
     -- { key = "d",                    cmd = [["_d]],             desc = "Do Not Cut",                   mode = { "n", "v" } },
     { key = "gT",                   cmd = "<cmd>tabnext<CR>",  desc = "[Tab] Next" },
     { key = "gt",                   cmd = "<cmd>tabprev<CR>",  desc = "[Tab] Previous" },
     { key = "p",                    cmd = [["_dP]],            desc = "Do Not Cut",                   mode = "v" },
     { key = "te",                   cmd = "<C-w>T",            desc = "[Tab] New from buffer" },
+    { key = "tt",                   cmd = "<cmd>tab term<CR>", desc = "[Tab] New terminal" },
     { key = "tn",                   cmd = "<cmd>tabnew<CR>",   desc = "[Tab] New" },
     { key = "tq",                   cmd = "<cmd>tabclose<CR>", desc = "[Tab] Close" },
     { key = { "<Down>", "<C-j>" },  cmd = "<C-w>j",            desc = "[Window] Navigate down" },

@@ -30,16 +30,21 @@ local cfg = {
     },
     keymaps = {
         leader = ",",
+        -- editor
+        ed = {
+            fold = "<Space>",
+        },
         -- editor/IDE features
         vim = {
             float = {
                 close = { "<Esc>", "q", "<C-c>" },
             },
             terminal = {
-                toggle = [[<C-\><C-\>]],
+                toggle_float = [[<C-\><C-\>]],
             },
         },
         lsp = {
+            hover = "K",
             goto_definition = "gd",
             goto_references = "gr",
             goto_implementations = "gi",

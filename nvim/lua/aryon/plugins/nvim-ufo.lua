@@ -55,7 +55,7 @@ return {
         -- })
 
         -- TODO: use global keymapping settings
-        vim.keymap.set("n", "K", function()
+        vim.keymap.set("n", require("aryon.config").keymaps.lsp.hover, function()
             local winid = require("ufo").peekFoldedLinesUnderCursor()
             if not winid then
                 vim.lsp.buf.hover()

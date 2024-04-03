@@ -15,6 +15,21 @@ return {
     cmd = {
         "Neotree",
     },
+    init = function()
+        vim.api.nvim_create_autocmd("BufEnter", {
+            -- make a group to be able to delete it later
+            group = vim.api.nvim_create_augroup("NeoTreeInit", { clear = true }),
+            callback = function()
+                local f = vim.fn.expand("%:p")
+                if vim.fn.isdirectory(f) ~= 0 then
+                    vim.cmd("Neotree current dir=" .. f)
+                    -- neo-tree is loaded now, delete the init autocmd
+                    vim.api.nvim_clear_autocmds { group = "NeoTreeInit" }
+                end
+            end
+        })
+        -- keymaps
+    end,
     config = function()
         local icons = require("share.icons")
 
@@ -111,7 +126,7 @@ return {
                 end,
             },
             window = {
-                position = "float",
+                position = "current",     -- float, current, left...
                 auto_expand_width = true, -- adaptive width
                 width = 10,
                 popup = {
@@ -143,22 +158,26 @@ return {
                     [k.file.add_dir] = "add_directory", -- also accepts the optional config.show_path option like "add". this also supports BASH style brace expansion.
                     [k.file.delete] = "delete",
                     [k.file.rename] = "rename",
-                    [k.vim.float.close[2]] = "close_window",
-                    [k.vim.float.close[3]] = "close_window",
-                    [k.vim.terminal.toggle] = "close_window", -- "close_window",
+                    -- [k.vim.float.close[1]] = "revert_preview",
+                    -- [k.vim.float.close[1]] = "close_window",
+                    -- [k.vim.float.close[2]] = "close_window",
+                    -- [k.vim.float.close[3]] = "close_window",
+                    [k.vim.float.close[1]] = false,
+                    [k.vim.float.close[2]] = false,
+                    [k.vim.float.close[3]] = false,
+                    -- [k.vim.terminal.toggle] = "close_window", -- "close_window",
                     [k.file.refresh_list[1]] = "refresh",
                     [k.file.refresh_list[2]] = "refresh",
                     [k.file.open_in_split] = "open_split",   -- "open_split" or "split_with_window_picker",
                     [k.file.open_in_vsplit] = "open_vsplit", -- "open_vsplit" or "vsplit_with_window_picker",
                     [k.file.open_in_tab] = "open_tabnew",
                     [k.tree.focus] = "jump_previous",
-                    ["<tab>"] = { "toggle_node" },
-                    ["<space>"] = { "toggle_node" },
+                    -- ["<tab>"] = { "toggle_node" },
+                    [k.ed.fold] = { "toggle_node" },
                     ["<2-LeftMouse>"] = "open", -- "open" or "open_with_window_picker",
                     -- ["<cr>"] = "open_drop",
                     ["<cr>"] = "open",          -- "open" or "open_with_window_picker",
-                    -- ["<esc>"] = "revert_preview",
-                    ["<esc>"] = "close_window",
+                    ["<esc>"] = false,
                     ["<BS>"] = "close_node",
                     --["P"] = "toggle_preview", -- enter preview mode, which shows the current node without focusing
                     ["C"] = "", -- default "close_node"
@@ -228,7 +247,7 @@ return {
                     enabled = true,
                 },
                 use_libuv_file_watcher = true, -- This will use the OS level file watchers to detect changes
-                hijack_netrw_behavior = "disabled",
+                hijack_netrw_behavior = "open_current",
                 window = {
                     -- position = "float",
                     mappings = {
@@ -242,7 +261,8 @@ return {
                         [k.tree.git_next] = "next_git_modified",
                         [k.tree.search_node] = "telescope_find",
                         [k.tree.grep_node] = "telescope_grep",
-                        ["<C-o>"] = "jump_previous",
+                        -- ["<C-o>"] = "jump_previous",
+                        ["<C-o>"] = false,
                     },
                 },
                 commands = {
@@ -347,18 +367,18 @@ return {
             },
         })
 
-        local custom_aug = vim.api.nvim_create_augroup("aryon/plugin/neo-tree.lua", { clear = true })
+        -- local custom_aug = vim.api.nvim_create_augroup("aryon/plugin/neo-tree.lua", { clear = true })
 
-        vim.api.nvim_create_autocmd({ "BufEnter" }, {
-            pattern = { "neo-tree git_status*", "neo-tree buffers*", "neo-tree filesystem*" },
-            group = custom_aug,
-            desc = "Neo-tree centralizes cursor",
-            callback = function()
-                vim.cmd([[
-                    setlocal scrolloff=99
-                ]])
-            end,
-        })
+        -- vim.api.nvim_create_autocmd({ "BufEnter" }, {
+        --     pattern = { "neo-tree git_status*", "neo-tree buffers*", "neo-tree filesystem*" },
+        --     group = custom_aug,
+        --     desc = "Neo-tree centralizes cursor",
+        --     callback = function()
+        --         vim.cmd([[
+        --             setlocal scrolloff=99
+        --         ]])
+        --     end,
+        -- })
 
         -- require("lsp-file-operations").setup()
     end,

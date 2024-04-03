@@ -15,7 +15,7 @@ return {
 
         local gitsigns_ok, _ = pcall(require, "gitsigns")
 
-        --- @param trunc_width number trunctates component when screen width is less then trunc_width
+        --- @param trunc_width number truncates component when screen width is less then trunc_width
         --- @param trunc_len number truncates component to trunc_len number of chars
         --- @param hide_width number hides component when window width is smaller then hide_width
         --- @param no_ellipsis boolean whether to disable adding '...' at end after truncation

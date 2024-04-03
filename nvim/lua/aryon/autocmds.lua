@@ -45,11 +45,11 @@ end
 
 local custom_aug = vim.api.nvim_create_augroup("aryon/autocmd.lua", { clear = true })
 
-vim.api.nvim_create_autocmd({ "VimEnter" }, {
-    group = custom_aug,
-    desc = "Update cwd based on argument",
-    callback = vim_enter_directory_setup,
-})
+-- vim.api.nvim_create_autocmd({ "VimEnter" }, {
+--     group = custom_aug,
+--     desc = "Update cwd based on argument",
+--     callback = vim_enter_directory_setup,
+-- })
 
 if config.auto_load_session_local then
     vim.api.nvim_create_autocmd({ "VimEnter" }, {
