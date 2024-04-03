@@ -203,7 +203,8 @@ return {
                     -- ["z"] = "close_all_nodes",
                     --["Z"] = "expand_all_nodes",
                     ["z"] = "",
-                    ["?"] = "show_help",
+                    -- ["?"] = "show_help",
+                    ["?"] = false, -- in buffer search
                     ["<"] = "prev_source",
                     [">"] = "next_source",
                     -- toggle source
@@ -318,12 +319,37 @@ return {
                 winbar = false,
                 statusline = false,
             },
+            -- If you don't want to use these columns, you can set `enabled = false` for each of them individually
+            file_size = {
+                enabled = true,
+                required_width = 64, -- min width of window required to show this column
+            },
+            type = {
+                enabled = false,
+                required_width = 110, -- min width of window required to show this column
+            },
+            last_modified = {
+                enabled = true,
+                required_width = 88, -- min width of window required to show this column
+            },
+            created = {
+                enabled = false,
+                required_width = 120, -- min width of window required to show this column
+            },
+            symlink_target = {
+                enabled = true,
+            },
             renderers = {
                 directory = {
                     {
                         "container",
                         content = {
-                            { "indent", zindex = 10 },
+                            -- optimize order
+                            { "file_size",     zindex = 10, align = "left" },
+                            -- { "type",          zindex = 10, align = "left" },
+                            { "last_modified", zindex = 10, align = "left" },
+                            { "created",       zindex = 10, align = "left" },
+                            { "indent",        zindex = 10 },
                         },
                     },
                     { "icon" },
@@ -332,6 +358,11 @@ return {
                         "container",
                         content = {
                             { "name",       zindex = 10 },
+                            {
+                                "symlink_target",
+                                zindex = 10,
+                                highlight = "NeoTreeSymbolicLinkTarget",
+                            },
                             { "git_status", zindex = 10, align = "left", hide_when_expanded = true },
                             { "clipboard",  zindex = 10 },
                             {
@@ -348,7 +379,12 @@ return {
                     {
                         "container",
                         content = {
-                            { "indent", zindex = 10, align = "left" },
+                            -- optimize order
+                            { "file_size",     zindex = 10, align = "left" },
+                            -- { "type",          zindex = 10, align = "left" },
+                            { "last_modified", zindex = 10, align = "left" },
+                            { "created",       zindex = 10, align = "left" },
+                            { "indent",        zindex = 10, align = "left" },
                         },
                     },
                     { "icon" },
@@ -356,6 +392,11 @@ return {
                         "container",
                         content = {
                             { "name",        zindex = 10 },
+                            {
+                                "symlink_target",
+                                zindex = 10,
+                                highlight = "NeoTreeSymbolicLinkTarget",
+                            },
                             { "git_status",  zindex = 10, align = "left" },
                             { "clipboard",   zindex = 10 },
                             { "bufnr",       zindex = 10 },
