@@ -43,4 +43,6 @@ M.lualine_winbar_exclude = vim.list_extend({}, base_exclude)
 
 M.lualine_statusbar_exclude = vim.list_extend({}, base_exclude)
 
+M.comment_toggle_exclude = vim.list_extend(extend, base_exclude)
+
 return M

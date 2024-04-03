@@ -11,12 +11,30 @@ return {
             },
         },
         config = function()
+            local ft = require("share.ft")
+
             require("mini.comment").setup({
                 mappings = {
                     comment = "<C-c>",
                     comment_line = "<C-c>",
                     comment_visual = "<C-c>",
                     textobject = "gc",
+                },
+                hooks = {
+                    pre = function()
+                        local buf = vim.api.nvim_win_get_buf(0)
+                        if vim.bo[buf].readonly then
+                            return false
+                        end
+                        -- ignore certain ft
+                        local buf_ft = vim.bo.filetype
+
+                        for _, t in ipairs(ft.comment_toggle_exclude) do
+                            if buf_ft == t then
+                                return false
+                            end
+                        end
+                    end,
                 },
             })
         end

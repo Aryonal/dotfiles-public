@@ -38,6 +38,7 @@ local fixed_bindings = {
     { key = { "<Left>", "<C-h>" },  cmd = "<C-w>h",            desc = "[Window] Navigate left" },
     { key = { "<Right>", "<C-l>" }, cmd = "<C-w>l",            desc = "[Window] Navigate right" },
     { key = { "<Up>", "<C-k>" },    cmd = "<C-w>k",            desc = "[Window] Navigate up" },
+    { key = [[<C-\>n]],             cmd = [[<C-\><C-n>]],      desc = "[Term] Normal mode",           mode = { "t" } },
 }
 
 local lsp_bindings = {
