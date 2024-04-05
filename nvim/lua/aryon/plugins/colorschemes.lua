@@ -12,6 +12,7 @@ local plugins = {
                     hl.LspInfoBorder = { link = "FloatBorder" }
                     hl.GitSignsCurrentLineBlame = { link = "Comment" }
                     hl.EndOfBuffer = { link = "NonText" }
+                    hl.WinSeparator = { fg = c.polar_night.brighter }
 
                     local darken = require("nord.utils").darken
                     local amount = 0.20

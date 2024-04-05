@@ -1,5 +1,6 @@
 return {
     "stevearc/aerial.nvim",
+    enabled = true,
     dependencies = {
         "onsails/lspkind.nvim",
     },

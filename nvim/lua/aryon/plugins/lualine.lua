@@ -1,3 +1,4 @@
+---@diagnostic disable: unused-local, unused-function
 return {
     "nvim-lualine/lualine.nvim",
     enabled = true,
@@ -97,7 +98,14 @@ return {
         local function get_window_static_info_components()
             return {
                 indentation,
-                "encoding",
+                -- "encoding",
+                function()
+                    local enc = vim.opt.fileencoding:get()
+                    if enc == "utf-8" then
+                        return ""
+                    end
+                    return enc
+                end,
                 {
                     "fileformat",
                     icons_enabled = true,
@@ -144,12 +152,9 @@ return {
 
                     shorting_target = 32, -- shortens path to leave 40 spaces in the window
                     -- for other components. (terrible name, any suggestions?)
-                    -- symbols = {
-                    --     modified = "[+]", -- Text to show when the file is modified.
-                    --     readonly = "[-]", -- Text to show when the file is non-modifiable or readonly.
-                    --     unnamed = "[No Name]", -- Text to show for unnamed buffers.
-                    --     newfile = "[New]", -- Text to show for newly created file before first write
-                    -- },
+                    symbols = {
+                        unnamed = "[無名]",
+                    },
                 },
             }
         end
@@ -159,15 +164,19 @@ return {
                 icons_enabled = false,
                 theme = "auto",
                 component_separators = { left = "", right = "" },
+                -- section_separators = "",
                 disabled_filetypes = {
                     statusline = ft.lualine_statusbar_exclude,
                     winbar = ft.lualine_winbar_exclude,
                 },
                 padding = { left = 1, right = 1 },
-                globalstatus = false,
+                globalstatus = true,
             },
             sections = {
-                lualine_a = { get_git_branch_component() },
+                lualine_a = {
+                    function() return path_util.get_cwd_short(32) end,
+                    get_git_branch_component(),
+                },
                 lualine_b = {},
                 lualine_c = get_window_dynamic_info_components(),
                 lualine_x = get_window_static_info_components(),
@@ -184,16 +193,16 @@ return {
             },
             tabline = {
                 lualine_a = {
-                    function() return path_util.get_cwd_short(32) end,
-                },
-                lualine_b = {
+                    -- function() return path_util.get_cwd_short(32) end,
                     {
                         "tabs",
                         tab_max_length = 32,
                         max_length = vim.o.columns,
                         mode = 2, -- 0: Shows tab_nr 1: Shows tab_name 2: Shows tab_nr + tab_name
-                        path = 1, -- 1: relative 2: absolute 3: shortened absolute 4: file name
+                        path = 4, -- 1: relative 2: absolute 3: shortened absolute 4: file name
                     },
+                },
+                lualine_b = {
                 },
                 lualine_c = {},
                 lualine_x = {},

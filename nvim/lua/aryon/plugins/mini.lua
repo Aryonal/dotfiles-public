@@ -53,7 +53,11 @@ return {
             },
         },
         config = function()
-            require("mini.splitjoin").setup()
+            require("mini.splitjoin").setup({
+                mappings = {
+                    toggle = "",
+                }
+            })
 
             local set_cmd = require("utils.command").set_cmd
             local set_abbr = require("utils.command").set_abbr

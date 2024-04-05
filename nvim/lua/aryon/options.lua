@@ -35,6 +35,7 @@ o.colorcolumn = tostring(style.MAX_LENGTH)
 -- o.equalalways = false
 
 vim.opt.wildignore:append({ "*/node_modules/*", "*/vendor/*" })
+vim.opt.shortmess:append({ I = true }) -- disable :intro
 
 -- window-local options
 -- wo.cursorcolumn = true

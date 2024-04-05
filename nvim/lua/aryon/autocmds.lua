@@ -1,3 +1,4 @@
+---@diagnostic disable: unused-function, unused-local
 local config = require("aryon.config").vim
 
 local function vim_enter_directory_setup(args)
@@ -24,11 +25,9 @@ local function vim_enter_directory_setup(args)
         return
     end
 
-    -- if no_name then
-    --     vim.cmd([[
-    --         intro
-    --     ]])
-    -- end
+    if no_name then
+        vim.cmd.bw(args.buf)
+    end
 
     -- open the tree
 
@@ -50,6 +49,28 @@ local custom_aug = vim.api.nvim_create_augroup("aryon/autocmd.lua", { clear = tr
 --     desc = "Update cwd based on argument",
 --     callback = vim_enter_directory_setup,
 -- })
+
+vim.api.nvim_create_autocmd({ "TermOpen" }, {
+    group = custom_aug,
+    desc = "Disable line numbers in terminal buffers",
+    pattern = "*",
+    callback = function()
+        vim.o.number = false
+
+        vim.cmd [[
+            startinsert
+        ]]
+    end
+})
+
+vim.api.nvim_create_autocmd({ "TermClose" }, {
+    group = custom_aug,
+    desc = "Close window on terminal close",
+    pattern = "*",
+    callback = function()
+        vim.api.nvim_win_close(0, {})
+    end
+})
 
 if config.auto_load_session_local then
     vim.api.nvim_create_autocmd({ "VimEnter" }, {

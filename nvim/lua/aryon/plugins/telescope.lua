@@ -214,6 +214,7 @@ return {
                 buffers = {
                     -- theme = "dropdown",
                     initial_mode = "insert",
+                    show_all_buffers = true,
                 },
                 find_files = {
                     -- theme = "dropdown",

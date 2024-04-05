@@ -171,7 +171,7 @@ return {
                     [k.file.open_in_split] = "open_split",   -- "open_split" or "split_with_window_picker",
                     [k.file.open_in_vsplit] = "open_vsplit", -- "open_vsplit" or "vsplit_with_window_picker",
                     [k.file.open_in_tab] = "open_tabnew",
-                    [k.tree.focus] = "jump_previous",
+                    -- [k.tree.focus] = "jump_previous",
                     -- ["<tab>"] = { "toggle_node" },
                     [k.ed.fold] = { "toggle_node" },
                     ["<2-LeftMouse>"] = "open", -- "open" or "open_with_window_picker",
@@ -330,7 +330,7 @@ return {
             },
             last_modified = {
                 enabled = true,
-                required_width = 88, -- min width of window required to show this column
+                required_width = 100, -- min width of window required to show this column
             },
             created = {
                 enabled = false,

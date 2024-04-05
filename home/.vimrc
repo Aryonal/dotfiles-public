@@ -33,17 +33,13 @@ set termguicolors
 set title
 set wrap
 
-set foldmethod=syntax
+set foldmethod=indent
 set foldlevel=99
 
 set directory=/tmp
 
 " Keymaps
 let mapleader = ","
-
-" EasyMotion
-map  ss <Plug>(easymotion-bd-w)
-nmap ss <Plug>(easymotion-overwin-w)
 
 nnoremap <C-e> 5<C-e>
 nnoremap <C-y> 5<C-y>
