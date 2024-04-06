@@ -5,6 +5,7 @@ return {
             "nvim-treesitter/nvim-treesitter-textobjects",
         },
         build = ":TSUpdate",
+        event = { "BufReadPre", "BufWritePre", "BufNewFile", "VeryLazy" },
         config = function()
             ---@diagnostic disable-next-line: missing-fields
             require("nvim-treesitter.configs").setup({

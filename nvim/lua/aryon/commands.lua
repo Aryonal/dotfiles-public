@@ -57,52 +57,6 @@ local cmds = {
             vim.notify('Copied "' .. path .. '" to the clipboard!')
         end,
     },
-    {
-        cmd = "SaveSessionLocal",
-        desc = "Save vim session of current workspace",
-        exec = function()
-            local session_folder = vim.fn.stdpath("state") .. "/sessions"
-
-            vim.fn.mkdir(session_folder, "p")
-            if vim.fn.isdirectory(session_folder) ~= 1 then
-                vim.notify("Failed to create session folder: " .. session_folder)
-                return
-            end
-
-            local cw = vim.fn.getcwd()
-            cw = require("utils.path").strip_path(cw)
-            local session_file = session_folder .. "/" .. require("utils.path").path_as_filename(cw) .. ".vim"
-
-            vim.cmd(string.format("mksession! %s", session_file))
-            vim.notify("Saved to " .. session_file)
-        end,
-    },
-    {
-        cmd = "LoadSessionLocal",
-        desc = "Load vim session of current workspace",
-        abbr = "sl",
-        exec = function()
-            local session_folder = vim.fn.stdpath("state") .. "/sessions"
-
-            vim.fn.mkdir(session_folder, "p")
-            if vim.fn.isdirectory(session_folder) ~= 1 then
-                vim.notify("Failed to create session folder: " .. session_folder)
-                return
-            end
-
-            local cw = vim.fn.getcwd()
-            cw = require("utils.path").strip_path(cw)
-            local session_file = session_folder .. "/" .. require("utils.path").path_as_filename(cw) .. ".vim"
-
-            if vim.fn.filereadable(session_file) ~= 1 then
-                vim.notify("Session file not exists: " .. session_file)
-                return
-            end
-
-            vim.cmd(string.format("source %s", session_file))
-            vim.notify("Loading " .. session_file)
-        end,
-    },
 }
 
 -- local cmds = require("aryon.config.commands")

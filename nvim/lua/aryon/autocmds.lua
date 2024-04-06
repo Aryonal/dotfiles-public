@@ -72,42 +72,6 @@ vim.api.nvim_create_autocmd({ "TermClose" }, {
     end
 })
 
-if config.auto_load_session_local then
-    vim.api.nvim_create_autocmd({ "VimEnter" }, {
-        group = custom_aug,
-        desc = "Load session on enter",
-        callback = function()
-            local session_folder = vim.fn.stdpath("state") .. "/sessions"
-            local cw = vim.fn.getcwd()
-            cw = require("utils.path").strip_path(cw)
-            local session_file = session_folder .. "/" .. require("utils.path").path_as_filename(cw) .. ".vim"
-            vim.cmd(string.format("source %s", session_file))
-        end,
-    })
-end
-
-if config.auto_save_session_local then
-    vim.api.nvim_create_autocmd({ "VimLeave" }, {
-        group = custom_aug,
-        desc = "Save session on leave",
-        callback = function()
-            local session_folder = vim.fn.stdpath("state") .. "/sessions"
-
-            vim.fn.mkdir(session_folder, "p")
-            if vim.fn.isdirectory(session_folder) ~= 1 then
-                vim.notify("Failed to create session folder: " .. session_folder)
-                return
-            end
-
-            local cw = vim.fn.getcwd()
-            cw = require("utils.path").strip_path(cw)
-            local session_file = session_folder .. "/" .. require("utils.path").path_as_filename(cw) .. ".vim"
-
-            vim.cmd(string.format("mksession! %s", session_file))
-        end,
-    })
-end
-
 -- highlight yanked text for 200ms using the "Visual" highlight group
 -- REF: https://github.com/craftzdog/dotfiles-public/blob/cf96bcffa1120d0116e9dcf34e8540b0f254ad41/.config/nvim/lua/craftzdog/highlights.lua#L8
 if false then
