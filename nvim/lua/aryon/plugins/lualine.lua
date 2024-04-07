@@ -154,6 +154,7 @@ return {
                     -- for other components. (terrible name, any suggestions?)
                     symbols = {
                         unnamed = "[無名]",
+                        readonly = "[RO]",
                     },
                 },
             }

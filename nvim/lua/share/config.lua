@@ -18,7 +18,7 @@ local cfg = {
     },
     vim = {
         default_delay_ms = 300,
-        auto_load_session_local = false,
+        auto_load_session_local = true,
         auto_save_session_local = true,
     },
     ui = {
