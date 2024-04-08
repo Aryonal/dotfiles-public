@@ -1,7 +1,7 @@
 [core]
 	editor = nvim
 [alias]
-	st = status
+	st = status -bsu --ignored
 	last = log -1
 	unstage = reset HEAD
 	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
@@ -11,15 +11,18 @@
     cmm = commit -m
 	wk = worktree
 	sync= !git add -A && git status && git commit -m \""sync: $(date '+%Y-%m-%d %H:%M')"\"
-[difftool]
-    prompt = true
-[diff]
-    tool = nvimdiff
-[difftool "nvimdiff"]
-	cmd = nvim -d \"$LOCAL\" \"$REMOTE\"
-[mergetool "nvimdiff"]
-	cmd = nvim -d \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-	trustExitCode = true
+; git-delta
+; [core]
+;     pager = delta
+; [interactive]
+;     diffFilter = delta --color-only
+; [delta]
+;     navigate = true    # use n and N to move between diff sections
+; [merge]
+;     conflictstyle = diff3
+; [diff]
+;     colorMoved = default
+; git-lfs
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f

@@ -212,12 +212,9 @@ return {
                 return {
                     ["<C-f>"] = cmp.mapping(luasnip_next_placeholder, { "i" }),
                     ["<C-b>"] = cmp.mapping(luasnip_prev_placeholder, { "i" }),
-                    ["<C-Space>"] = cmp.mapping(cmp.mapping.complete(), { "i", "c" }),
-                    ["<C-y>"] = cmp.config.disable, -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
-                    ["<C-e>"] = cmp.mapping({
-                        i = cmp.mapping.abort(),
-                        c = cmp.mapping.close(),
-                    }),
+                    ["<C-x>"] = cmp.mapping(cmp.mapping.complete(), { "i", "c" }), -- replace omni func
+                    ["<C-y>"] = cmp.config.disable,
+                    ["<C-c>"] = cmp.mapping(cmp.mapping.abort(), { "i" }),
                     ["<CR>"] = cmp.mapping.confirm({ select = false }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
                     ["<Tab>"] = cmp.mapping(next_item_prompt, { "i", "s" }),
                     ["<S-Tab>"] = cmp.mapping(prev_item, { "i", "s" }),
@@ -231,21 +228,12 @@ return {
             -- REF: https://github.com/hrsh7th/nvim-cmp/blob/main/lua/cmp/config/mapping.lua
             local function get_cmdline_keymap_setup()
                 return {
-                    ["<Tab>"] = {
-                        c = next_item_cmdline,
-                    },
-                    ["<S-Tab>"] = {
-                        c = prev_item_cmdline,
-                    },
-                    ["<Down>"] = {
-                        c = next_item,
-                    },
-                    ["<Up>"] = {
-                        c = prev_item,
-                    },
-                    ["<C-e>"] = {
-                        c = cmp.mapping.close(),
-                    },
+                    ["<C-x>"] = { c = cmp.mapping.complete() }, -- replace omni func
+                    ["<Tab>"] = { c = next_item_cmdline },
+                    ["<S-Tab>"] = { c = prev_item_cmdline },
+                    ["<Down>"] = { c = next_item },
+                    ["<Up>"] = { c = prev_item },
+                    ["<C-c>"] = { c = cmp.mapping.close() },
                 }
             end
 

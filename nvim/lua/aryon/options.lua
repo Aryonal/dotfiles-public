@@ -6,9 +6,8 @@ local style = require("aryon.config").code_style
 local bg = require("aryon.config").colors.background
 
 -- global options
--- default setting for tab and space
-o.scrolloff = 8 -- keep cursor vertically centralized
 -- o.updatetime = 1000 -- the timeout for CursorHold
+o.scrolloff = 8 -- keep cursor vertically centralized
 o.autoindent = true
 o.autoread = true
 o.dir = "/tmp"
@@ -29,6 +28,13 @@ o.tabstop = 4
 o.title = true
 -- o.spell = true
 -- o.spelllang = "en"
+
+-- NonText
+vim.opt.list = true
+vim.opt.listchars:append("space:⋅")
+vim.opt.listchars:append("eol:↴")
+vim.opt.listchars:append("tab:󰌒 ")
+
 
 o.colorcolumn = tostring(style.MAX_LENGTH)
 

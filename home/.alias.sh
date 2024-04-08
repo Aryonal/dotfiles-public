@@ -1,6 +1,18 @@
-# Alias shared by bash and zsh
+# Alias shared between bash and zsh
 # $ tail .bashrc # or .zshrc
 # [ -f path/to/.alias.sh ] && source path/to/.alias.sh
+
+# XDG configuration
+# REF: https://wiki.archlinux.org/title/XDG_Base_Directory
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_STATE_HOME="$HOME/.local/state"
+
+export XDG_DATA_DIRS="/usr/local/share:/usr/share"
+export XDG_CONFIG_DIRS="/etc/xdg"
+
+# Alias
 
 if command -v lsd &>/dev/null; then
 	alias ls="lsd --group-directories-first"

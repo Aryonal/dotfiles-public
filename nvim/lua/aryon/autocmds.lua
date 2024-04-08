@@ -68,7 +68,7 @@ vim.api.nvim_create_autocmd({ "TermClose" }, {
     desc = "Close window on terminal close",
     pattern = "*",
     callback = function()
-        vim.api.nvim_win_close(0, {})
+        vim.api.nvim_buf_delete(0, {})
     end
 })
 

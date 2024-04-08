@@ -5,8 +5,13 @@ return {
         event = { "BufReadPost", "BufWritePost", "BufNewFile" },
         keys = {
             {
-                "<C-c>",
-                mode = { "n", "v" },
+                "gcc",
+                mode = { "n" },
+                desc = "[Comment] Toggle"
+            },
+            {
+                "gc",
+                mode = { "v" },
                 desc = "[Comment] Toggle"
             },
         },
@@ -15,10 +20,11 @@ return {
 
             require("mini.comment").setup({
                 mappings = {
-                    comment = "<C-c>",
-                    comment_line = "<C-c>",
-                    comment_visual = "<C-c>",
-                    textobject = "gc",
+                    -- FIXME: builtin comment in https://github.com/neovim/neovim/pull/28176
+                    comment = "gc",        -- use `gcip`
+                    comment_line = "gcc",  -- current line
+                    comment_visual = "gc", -- visual mode
+                    textobject = "gc",     -- dgc
                 },
                 hooks = {
                     pre = function()
