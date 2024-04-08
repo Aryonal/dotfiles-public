@@ -104,6 +104,32 @@ if command -v kubectl &>/dev/null; then
 	fi
 fi
 
+# tmux
+if command -v tmux &> /dev/null
+then
+    alias tmd="tmux detach" # tmux detach
+    # alias tmk="tmux kill-session -t" # tmux kill session by name # use tkss
+    # alias tmka="tmux ls -F \#S | xargs -IX tmux kill-session -t X" # tmux kill all session # use tksv
+    alias tmr="tmux rename" # tmux rename session
+
+    if command -v z &> /dev/null
+    then
+        function tm () {
+            if ! [[ -n $@ ]]; then
+                tmux
+                return $?
+            elif tmux list-sessions | grep $1 &> /dev/null; then
+                tmux attach -d -t $1
+                return $?
+            else
+                (z $1 && tmux new-session -s $1)
+                return $?
+            fi
+        }
+    fi
+fi
+
+
 # git
 command -v git &>/dev/null && alias g="git"
 
@@ -114,18 +140,3 @@ export EDITOR="nvim"
 
 alias vi=nvim
 # alias vim=nvim
-
-# others
-
-function conf-zshrc() {
-	$EDITOR $XDG_CONFIG_HOME/zsh/.zshrc
-}
-function conf-zz() {
-	$EDITOR $XDG_CONFIG_HOME/zsh/.zz.zsh
-}
-function conf-nvim() {
-	$EDITOR $XDG_CONFIG_HOME/nvim/
-}
-function conf-tmux() {
-	$EDITOR $XDG_CONFIG_HOME/tmux/tmux.conf
-}
