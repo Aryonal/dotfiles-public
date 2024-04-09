@@ -52,13 +52,14 @@ return {
     {
         "hrsh7th/nvim-cmp",
         dependencies = {
-            "hrsh7th/cmp-nvim-lsp",
-            "hrsh7th/cmp-path",
-            "hrsh7th/cmp-cmdline",
-            "hrsh7th/cmp-nvim-lua",
-            "zbirenbaum/copilot-cmp",
             "L3MON4D3/LuaSnip",
+            "hrsh7th/cmp-buffer",
+            "hrsh7th/cmp-cmdline",
+            "hrsh7th/cmp-nvim-lsp",
+            "hrsh7th/cmp-nvim-lua",
+            "hrsh7th/cmp-path",
             "onsails/lspkind.nvim",
+            "zbirenbaum/copilot-cmp",
         },
         event = { "InsertEnter", "CmdlineEnter" },
         config = function()
@@ -66,6 +67,7 @@ return {
             local cmp = require("cmp")
             local feedkeys = require("cmp.utils.feedkeys")
             local keymap = require("cmp.utils.keymap")
+            local types = require("cmp.types")
             local signs = require("share.icons")
 
             -- REF: https://github.com/hrsh7th/nvim-cmp/wiki/Example-mappings#luasnip
@@ -152,9 +154,33 @@ return {
 
             local function next_item(fallback)
                 if cmp.visible() then
-                    cmp.select_next_item()
+                    cmp.select_next_item({ behavior = types.cmp.SelectBehavior.Insert })
                 else
                     fallback()
+                end
+            end
+
+            local function prev_item(fallback)
+                if cmp.visible() then
+                    cmp.select_prev_item({ behavior = types.cmp.SelectBehavior.Insert })
+                else
+                    fallback()
+                end
+            end
+
+            local function next_item_or_show()
+                if cmp.visible() then
+                    cmp.select_next_item({ behavior = types.cmp.SelectBehavior.Insert })
+                else
+                    cmp.complete()
+                end
+            end
+
+            local function prev_item_or_show()
+                if cmp.visible() then
+                    cmp.select_prev_item({ behavior = types.cmp.SelectBehavior.Insert })
+                else
+                    cmp.complete()
                 end
             end
 
@@ -163,24 +189,6 @@ return {
                     cmp.select_next_item()
                 else
                     feedkeys.call(keymap.t("<C-z>"), "n")
-                end
-            end
-
-            local function next_item_prompt(fallback)
-                if cmp.visible() and has_words_before() then -- for copilot
-                    cmp.select_next_item()
-                    -- elseif has_words_before() then -- disable this for copilot
-                    --     cmp.complete()
-                else
-                    fallback()
-                end
-            end
-
-            local function prev_item(fallback)
-                if cmp.visible() then
-                    cmp.select_prev_item()
-                else
-                    fallback()
                 end
             end
 
@@ -216,12 +224,13 @@ return {
                     ["<C-y>"] = cmp.config.disable,
                     ["<C-c>"] = cmp.mapping(cmp.mapping.abort(), { "i" }),
                     ["<CR>"] = cmp.mapping.confirm({ select = false }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-                    ["<Tab>"] = cmp.mapping(next_item_prompt, { "i", "s" }),
+                    ["<Tab>"] = cmp.mapping(next_item, { "i", "s" }),
                     ["<S-Tab>"] = cmp.mapping(prev_item, { "i", "s" }),
                     ["<Down>"] = cmp.mapping(next_item, { "i", "s" }),
-                    ["<C-n>"] = cmp.mapping(next_item, { "i", "s" }),
                     ["<Up>"] = cmp.mapping(prev_item, { "i", "s" }),
-                    ["<C-p>"] = cmp.mapping(prev_item, { "i", "s" }),
+                    -- mock omni func
+                    ["<C-n>"] = { i = next_item_or_show },
+                    ["<C-p>"] = { i = prev_item_or_show },
                 }
             end
 
@@ -233,6 +242,8 @@ return {
                     ["<S-Tab>"] = { c = prev_item_cmdline },
                     ["<Down>"] = { c = next_item },
                     ["<Up>"] = { c = prev_item },
+                    ["<C-n>"] = { c = next_item_or_show },
+                    ["<C-p>"] = { c = prev_item_or_show },
                     ["<C-c>"] = { c = cmp.mapping.close() },
                 }
             end
@@ -265,8 +276,6 @@ return {
                 }
             end
 
-            -- config for lsp + nvim-cmp
-
             -- Setup nvim-cmp.
             cmp.setup({
                 snippet = get_snippet_setup(),
@@ -280,30 +289,22 @@ return {
 
             -- Set configuration for specific filetype.
             cmp.setup.filetype("gitcommit", {
-                sources = cmp.config.sources({
-                    -- { name = 'cmp_git' }, -- You can specify the `cmp_git` source if you were installed it.
-                }, {
-                    { name = "buffer" },
-                }),
+                sources = { { name = "buffer" } },
             })
 
             -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
             cmp.setup.cmdline("/", {
                 mapping = get_cmdline_keymap_setup(),
-                -- mapping = cmp.mapping.preset.cmdline(), -- ref: https://github.com/hrsh7th/nvim-cmp/issues/875#issuecomment-1214416687
                 view = {
                     entries = "custom", -- can be "custom", "wildmenu" or "native"
                 },
                 formatting = get_format_name_only_setup(),
-                sources = {
-                    { name = "buffer" },
-                },
+                sources = { { name = "buffer" } },
             })
 
             -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
             cmp.setup.cmdline(":", {
                 mapping = get_cmdline_keymap_setup(),
-                -- mapping = cmp.mapping.preset.cmdline(), -- ref: https://github.com/hrsh7th/nvim-cmp/issues/875#issuecomment-1214416687
                 view = {
                     entries = "custom", -- can be "custom", "wildmenu" or "native"
                 },

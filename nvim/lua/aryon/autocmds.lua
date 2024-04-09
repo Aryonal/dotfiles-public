@@ -8,7 +8,7 @@ local function vim_enter_directory_setup(args)
     -- buffer is a real file on the disk
     local is_real_file = vim.fn.filereadable(args.file) == 1
     -- buffer is a [No Name]
-    local no_name = args.file == "" and vim.bo[args.buf].buftype == ""
+    -- local no_name = args.file == "" and vim.bo[args.buf].buftype == ""
 
     if is_directory then
         -- create a new, empty buffer
@@ -26,7 +26,7 @@ local function vim_enter_directory_setup(args)
     end
 
     if no_name then
-        vim.cmd.bw(args.buf)
+        -- vim.cmd.bw(args.buf)
     end
 
     -- open the tree
@@ -44,11 +44,11 @@ end
 
 local custom_aug = vim.api.nvim_create_augroup("aryon/autocmd.lua", { clear = true })
 
--- vim.api.nvim_create_autocmd({ "VimEnter" }, {
---     group = custom_aug,
---     desc = "Update cwd based on argument",
---     callback = vim_enter_directory_setup,
--- })
+vim.api.nvim_create_autocmd({ "VimEnter" }, {
+    group = custom_aug,
+    desc = "Update cwd based on argument",
+    callback = vim_enter_directory_setup,
+})
 
 vim.api.nvim_create_autocmd({ "TermOpen" }, {
     group = custom_aug,
