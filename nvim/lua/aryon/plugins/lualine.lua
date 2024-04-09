@@ -153,8 +153,8 @@ return {
                     shorting_target = 32, -- shortens path to leave 40 spaces in the window
                     -- for other components. (terrible name, any suggestions?)
                     symbols = {
-                        unnamed = "[無名]",
-                        readonly = "[RO]",
+                        unnamed = icons.noname,
+                        readonly = icons.readonly,
                     },
                 },
             }

@@ -140,3 +140,17 @@ export EDITOR="nvim"
 
 alias vi=nvim
 # alias vim=nvim
+
+# golang
+if command -v go &> /dev/null; then
+    export PATH=$PATH:$(go env GOPATH)/bin
+fi
+
+# user local binaries
+export PATH=$PATH:$HOME/.local/bin:$HOME/.bin
+
+# n: node version manager
+export N_PREFIX="$HOME/n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"  # Added by n-install (see http://git.io/n-install-repo).
+
+# mysql-client
+export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"

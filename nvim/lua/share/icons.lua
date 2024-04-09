@@ -1,21 +1,21 @@
 return {
-    error = "E", -- ,
-    warn = "W", -- ,
-    hint = "H", --  󰛩  󰌵 󱩏 ﯧ 
-    info = "I", -- 
-    debug = "D", -- 
-    code_action = "C", -- 
+    error = "E",
+    warn = "W",
+    hint = "H",
+    info = "I",
+    debug = "D",
+    code_action = "C",
     -- for git
-    git_unstaged = "M", -- M ✎   ±  ●
+    git_unstaged = "M",
     git_staged = "✓",
-    git_add = "A", -- +
-    git_unmerged = "", -- ‡
-    git_renamed = "→", --  ⮕ ➜ 
-    git_untracked = "U", -- U  ? + ★
-    git_deleted = "-", -- 󰚃 󰆴    -
-    git_ignored = "◌", --  
+    git_add = "A",
+    git_unmerged = "",
+    git_renamed = "→",
+    git_untracked = "U",
+    git_deleted = "D",
+    git_ignored = "!!",
     git_conflict = "!",
-    git_branch = "", --   
+    git_branch = "",
     diff_add = "+",
     diff_change = "~",
     diff_delete = "-",
@@ -31,7 +31,10 @@ return {
     arrow_right = "",
     arrow_open = "",
     arrow_void = " ",
+    -- buffers
     added = "[+]",
+    readonly = "[-]",
+    noname = "[無名]",
     -- lsp
     diagnostics_prefix = "■", -- Could be '' '■' '●' '▎' 'x' '@'
     -- REF: https://github.com/hrsh7th/nvim-cmp/wiki/Menu-Appearance#basic-customisations
