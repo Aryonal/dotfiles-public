@@ -39,6 +39,8 @@ local fixed_bindings = {
     { key = { "<Left>", "<C-h>" },  cmd = "<C-w>h",                   desc = "[Window] Navigate left" },
     { key = { "<Right>", "<C-l>" }, cmd = "<C-w>l",                   desc = "[Window] Navigate right" },
     { key = { "<Up>", "<C-k>" },    cmd = "<C-w>k",                   desc = "[Window] Navigate up" },
+
+    { key = "<BS>",                 cmd = "<C-g>u<BS>",               desc = "Keep insert",                  mode = { "v" } },
 }
 
 local lsp_bindings = {
@@ -75,3 +77,6 @@ vim.list_extend(bindings, lsp_bindings)
 
 local maps = require("utils.keymap").batch_set
 maps(bindings)
+
+vim.keymap.del("s", "p")
+vim.keymap.del("s", "c")

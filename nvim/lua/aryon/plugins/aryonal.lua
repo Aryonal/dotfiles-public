@@ -14,5 +14,19 @@ return {
             "SaveLocalSession",
             "LoadLocalSession",
         },
+        config = function()
+            local set = require("utils.keymap").set
+
+            set({
+                key = "<C-w>o",
+                cmd = "<cmd>SaveLocalSession<CR><C-w>o",
+                desc = "Full screen buffer",
+            })
+            set({
+                key = "<C-w>u",
+                cmd = "<cmd>LoadLocalSession<CR>",
+                desc = "Restore full screen",
+            })
+        end
     },
 }
