@@ -38,4 +38,15 @@ function M.merge_tbl(a, b)
     return m
 end
 
+---crop string b from a,
+-- e.g. crop("abcde", "abc") -> "de"
+---@param a string
+---@param b string
+---@return string
+function M.crop(a, b)
+    local start_index = #b + 1
+    local result = string.sub(a, start_index)
+    return result
+end
+
 return M

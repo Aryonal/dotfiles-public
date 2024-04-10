@@ -12,8 +12,10 @@ export XDG_STATE_HOME="$HOME/.local/state"
 export XDG_DATA_DIRS="/usr/local/share:/usr/share"
 export XDG_CONFIG_DIRS="/etc/xdg"
 
-# Alias
+# user local binaries
+export PATH=$PATH:$HOME/.local/bin:$HOME/.bin
 
+# Alias
 if command -v lsd &>/dev/null; then
 	alias ls="lsd --group-directories-first"
 	# use --group-directories-first for GNU ls
@@ -45,6 +47,11 @@ fi
 # Chrome
 if [[ $OSTYPE == 'darwin'* ]]; then
 	alias chrome="open -na \"Google Chrome\" --args --new-window"
+fi
+
+# golang
+if command -v go &> /dev/null; then
+    export PATH=$PATH:$(go env GOPATH)/bin
 fi
 
 function goenv() {
@@ -140,14 +147,6 @@ export EDITOR="nvim"
 
 alias vi=nvim
 # alias vim=nvim
-
-# golang
-if command -v go &> /dev/null; then
-    export PATH=$PATH:$(go env GOPATH)/bin
-fi
-
-# user local binaries
-export PATH=$PATH:$HOME/.local/bin:$HOME/.bin
 
 # n: node version manager
 export N_PREFIX="$HOME/n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"  # Added by n-install (see http://git.io/n-install-repo).

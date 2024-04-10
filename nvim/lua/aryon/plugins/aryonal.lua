@@ -1,3 +1,5 @@
+local go_cfg = require("aryon.config").code_style.go
+
 return {
     {
         "aryonal/sessions.nvim",
@@ -29,4 +31,38 @@ return {
             })
         end
     },
+    {
+        "aryonal/gou.nvim",
+        dependencies = {
+            "nvim-treesitter/nvim-treesitter",
+        },
+        ft = {
+            "go",
+        },
+        init = function()
+            local dir = vim.fn.expand(go_cfg.go_tests_template_dir)
+            if not vim.loop.fs_stat(dir) then
+                vim.notify(vim.fn.system({
+                    "git",
+                    "clone",
+                    "https://github.com/cweill/gotests.git",
+                    "--branch=develop", -- latest stable release
+                    "--depth=1",
+                    dir,
+                }))
+            end
+        end,
+        cmd = {
+            "GoTests",
+            "GoTestsFunc",
+        },
+        config = function()
+            require("gou").setup({
+                gotests = {
+                    named = true,
+                    template_dir = go_cfg.go_tests_template_dir,
+                }
+            })
+        end
+    }
 }

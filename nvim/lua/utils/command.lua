@@ -50,6 +50,8 @@ function M.set_cmd(cmd)
     if cmd.abbr ~= nil then
         M.set_abbr(cmd.abbr, cmd.cmd)
     end
+
+    ---TODO: add keymap setting
 end
 
 return M

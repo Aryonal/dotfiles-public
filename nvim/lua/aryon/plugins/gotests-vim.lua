@@ -1,5 +1,6 @@
 return {
     "buoto/gotests-vim",
+    enabled = false,
     ft = { "go" },
     cmd = {
         "GoTests",

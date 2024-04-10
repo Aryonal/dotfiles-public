@@ -25,7 +25,10 @@ local cmds = {
         cmd = "CopyPath",
         desc = "Copy relative path of current buffer",
         exec = function()
-            local path = vim.fn.expand("%")
+            local path = vim.fn.expand("%:p")
+            -- "%" seems not to be so reliable
+            local cwd = vim.fn.getcwd()
+            path = require("utils.lua").crop(path, cwd)
             vim.fn.setreg("+", path)
             vim.notify('Copied "' .. path .. '" to the clipboard!')
         end,
@@ -43,7 +46,10 @@ local cmds = {
         cmd = "CopyDir",
         desc = "Copy absolute path of current buffer directory",
         exec = function()
-            local path = vim.fn.expand("%:h")
+            local path = vim.fn.expand("%:ph")
+            -- "%" seems not to be so reliable
+            local cwd = vim.fn.getcwd()
+            path = require("utils.lua").crop(path, cwd)
             vim.fn.setreg("+", path)
             vim.notify('Copied "' .. path .. '" to the clipboard!')
         end,
@@ -57,6 +63,14 @@ local cmds = {
             vim.notify('Copied "' .. path .. '" to the clipboard!')
         end,
     },
+    {
+        cmd = "TrssSitterInspect",
+        abbr = "tti",
+        desc = "Treesitter inspect",
+        exec = function()
+            vim.treesitter.inspect_tree()
+        end
+    }
 }
 
 -- local cmds = require("aryon.config.commands")

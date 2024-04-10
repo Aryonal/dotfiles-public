@@ -240,10 +240,10 @@ return {
                     ["<C-x>"] = { c = cmp.mapping.complete() }, -- replace omni func
                     ["<Tab>"] = { c = next_item_cmdline },
                     ["<S-Tab>"] = { c = prev_item_cmdline },
-                    ["<Down>"] = { c = next_item },
-                    ["<Up>"] = { c = prev_item },
-                    ["<C-n>"] = { c = next_item_or_show },
-                    ["<C-p>"] = { c = prev_item_or_show },
+                    -- ["<Down>"] = { c = next_item }, -- for cmd history
+                    -- ["<Up>"] = { c = prev_item },
+                    -- ["<C-n>"] = { c = next_item_or_show },
+                    -- ["<C-p>"] = { c = prev_item_or_show },
                     ["<C-c>"] = { c = cmp.mapping.close() },
                 }
             end
