@@ -32,14 +32,15 @@ return {
         end
     },
     {
-        "aryonal/gou.nvim",
+        -- "aryonal/gou.nvim",
+        dir = "~/src/aryonal/gou.nvim",
         dependencies = {
             "nvim-treesitter/nvim-treesitter",
         },
         ft = {
             "go",
         },
-        init = function()
+        build = function()
             local dir = vim.fn.expand(go_cfg.go_tests_template_dir)
             if not vim.loop.fs_stat(dir) then
                 vim.notify(vim.fn.system({
@@ -58,7 +59,12 @@ return {
         },
         config = function()
             require("gou").setup({
+                run = {
+                    -- enabled = true,
+                    test_flag = "-count=1",
+                },
                 gotests = {
+                    -- enabled = true,
                     named = true,
                     template_dir = go_cfg.go_tests_template_dir,
                 }

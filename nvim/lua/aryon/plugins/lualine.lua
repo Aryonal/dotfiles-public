@@ -1,4 +1,4 @@
----@diagnostic disable: unused-local, unused-function
+---@diagnostic disable: unused-local, unused-function, missing-parameter
 return {
     "nvim-lualine/lualine.nvim",
     enabled = true,

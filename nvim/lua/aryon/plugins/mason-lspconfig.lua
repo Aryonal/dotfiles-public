@@ -10,6 +10,18 @@ return {
     },
     {
         "neovim/nvim-lspconfig",
+        init = function()
+            require("utils.autocmd").create_autocmd({
+                events = { "ColorScheme" },
+                group_name = "aryon/lspconfig.lua",
+                desc = "Link LspInfoBorder to FloatBorder",
+                callback = function()
+                    vim.cmd([[
+                        hi! link LspInfoBorder FloatBorder
+                    ]])
+                end,
+            })
+        end,
         config = function()
             -- border for LspInfo window
             -- REF: https://neovim.discourse.group/t/lspinfo-window-border/1566/2

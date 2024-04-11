@@ -1,4 +1,4 @@
-# Neovim configs
+# Neovim configs & Lua playground
 
 ```
 Validated on neovim 0.9.5

@@ -2,6 +2,18 @@ return {
     "lewis6991/gitsigns.nvim",
     version = "*", -- To use the latest release
     event = { "BufReadPost", "BufWritePost", "BufNewFile" },
+    init = function()
+        require("utils.autocmd").create_autocmd({
+            events = { "ColorScheme" },
+            group_name = "aryon/gitsigns.lua",
+            desc = "Link GitSignsCurrentLineBlame to Comment",
+            callback = function()
+                vim.cmd([[
+                    hi! link GitSignsCurrentLineBlame Comment
+                ]])
+            end,
+        })
+    end,
     config = function()
         local bmap = require("utils.keymap").set_buffer
         local c = require("aryon.config").keymaps

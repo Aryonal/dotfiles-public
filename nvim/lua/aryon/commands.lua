@@ -27,7 +27,7 @@ local cmds = {
         exec = function()
             local path = vim.fn.expand("%:p")
             -- "%" seems not to be so reliable
-            local cwd = vim.fn.getcwd()
+            local cwd = vim.fn.getcwd() .. "/"
             path = require("utils.lua").crop(path, cwd)
             vim.fn.setreg("+", path)
             vim.notify('Copied "' .. path .. '" to the clipboard!')
@@ -37,7 +37,7 @@ local cmds = {
         cmd = "CopyDirAbs",
         desc = "Copy absolute path of current buffer directory",
         exec = function()
-            local path = vim.fn.expand("%:ph")
+            local path = vim.fn.expand("%:p:h")
             vim.fn.setreg("+", path)
             vim.notify('Copied "' .. path .. '" to the clipboard!')
         end,
@@ -46,9 +46,9 @@ local cmds = {
         cmd = "CopyDir",
         desc = "Copy absolute path of current buffer directory",
         exec = function()
-            local path = vim.fn.expand("%:ph")
+            local path = vim.fn.expand("%:p:h")
             -- "%" seems not to be so reliable
-            local cwd = vim.fn.getcwd()
+            local cwd = vim.fn.getcwd() .. "/"
             path = require("utils.lua").crop(path, cwd)
             vim.fn.setreg("+", path)
             vim.notify('Copied "' .. path .. '" to the clipboard!')

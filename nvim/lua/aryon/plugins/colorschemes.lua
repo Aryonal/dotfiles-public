@@ -1,5 +1,17 @@
 local common_opts = {
     lazy = false,
+    init = function()
+        require("utils.autocmd").create_autocmd({
+            events = { "ColorScheme" },
+            group_name = "aryon/colorscheme.lua",
+            desc = "Link EndOfBuffer to NonText",
+            callback = function()
+                vim.cmd([[
+                    hi! link EndOfBuffer NonText
+                ]])
+            end,
+        })
+    end,
 }
 local plugins = {
     {
@@ -8,10 +20,7 @@ local plugins = {
         config = function()
             require("nord").setup({
                 on_highlights = function(hl, c)
-                    hl.NulllsInfoBorder = { link = "FloatBorder" }
-                    hl.LspInfoBorder = { link = "FloatBorder" }
-                    hl.GitSignsCurrentLineBlame = { link = "Comment" }
-                    hl.EndOfBuffer = { link = "NonText" }
+                    -- hl.EndOfBuffer = { link = "NonText" }
                     hl.WinSeparator = { fg = c.polar_night.brighter }
 
                     local darken = require("nord.utils").darken
