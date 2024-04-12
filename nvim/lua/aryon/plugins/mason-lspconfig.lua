@@ -11,7 +11,7 @@ return {
     {
         "neovim/nvim-lspconfig",
         init = function()
-            require("utils.autocmd").create_autocmd({
+            require("utils.vim").create_autocmd({
                 events = { "ColorScheme" },
                 group_name = "aryon/lspconfig.lua",
                 desc = "Link LspInfoBorder to FloatBorder",
@@ -77,10 +77,7 @@ return {
                     lspconfig.lua_ls.setup(lsp.sumneko)
                 else
                     -- other servers
-                    lspconfig[server].setup({
-                        on_attach = lsp.on_attach,
-                        capabilities = lsp.capabilities,
-                    })
+                    lspconfig[server].setup(lsp.default)
                 end
             end
         end,

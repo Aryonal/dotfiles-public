@@ -19,15 +19,17 @@ o.incsearch = true
 o.infercase = true
 o.laststatus = 2
 o.mouse = "a"
-o.shiftwidth = 4
 o.smartcase = true
-o.smartindent = true
-o.softtabstop = 4
 o.swapfile = true
-o.tabstop = 4
 o.title = true
 -- o.spell = true
 -- o.spelllang = "en"
+
+-- Indentation
+o.smartindent = true
+o.shiftwidth = 4
+o.tabstop = 4
+o.softtabstop = 4
 
 -- NonText
 vim.opt.list = true
@@ -35,8 +37,9 @@ vim.opt.listchars:append("space:⋅")
 vim.opt.listchars:append("eol:↴")
 vim.opt.listchars:append("tab:» ")
 
-
 o.colorcolumn = tostring(style.MAX_LENGTH)
+o.termguicolors = true
+o.bg = bg
 
 -- o.equalalways = false
 
@@ -53,10 +56,6 @@ wo.wrap = true
 -- window split
 o.splitright = true
 o.splitbelow = true
-
--- REF: https://www.reddit.com/r/neovim/comments/qoy419/comment/hjr8oev/?utm_source=share&utm_medium=web2x&context=3
-o.termguicolors = true
-o.bg = bg
 
 -- :h sessionoptions
 -- default "blank,buffers,curdir,folds,help,tabpages,winsize,terminal"

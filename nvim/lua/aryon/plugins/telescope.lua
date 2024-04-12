@@ -146,6 +146,23 @@ return {
     cmd = {
         "Telescope",
     },
+    init = function()
+        require("utils.vim").create_autocmd({
+            events = { "ColorScheme" },
+            group_name = "aryon/telescope.lua",
+            desc = "Link TelescopeBorder to FloatBorder",
+            callback = function()
+                vim.cmd([[
+                        hi! link TelescopeBorder FloatBorder
+                        hi! link TelescopePromptBorder FloatBorder
+                        hi! link TelescopeResultsBorder FloatBorder
+                        hi! link TelescopePreviewBorder FloatBorder
+
+                        hi! link TelescopePromptCounter FloatNornal
+                    ]])
+            end,
+        })
+    end,
     config = function()
         local telescope = require("telescope")
         local actions = require("telescope.actions")
@@ -331,7 +348,7 @@ return {
         telescope.load_extension("fzf")
         telescope.load_extension("live_grep_args")
 
-        local set_abbr_batch = require("utils.command").batch_set_abbr
+        local set_abbr_batch = require("utils.vim").batch_set_abbr
         local abbrs = {
             {
                 name = "tel",

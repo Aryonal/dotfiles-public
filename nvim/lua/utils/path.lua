@@ -46,35 +46,18 @@ function M.get_file_path_short(l)
     return M.shorten_path(pth, "/", l)
 end
 
-function M.get_session_folder()
-    local wd = vim.fn.getcwd()
-    local datapath = vim.fn.stdpath("data")
-    wd = M.strip_path(wd)
-    wd = string.gsub(wd, "/", ".") -- Replace slashes with dashes
-    return datapath .. "/sessions/" .. wd
-end
-
 -- strip_path will remove the leading and trailing slashes, and dots
 -- Example:
 --  /home/user/.config/nvim -> home/user/.config/nvim
 --  ./home/user/.config/nvim -> home/user/.config/nvim
 function M.strip_path(path)
+    path = string.gsub(path, "^%.", "") -- Remove leading dots
     path = string.gsub(path, "^/*", "") -- Remove leading slashes
     path = string.gsub(path, "/*$", "") -- Remove trailing slashes
-    path = string.gsub(path, "^%.", "") -- Remove leading dots
     return path
 end
 
--- path_as_filename will replace slashes with dots
--- it's used in scenarios where we want to use the path as a filename
-function M.path_as_filename(path)
-    path = M.strip_path(path)
-    return string.gsub(path, "/", ".") -- Replace slashes with dots
-end
-
 ---scan_directory will scan the given directory and call the given function for each file
----@param path string
----@param fn function
 -- fn will be called with the following parameters:
 -- - name: string
 -- - type: string
@@ -89,6 +72,8 @@ end
 -- plugin/ directory
 -- ...
 -- ```
+---@param path string
+---@param fn function
 function M.scan_directory(path, fn)
     local handle, err = vim.loop.fs_scandir(path)
     if not handle then

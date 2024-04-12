@@ -15,8 +15,8 @@ return {
         require("CopilotChat").setup()
 
         -- setup abbr
-        require("utils.command").set_abbr("cco", "CopilotChatOpen")
-        require("utils.command").set_abbr("cce", "CopilotChatExplain")
-        require("utils.command").set_abbr("cct", "CopilotChatTests")
+        require("utils.vim").set_abbr("cco", "CopilotChatOpen")
+        require("utils.vim").set_abbr("cce", "CopilotChatExplain")
+        require("utils.vim").set_abbr("cct", "CopilotChatTests")
     end,
 }

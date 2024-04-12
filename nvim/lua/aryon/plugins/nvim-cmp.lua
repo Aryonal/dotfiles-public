@@ -1,3 +1,4 @@
+---@diagnostic disable: deprecated, unused-function, unused-local
 return {
     {
         "zbirenbaum/copilot.lua",
@@ -63,7 +64,7 @@ return {
         },
         event = { "InsertEnter", "CmdlineEnter" },
         config = function()
-            local luasnip = require("luasnip") ---@diagnostic disable-line: different-requires
+            local luasnip = require("luasnip")
             local cmp = require("cmp")
             local feedkeys = require("cmp.utils.feedkeys")
             local keymap = require("cmp.utils.keymap")
@@ -72,7 +73,6 @@ return {
 
             -- REF: https://github.com/hrsh7th/nvim-cmp/wiki/Example-mappings#luasnip
             local function has_words_before()
-                ---@diagnostic disable-next-line: deprecated
                 local line, col = unpack(vim.api.nvim_win_get_cursor(0))
                 return col ~= 0 and
                     vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
@@ -228,6 +228,8 @@ return {
                     ["<S-Tab>"] = cmp.mapping(prev_item, { "i", "s" }),
                     ["<Down>"] = cmp.mapping(next_item, { "i", "s" }),
                     ["<Up>"] = cmp.mapping(prev_item, { "i", "s" }),
+                    ["<C-j>"] = cmp.mapping(next_item, { "i", "s" }),
+                    ["<C-k>"] = cmp.mapping(prev_item, { "i", "s" }),
                     -- mock omni func
                     ["<C-n>"] = { i = next_item_or_show },
                     ["<C-p>"] = { i = prev_item_or_show },
@@ -316,7 +318,7 @@ return {
             })
 
             -- setup hl for copilot
-            vim.api.nvim_set_hl(0, "CmpItemKindCopilot", { fg = "#72c44d" })
+            vim.api.nvim_set_hl(0, "CmpItemKindCopilot", { fg = "#72c44d", default = true })
         end,
     },
     {

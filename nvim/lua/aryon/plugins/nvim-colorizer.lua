@@ -1,5 +1,6 @@
 return {
     "NvChad/nvim-colorizer.lua",
+    event = { "BufReadPost", "BufWritePost", "BufNewFile" },
     config = function()
         -- Exclude some filetypes from highlighting by using `!`
         -- REF: https://github.com/norcalli/nvim-colorizer.lua#customization

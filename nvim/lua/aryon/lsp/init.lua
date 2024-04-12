@@ -1,39 +1,86 @@
 local M = {}
 
 local cfg = require("aryon.config")
+local ft = require("aryon.config.ft")
 
-local capabilities = require("share.lsp").capabilities
-local on_attach_builder = require("share.lsp").build_on_attach
+local function lsp_buf_keymaps(bufnr)
+    if ft.lsp_on_attach_exclude_map[vim.bo[bufnr].filetype] then
+        return
+    end
 
-local function attach_keymaps(bufnr)
     -- Mappings.
+    local list_work_dirs_fn = function() print(vim.inspect(vim.lsp.buf.list_workspace_folders())) end
+    local sync_format_fn = function() vim.lsp.buf.format({ async = false }) end
     local keymaps = {
-        { key = "<leader>wa", cmd = vim.lsp.buf.add_workspace_folder,                                        desc = "[LSP] Add workspace folders" },
-        { key = "<leader>wr", cmd = vim.lsp.buf.remove_workspace_folder,                                     desc = "[LSP] Remove workspace folders" },
-        { key = "<leader>wl", cmd = function() print(vim.inspect(vim.lsp.buf.list_workspace_folders())) end, desc = "[LSP] List workspace folders" },
-        { key = "<leader>f",  cmd = function() vim.lsp.buf.format({ async = false }) end,                    desc = "[LSP] Formatting" },
-        { key = "<leader>f",  cmd = function() vim.lsp.buf.format({ async = false }) end,                    desc = "[LSP] Formatting",              mode = "v" },
-        { key = "<leader>rn", cmd = vim.lsp.buf.rename,                                                      desc = "[LSP] Rename" },
-        { key = "<leader>ca", cmd = vim.lsp.buf.code_action,                                                 desc = "[LSP] Code action" },
-        { key = "<leader>sg", cmd = vim.lsp.buf.signature_help,                                              desc = "[LSP] Signature" },
-        { key = "<C-s>",      cmd = vim.lsp.buf.signature_help,                                              desc = "[I][LSP] Signature",            mode = "i" },
+        { key = "<leader>wa", cmd = vim.lsp.buf.add_workspace_folder,    desc = "[LSP] Add workspace folders" },
+        { key = "<leader>wr", cmd = vim.lsp.buf.remove_workspace_folder, desc = "[LSP] Remove workspace folders" },
+        { key = "<leader>wl", cmd = list_work_dirs_fn,                   desc = "[LSP] List workspace folders" },
+        { key = "<leader>f",  cmd = sync_format_fn,                      desc = "[LSP] Formatting" },
+        { key = "<leader>f",  cmd = sync_format_fn,                      desc = "[LSP] Formatting",              mode = "v" },
+        { key = "<leader>rn", cmd = vim.lsp.buf.rename,                  desc = "[LSP] Rename" },
+        { key = "<leader>ca", cmd = vim.lsp.buf.code_action,             desc = "[LSP] Code action" },
+        { key = "<leader>sg", cmd = vim.lsp.buf.signature_help,          desc = "[LSP] Signature" },
+        { key = "<C-s>",      cmd = vim.lsp.buf.signature_help,          desc = "[I][LSP] Signature",            mode = "i" },
     }
 
     -- setup on_attach function for lsp
-    local bmap = require("utils.keymap").set_buffer
+    local bmap = require("utils.vim").set_buffer_keymap
     for _, keymap in ipairs(keymaps) do
         bmap(keymap, bufnr)
     end
 end
 
 local function on_attach(client, bufnr)
-    on_attach_builder(cfg)(client, bufnr)
-    attach_keymaps(bufnr)
+    -- Enable completion triggered by <c-x><c-o>
+    -- vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
+
+    local m = require("aryon.config.ft").lsp_on_attach_exclude_map
+
+    if m[vim.bo.filetype] then
+        return
+    end
+
+    -- default to be on
+    if not cfg.lsp.semantic_tokens then
+        client.server_capabilities.semanticTokensProvider = nil
+    end
+
+    -- default to be off
+    if cfg.lsp.inlay_hints then
+        if client.server_capabilities.inlayHintProvider then
+            vim.lsp.inlay_hints.enable(bufnr, true)
+        end
+    end
+    lsp_buf_keymaps(bufnr)
+end
+
+local function client_capabilities()
+    local cap = vim.lsp.protocol.make_client_capabilities()
+
+    local ok, _ = pcall(require, "cmp_nvim_lsp")
+    if ok then
+        local c = require("cmp_nvim_lsp").default_capabilities()
+        c.textDocument.completion.completionItem.snippetSupport = true
+        cap = c
+    end
+
+    -- REF: https://github.com/kevinhwang91/nvim-ufo#minimal-configuration
+    cap.textDocument.foldingRange = {
+        dynamicRegistration = false,
+        lineFoldingOnly = true,
+    }
+
+    return cap
 end
 
 -- TODO: use `LspAttach` event
 M.on_attach = on_attach
-M.capabilities = capabilities
+M.capabilities = client_capabilities()
+
+M.default = {
+    on_attach = on_attach,
+    capabilities = capabilities,
+}
 
 M.gopls = {
     on_attach = function(client, bufnr)

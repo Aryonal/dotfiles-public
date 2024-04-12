@@ -1,8 +1,22 @@
 return {
     "RRethy/vim-illuminate", -- To highlight occurrences under cursor
     event = { "BufReadPost", "BufWritePost", "BufNewFile" },
+    init = function()
+        require("utils.vim").create_autocmd({
+            events = { "ColorScheme" },
+            group_name = "aryon/illuminate.lua",
+            desc = "Link IlluminatedWord* to Visual",
+            callback = function()
+                vim.cmd([[
+                        hi! link IlluminatedWordRead CursorLine
+                        hi! link IlluminatedWordWrite CursorLine
+                        hi! link IlluminatedWordText CursorLine
+                    ]])
+            end,
+        })
+    end,
     config = function()
-        local ft = require("share.ft")
+        local ft = require("aryon.config.ft")
         local cfg = require("aryon.config")
 
         -- default configuration

@@ -17,7 +17,7 @@ return {
             "LoadLocalSession",
         },
         config = function()
-            local set = require("utils.keymap").set
+            local set = require("utils.vim").set_keymap
 
             set({
                 key = "<C-w>o",
@@ -32,8 +32,8 @@ return {
         end
     },
     {
-        -- "aryonal/gou.nvim",
-        dir = "~/src/aryonal/gou.nvim",
+        "aryonal/gou.nvim",
+        -- dir = "~/src/aryonal/gou.nvim",
         dependencies = {
             "nvim-treesitter/nvim-treesitter",
         },

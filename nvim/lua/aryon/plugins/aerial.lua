@@ -6,7 +6,7 @@ return {
     },
     event = { "BufReadPost", "BufWritePost", "BufNewFile" },
     config = function()
-        local bmap = require("utils.keymap").set_buffer
+        local bmap = require("utils.vim").set_buffer_keymap
         local c = require("aryon.config").keymaps
 
         require("aerial").setup({

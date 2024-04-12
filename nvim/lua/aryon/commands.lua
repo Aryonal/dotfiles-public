@@ -1,18 +1,5 @@
--- structure
--- REF: h: nvim_create_user_command
--- ```
--- {
---    cmd = "CommandName",
---    desc = "",
---    abbr = "",
---    exec = function () { print("hello") },
---    opts = {},
--- }
--- ```
-
 local cmds = {
     {
-        -- REF: https://www.reddit.com/r/neovim/comments/u221as/comment/i5y9zy2/?utm_source=share&utm_medium=web2x&context=3
         cmd = "CopyPathAbs",
         desc = "Copy absolute path of current buffer",
         exec = function()
@@ -73,8 +60,7 @@ local cmds = {
     }
 }
 
--- local cmds = require("aryon.config.commands")
-local set_cmd = require("utils.command").set_cmd
+local set_cmd = require("utils.vim").set_cmd
 
 for _, c in ipairs(cmds) do
     set_cmd(c)

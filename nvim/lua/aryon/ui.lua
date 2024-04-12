@@ -1,5 +1,5 @@
 local signs = require("share.icons")
-local ua = require("utils.appearance")
+local ua = require("utils.vim")
 local cfg = require("aryon.config")
 
 -- setup customized UI for lsp

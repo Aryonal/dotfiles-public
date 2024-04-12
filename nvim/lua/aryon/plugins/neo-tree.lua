@@ -85,16 +85,16 @@ return {
                     right_padding = 1,
                 },
                 icon = {
-                    folder_closed = icons.arrow_right, --"",
-                    folder_open = icons.arrow_open,    --"",
+                    folder_closed = icons.arrow_right,
+                    folder_open = icons.arrow_open,
                     folder_empty = icons.arrow_void,
                     -- The next two settings are only a fallback, if you use nvim-web-devicons and configure default icons there
                     -- then these will never be used.
-                    default = icons.file_default, -- "*",
+                    default = icons.file_default,
                     highlight = "NeoTreeFileIcon",
                 },
                 modified = {
-                    symbol = icons.added, -- "[+]",
+                    symbol = icons.added,
                     highlight = "NeoTreeModified",
                 },
                 name = {
@@ -105,16 +105,15 @@ return {
                 git_status = {
                     symbols = {
                         -- Change type
-                        added = "",                      -- or "✚", but this is redundant info if you use git_status_colors on the name
-                        modified = "",                   -- or "", but this is redundant info if you use git_status_colors on the name
-                        deleted = icons.git_deleted,     -- or "✖", -- this can only be used in the git_status source
-                        renamed = icons.git_renamed,     -- or "", -- this can only be used in the git_status source
-                        -- Status type
-                        untracked = icons.git_untracked, -- "", -- icons.git_untracked,
-                        ignored = icons.git_ignored,     -- or "",
-                        unstaged = icons.git_unstaged,   -- or "",
-                        staged = icons.git_staged,       -- or "",
-                        conflict = icons.git_conflict,   -- or "",
+                        added = "",
+                        modified = "",
+                        deleted = icons.git_deleted,
+                        renamed = icons.git_renamed,
+                        untracked = icons.git_untracked,
+                        ignored = icons.git_ignored,
+                        unstaged = icons.git_unstaged,
+                        staged = icons.git_staged,
+                        conflict = icons.git_conflict,
                     },
                 },
             },

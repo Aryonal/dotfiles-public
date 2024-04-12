@@ -1,3 +1,4 @@
+---@diagnostic disable: unused-local
 return {
     "kevinhwang91/nvim-ufo",
     version = "*",
@@ -43,9 +44,9 @@ return {
                 return newVirtText
             end,
             -- use treesitter
-            -- provider_selector = function(bufnr, filetype, buftype)
-            --     return { "treesitter", "indent" }
-            -- end,
+            provider_selector = function(bufnr, filetype, buftype)
+                return { "treesitter", "indent" }
+            end,
         })
 
         -- TODO: use statuscol to remove the depth number

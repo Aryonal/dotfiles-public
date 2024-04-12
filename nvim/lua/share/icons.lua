@@ -13,9 +13,9 @@ return {
     git_renamed = "→",
     git_untracked = "U",
     git_deleted = "D",
-    git_ignored = "!!",
-    git_conflict = "!",
-    git_branch = "",
+    git_ignored = "",
+    git_conflict = "!!",
+    git_branch = "⎇", -- 
     diff_add = "+",
     diff_change = "~",
     diff_delete = "-",

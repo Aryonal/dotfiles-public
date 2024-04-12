@@ -70,9 +70,22 @@ return {
     },
     {
         "nvim-treesitter/nvim-treesitter-context",
+        enabled = false,
         -- REF: https://github.com/LazyVim/LazyVim/blob/50b7f426f287ecfc542dd9c197e430b0aca8af04/lua/lazyvim/plugins/treesitter.lua#L120
         -- event = "LazyFile",
         event = { "BufReadPost", "BufWritePost", "BufNewFile" },
+        init = function()
+            require("utils.vim").create_autocmd({
+                events = { "ColorScheme" },
+                group_name = "aryon/nvim-treesitter.lua",
+                desc = "Link TreesitterContext to CursorLine",
+                callback = function()
+                    vim.cmd([[
+                        hi! link TreesitterContext CursorLine
+                    ]])
+                end,
+            })
+        end,
         config = function()
             require("treesitter-context").setup({
                 -- max_lines = 0, -- How many lines the window should span. Values <= 0 mean no limit.

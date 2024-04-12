@@ -7,7 +7,7 @@ return {
     },
     -- lazy = false,
     config = function()
-        local ft = require("share.ft")
+        local ft = require("aryon.config.ft")
         local icons = require("share.icons")
         local path_util = require("utils.path")
 

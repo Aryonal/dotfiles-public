@@ -12,7 +12,7 @@ return {
         vim.g.mkdp_theme = "dark"
     end,
     config = function()
-        local create_abbr_batch = require("utils.command").batch_set_abbr
+        local create_abbr_batch = require("utils.vim").batch_set_abbr
         local abbrs = {
             {
                 name = "mp",

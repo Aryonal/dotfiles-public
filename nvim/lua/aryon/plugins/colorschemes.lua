@@ -1,13 +1,14 @@
 local common_opts = {
     lazy = false,
     init = function()
-        require("utils.autocmd").create_autocmd({
+        require("utils.vim").create_autocmd({
             events = { "ColorScheme" },
             group_name = "aryon/colorscheme.lua",
             desc = "Link EndOfBuffer to NonText",
             callback = function()
                 vim.cmd([[
                     hi! link EndOfBuffer NonText
+                    hi! link NormalFloat Normal
                 ]])
             end,
         })
@@ -16,11 +17,10 @@ local common_opts = {
 local plugins = {
     {
         "gbprod/nord.nvim",
-        enabled = true,
+        enabled = false,
         config = function()
             require("nord").setup({
                 on_highlights = function(hl, c)
-                    -- hl.EndOfBuffer = { link = "NonText" }
                     hl.WinSeparator = { fg = c.polar_night.brighter }
 
                     local darken = require("nord.utils").darken
@@ -81,7 +81,14 @@ local plugins = {
             })
             vim.cmd("colorscheme " .. theme)
         end,
-    }
+    },
+    {
+        "ellisonleao/gruvbox.nvim",
+        config = function()
+            require("gruvbox").setup({})
+            vim.cmd("colorscheme gruvbox")
+        end,
+    },
 }
 
 for i, plugin in ipairs(plugins) do

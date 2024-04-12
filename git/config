@@ -1,42 +1,45 @@
 [core]
 	editor = nvim
 [alias]
-	st = status -bsu
-	last = log -1
-	unstage = reset HEAD
-	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
-	ck = checkout
+    st = status -bsu
+    last = log -1
+    unstage = reset HEAD
+    lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+    ck = checkout
     br = branch
     cm = commit
     cmm = commit -m
-	wk = worktree
-	sync= !git add -A && git status && git commit -m \""sync: $(date '+%Y-%m-%d %H:%M')"\"
-; git-delta
-; [core]
-;     pager = delta
-; [interactive]
-;     diffFilter = delta --color-only
-; [delta]
-;     navigate = true    # use n and N to move between diff sections
-; [merge]
-;     conflictstyle = diff3
-; [diff]
-;     colorMoved = default
-; git-lfs
+    amend = commit --amend
+    wk = worktree
+    df = difftool
+    last = -c diff.external=difft show HEAD --ext-diff
+    recent = -c diff.external=difft log -p --ext-diff
+    against = -c diff.external=difft diff origin/HEAD --ext-diff
+    sync = !git add -A && git status && git commit -m \""sync: $(date '+%Y-%m-%d %H:%M')"\"
+
+[diff]
+    tool = difftastic
+[difftool]
+    prompt = false
+[difftool "difftastic"]
+    cmd = difft "$LOCAL" "$REMOTE"
+[pager]
+    difftool = true
+
 [filter "lfs"]
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
 
 ; $ cat ~/.gitconfig
 ;
 ; [user]
-; 	name = John
-; 	email = john.doe@gmail.com
+;     name = John
+;     email = john.doe@gmail.com
 ; [commit]
-; 	gpgsign = true
+;     gpgsign = true
 ; [user]
-; 	signingkey = xxxxxxxx
+;     signingkey = xxxxxxxx
 ; [gpg]
-; 	program = /path/to/gpg
+;     program = /path/to/gpg

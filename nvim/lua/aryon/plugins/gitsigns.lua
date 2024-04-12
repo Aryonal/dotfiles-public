@@ -3,7 +3,7 @@ return {
     version = "*", -- To use the latest release
     event = { "BufReadPost", "BufWritePost", "BufNewFile" },
     init = function()
-        require("utils.autocmd").create_autocmd({
+        require("utils.vim").create_autocmd({
             events = { "ColorScheme" },
             group_name = "aryon/gitsigns.lua",
             desc = "Link GitSignsCurrentLineBlame to Comment",
@@ -15,7 +15,7 @@ return {
         })
     end,
     config = function()
-        local bmap = require("utils.keymap").set_buffer
+        local bmap = require("utils.vim").set_buffer_keymap
         local c = require("aryon.config").keymaps
 
         local virtual_text_spaces = ""
@@ -159,7 +159,7 @@ return {
             end,
         })
 
-        local create_abbr_batch = require("utils.command").batch_set_abbr
+        local create_abbr_batch = require("utils.vim").batch_set_abbr
         local abbrs = {
             {
                 name = "gs",

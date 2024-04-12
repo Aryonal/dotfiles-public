@@ -16,7 +16,7 @@ return {
             },
         },
         config = function()
-            local ft = require("share.ft")
+            local ft = require("aryon.config.ft")
 
             require("mini.comment").setup({
                 mappings = {
@@ -65,8 +65,8 @@ return {
                 }
             })
 
-            local set_cmd = require("utils.command").set_cmd
-            local set_abbr = require("utils.command").set_abbr
+            local set_cmd = require("utils.vim").set_cmd
+            local set_abbr = require("utils.vim").set_abbr
 
             set_cmd({
                 cmd = "SplitJoinToggle",

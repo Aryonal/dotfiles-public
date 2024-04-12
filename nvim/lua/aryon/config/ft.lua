@@ -20,6 +20,7 @@ local base_exclude = {
 
 local extend = {
     "neo-tree",
+    "help",
     "",
 }
 

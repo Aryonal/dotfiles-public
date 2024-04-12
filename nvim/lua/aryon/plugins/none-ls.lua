@@ -3,7 +3,7 @@ return {
     enabled = true,
     dependencies = { "nvim-lua/plenary.nvim", "mason.nvim" },
     init = function()
-        require("utils.autocmd").create_autocmd({
+        require("utils.vim").create_autocmd({
             events = { "ColorScheme" },
             group_name = "aryon/none-ls.lua",
             desc = "Link NulllsInfoBorder to FloatBorder",
@@ -15,7 +15,7 @@ return {
         })
     end,
     config = function()
-        local lsp_lspconfig = require("aryon.lsp")
+        local lsp = require("aryon.lsp")
         local style = require("aryon.config").code_style
 
         local null_ls = require("null-ls")
@@ -174,7 +174,7 @@ return {
 
         null_ls.setup({
             border = require("aryon.config").ui.float.border,
-            on_attach = lsp_lspconfig.on_attach,
+            on_attach = lsp.on_attach,
             sources = sources,
             diagnostics_format = "#{s}:#{c}: #{m}",
         })
