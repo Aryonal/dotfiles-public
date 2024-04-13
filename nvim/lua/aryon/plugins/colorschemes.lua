@@ -17,7 +17,7 @@ local common_opts = {
 local plugins = {
     {
         "gbprod/nord.nvim",
-        enabled = false,
+        enabled = true,
         config = function()
             require("nord").setup({
                 on_highlights = function(hl, c)
@@ -40,50 +40,8 @@ local plugins = {
         end,
     },
     {
-        "projekt0n/github-nvim-theme",
-        enabled = false,
-        config = function()
-            local theme = "github_dark_dimmed"
-
-            -- local spec = require("github-theme.spec").load(theme)
-
-            require("github-theme").setup({
-                groups = {
-                    all = {
-                        -- trsnaparent float
-                        NormalFloat = { link = "Normal" },
-                        FloatBorder = { fg = "palette.fg.subtle" },
-                        LspInfoBorder = { link = "FloatBorder" },
-                        NulllsInfoBorder = { link = "FloatBorder" },
-                        TelescopeBorder = { link = "FloatBorder" },
-
-                        -- illuminate
-                        IlluminatedWordText = { link = "CursorLine" },
-                        IlluminatedWordRead = { link = "CursorLine" },
-                        IlluminatedWordWrite = { link = "CursorLine" },
-
-                        -- telescope
-                        TelescopeTitle = { fg = "palette.fg.muted" },
-                        TelescopePromptCounter = { fg = "palette.fg.muted" },
-
-                        LspCodeLens = { link = "DiagnosticsHint" },
-
-                        NonText = { link = "Whitespace" },
-                        GitSignsCurrentLineBlame = { link = "Comment" },
-
-                        -- diff
-                        -- DiffAdd = { bg = spec.diff.add },
-                        -- DiffChange = { bg = spec.diff.change },
-                        -- DiffDelete = { fg = spec.diff.delete, bg = spec.diff.delete },
-                        -- DiffText = { bg = spec.diff.text },
-                    },
-                },
-            })
-            vim.cmd("colorscheme " .. theme)
-        end,
-    },
-    {
         "ellisonleao/gruvbox.nvim",
+        enabled = false,
         config = function()
             require("gruvbox").setup({})
             vim.cmd("colorscheme gruvbox")

@@ -53,20 +53,14 @@ return {
                 }))
             end
         end,
-        cmd = {
-            "GoTests",
-            "GoTestsFunc",
-        },
         config = function()
             require("gou").setup({
                 run = {
-                    -- enabled = true,
                     test_flag = "-count=1",
                 },
                 gotests = {
-                    -- enabled = true,
                     named = true,
-                    template_dir = go_cfg.go_tests_template_dir,
+                    template_dir = go_cfg.go_tests_template_dir .. "/templates/testify/",
                 }
             })
         end

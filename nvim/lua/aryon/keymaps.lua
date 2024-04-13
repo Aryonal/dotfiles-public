@@ -4,6 +4,10 @@ local all_modes = { "n", "i", "v", "t", "c" }
 
 local fixed_bindings = {
     -- { key = "d",         cmd = [["_d]],             desc = "Do Not Cut",           mode = { "n", "v" } },
+    -- { key = "<C-h>",     cmd = "<Left>",            desc = "Left",                 mode = all_modes },
+    -- { key = "<C-j>",     cmd = "<Down>",            desc = "Down",                 mode = all_modes },
+    -- { key = "<C-k>",     cmd = "<Up>",              desc = "Up",                   mode = all_modes },
+    -- { key = "<C-l>",     cmd = "<Right>",           desc = "Right",                mode = all_modes },
     { key = "+",         cmd = "<C-a>",             desc = "Increase" },
     { key = "-",         cmd = "<C-x>",             desc = "Decrease" },
     { key = "<C-[>",     cmd = "<Esc>",             desc = "Esc",                  mode = { "i", "n" } },
@@ -12,10 +16,6 @@ local fixed_bindings = {
     { key = "<C-e>",     cmd = "3<C-e>",            desc = "Scroll Down (Faster)", mode = { "n", "v" } },
     { key = "<C-e>",     cmd = "<C-o>A",            desc = "[I] Insert end",       mode = "i" },
     { key = "<C-f>",     cmd = "<C-o>w",            desc = "[I] Move next word",   mode = "i" },
-    { key = "<C-h>",     cmd = "<Left>",            desc = "Left",                 mode = all_modes },
-    { key = "<C-j>",     cmd = "<Down>",            desc = "Down",                 mode = all_modes },
-    { key = "<C-k>",     cmd = "<Up>",              desc = "Up",                   mode = all_modes },
-    { key = "<C-l>",     cmd = "<Right>",           desc = "Right",                mode = all_modes },
     { key = "<C-w>+",    cmd = "5<C-w>+",           desc = "[Win] Height incr" },
     { key = "<C-w>-",    cmd = "5<C-w>-",           desc = "[Win] Height decr" },
     { key = "<C-w><",    cmd = "5<C-w><",           desc = "[Win] Width decr " },

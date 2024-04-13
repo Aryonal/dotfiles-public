@@ -2,19 +2,19 @@
 	editor = nvim
 [alias]
     st = status -bsu
-    last = log -1
     unstage = reset HEAD
     lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
     ck = checkout
     br = branch
+    rename = branch -m `git rev-parse --abbrev-ref HEAD`
     cm = commit
     cmm = commit -m
     amend = commit --amend
     wk = worktree
     df = difftool
-    last = -c diff.external=difft show HEAD --ext-diff
-    recent = -c diff.external=difft log -p --ext-diff
-    against = -c diff.external=difft diff origin/HEAD --ext-diff
+    last = show HEAD --ext-diff
+    recent = log -p --ext-diff
+    against = diff origin/HEAD --ext-diff
     sync = !git add -A && git status && git commit -m \""sync: $(date '+%Y-%m-%d %H:%M')"\"
 
 [diff]
