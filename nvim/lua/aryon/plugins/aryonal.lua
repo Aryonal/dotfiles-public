@@ -17,18 +17,18 @@ return {
             "LoadLocalSession",
         },
         config = function()
-            local set = require("utils.vim").set_keymap
+            -- local set = require("utils.vim").set_keymap
 
-            set({
-                key = "<C-w>o",
-                cmd = "<cmd>SaveLocalSession<CR><C-w>o",
-                desc = "Full screen buffer",
-            })
-            set({
-                key = "<C-w>u",
-                cmd = "<cmd>LoadLocalSession<CR>",
-                desc = "Restore full screen",
-            })
+            -- set({
+            --     key = "<C-w>o",
+            --     cmd = "<cmd>SaveLocalSession<CR><C-w>o",
+            --     desc = "Full screen buffer",
+            -- })
+            -- set({
+            --     key = "<C-w>u",
+            --     cmd = "<cmd>LoadLocalSession<CR>",
+            --     desc = "Restore full screen",
+            -- })
         end
     },
     {
@@ -56,7 +56,7 @@ return {
         config = function()
             require("gou").setup({
                 run = {
-                    test_flag = "-count=1",
+                    test_flag = { "-count=1", "-race" },
                 },
                 gotests = {
                     named = true,

@@ -63,14 +63,7 @@ vim.api.nvim_create_autocmd({ "TextYankPost" }, {
     group = custom_aug,
     desc = "Highlight text after yank",
     callback = function()
-        vim.highlight.on_yank({ higroup = "Visual", timeout = 500 })
+        vim.highlight.on_yank()
     end,
 })
 
--- vim.api.nvim_create_autocmd({ "CursorHold", "InsertLeave"}, {
---     group = custom_aug,
---     desc = "Refresh CodeLens",
---     callback = function ()
---         vim.lsp.codelens.refresh()
---     end
--- })

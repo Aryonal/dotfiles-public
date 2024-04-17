@@ -51,11 +51,11 @@ return {
             return _executable(exec)
         end
 
-        -- @param tb: table, source tables
-        -- @param interf: string, name of interface, one of diagnostics, code_actions, hover, formatting...
-        -- @param name: string, name of resource
-        -- @param exec: string | table, executable name or path
-        -- @param opts: table, null-ls resource options, will be passed to `null_ls.builtin.interf.name.with()`
+        ---@param tb: table, source tables
+        ---@param interf: string, name of interface, one of diagnostics, code_actions, hover, formatting...
+        ---@param name: string, name of resource
+        ---@param exec: string | table, executable name or path
+        ---@param opts: table, null-ls resource options, will be passed to `null_ls.builtin.interf.name.with()`
         local function _append_source(tb, interf, name, exec, opts)
             if not exec then
                 exec = name
@@ -159,18 +159,6 @@ return {
 
         -- Makefile
         _append_source(sources, "diagnostics", "checkmake")
-
-        -- go.nvim
-        -- local go_nvim_ok, _ = pcall(require, "go")
-        -- if go_nvim_ok then
-        --     -- run test on save
-        --     -- local gotest = require("go.null_ls").gotest()
-        --     -- table.insert(sources, gotest)
-
-        --     -- run test in code action
-        --     local gotest_codeaction = require("go.null_ls").gotest_action()
-        --     table.insert(sources, gotest_codeaction)
-        -- end
 
         null_ls.setup({
             border = require("aryon.config").ui.float.border,

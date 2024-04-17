@@ -105,6 +105,11 @@ local function setup(plugins, opts)
 end
 
 return {
+    events = {
+        SetA = { "BufReadPre", "BufWritePre", "BufNewFile", "VeryLazy" },
+        SetB = { "BufReadPost", "BufWritePost", "BufNewFile" },
+        SetC = { "InsertEnter", "CmdlineEnter" },
+    },
     default_opts = default_opts,
     setup = setup,
     init = init,

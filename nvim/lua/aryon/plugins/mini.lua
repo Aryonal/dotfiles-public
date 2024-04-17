@@ -2,7 +2,7 @@ return {
     {
         "echasnovski/mini.comment",
         version = "*",
-        event = { "BufReadPost", "BufWritePost", "BufNewFile" },
+        event = require("utils.lazy").events.SetB,
         keys = {
             {
                 "gcc",
@@ -48,7 +48,7 @@ return {
     {
         "echasnovski/mini.splitjoin",
         version = false,
-        event = { "BufReadPost", "BufWritePost", "BufNewFile" },
+        event = require("utils.lazy").events.SetB,
         keys = {
             {
                 "<leader>j",

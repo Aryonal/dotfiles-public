@@ -1,3 +1,4 @@
+---@diagnostic disable: unused-local
 local c = require("aryon.config").keymaps
 
 local previewer_maker_default_opts = {
@@ -182,28 +183,32 @@ return {
                 -- border = false,
                 mappings = {
                     n = {
+                        ["<C-e>"] = actions.preview_scrolling_down,
+                        ["<C-n>"] = actions.move_selection_next,
+                        ["<C-p>"] = actions.move_selection_previous,
+                        ["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
+                        ["<C-y>"] = actions.preview_scrolling_up,
+                        ["<CR>"] = actions.select_default + actions.center,
+                        [c.file.open_in_split] = actions.select_horizontal,
+                        [c.file.open_in_tab] = actions.select_tab,
+                        [c.file.open_in_vsplit] = actions.select_vertical,
                         [c.vim.float.close[1]] = actions.close,
                         [c.vim.float.close[2]] = actions.close,
                         [c.vim.float.close[3]] = actions.close,
-                        -- [c.vim.terminal.toggle] = actions.close,
-                        ["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
-                        ["<CR>"] = actions.select_default + actions.center,
-                        ["<C-e>"] = actions.preview_scrolling_down,
-                        ["<C-y>"] = actions.preview_scrolling_up,
                     },
                     i = {
                         -- REF: https://github.com/nvim-telescope/telescope.nvim/wiki/Configuration-Recipes#mapping-c-u-to-clear-prompt
-                        ["<C-u>"] = false,
-                        -- ["<C-w>"] = false, -- default delete a word
                         -- ["<C-n>"] = false, -- default previous entry
                         -- ["<C-p>"] = false, -- default next entry
-                        -- ["<C-\\>"] = actions.close,
-                        [c.vim.float.close[3]] = actions.close,
-                        -- ["<C-q>"] = trouble.open_with_trouble,
+                        -- ["<C-w>"] = false, -- default delete a word
+                        ["<C-f>"] = false, -- default preview_scroll_left
                         ["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
+                        ["<C-u>"] = false,
                         ["<CR>"] = actions.select_default + actions.center,
-                        -- ["<C-e>"] = actions.preview_scrolling_down,
-                        -- ["<C-y>"] = actions.preview_scrolling_up,
+                        [c.file.open_in_split] = actions.select_horizontal,
+                        [c.file.open_in_tab] = actions.select_tab,
+                        [c.file.open_in_vsplit] = actions.select_vertical,
+                        [c.vim.float.close[3]] = actions.close,
                     },
                 },
                 vimgrep_arguments = { -- be used for `live_grep` and `grep_string`, respects gitignore

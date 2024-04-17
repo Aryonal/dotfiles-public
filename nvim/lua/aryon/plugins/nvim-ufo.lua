@@ -7,7 +7,7 @@ return {
         "williamboman/mason-lspconfig.nvim", -- it should be setup after lsp is set
         "nvim-treesitter/nvim-treesitter",
     },
-    event = { "BufReadPost", "BufWritePost", "BufNewFile" },
+    event = require("utils.lazy").events.SetB,
     config = function()
         vim.o.foldcolumn = "0" -- '0' to disable foldcolumn
         vim.o.foldlevel = 99   -- Using ufo provider need a large value, feel free to decrease the value
@@ -61,9 +61,9 @@ return {
                 return newVirtText
             end,
             -- use treesitter
-            provider_selector = function(bufnr, filetype, buftype)
-                return { "treesitter", "indent" }
-            end,
+            -- provider_selector = function(bufnr, filetype, buftype)
+            --     return { "treesitter", "indent" }
+            -- end,
         })
 
         -- TODO: use statuscol to remove the depth number

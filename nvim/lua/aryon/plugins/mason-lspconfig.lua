@@ -38,6 +38,7 @@ return {
             "neovim/nvim-lspconfig",
             "folke/neodev.nvim", -- ensure before lspconfig setup
         },
+        event = require("utils.lazy").events.setA,
         config = function()
             local mason_lspconfig = require("mason-lspconfig")
             local ensured_servers = require("aryon.config").lsp.ensured_servers

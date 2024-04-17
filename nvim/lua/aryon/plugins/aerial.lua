@@ -4,7 +4,7 @@ return {
     dependencies = {
         "onsails/lspkind.nvim",
     },
-    event = { "BufReadPost", "BufWritePost", "BufNewFile" },
+    event = require("utils.lazy").events.SetB,
     config = function()
         local bmap = require("utils.vim").set_buffer_keymap
         local c = require("aryon.config").keymaps
@@ -44,26 +44,9 @@ return {
             -- -- Call this function when aerial attaches to a buffer.
             -- -- Useful for setting keymaps. Takes a single `bufnr` argument.
             on_attach = function(bufnr)
-                -- Toggle the aerial window with <leader>a
-                bmap({
-                    key = "<leader>a",
-                    cmd = "<cmd>AerialToggle!<CR>",
-                    desc = "[Aerial] Toggle",
-                }, bufnr)
-                -- Jump forwards/backwards with '{' and '}'
-                bmap({
-                    key = c.motion.buffer.aerial_previous,
-                    cmd = "<cmd>AerialPrev<CR>",
-                    desc = "[Aerial] Previous",
-                }, bufnr)
-                bmap({
-                    key = c.motion.buffer.aerial_next,
-                    cmd = "<cmd>AerialNext<CR>",
-                    desc = "[Aerial] Next",
-                }, bufnr)
-                -- -- Jump up the tree with '[[' or ']]'
-                -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '[[', '<cmd>AerialPrevUp<CR>', {})
-                -- vim.api.nvim_buf_set_keymap(bufnr, 'n', ']]', '<cmd>AerialNextUp<CR>', {})
+                bmap({ "<leader>a", "<cmd>AerialToggle!<CR>", desc = "[Aerial] Toggle" }, bufnr)
+                bmap({ c.motion.buffer.aerial_previous, "<cmd>AerialPrev<CR>", desc = "[Aerial] Previous" }, bufnr)
+                bmap({ c.motion.buffer.aerial_next, "<cmd>AerialNext<CR>", desc = "[Aerial] Next" }, bufnr)
             end,
         })
     end,

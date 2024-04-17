@@ -81,10 +81,10 @@ end
 -- Structure of `bind`:
 -- ```lua
 -- {
---   mode = "n",
---   key = "<Left>", // or {"<Left>", "<C-h>"}
---   cmd = "<C-w>h",
+--   [1] = "<Left>", -- or {"<Left>", "<C-h>"}
+--   [2] = "<C-w>h",
 --   desc = "Window navigates left",
+--   mode = "n",
 --   opts = {
 --     buffer = nil,
 --     silent = true,
@@ -96,7 +96,7 @@ end
 -- Default mode is 'n' if not specified.
 -- ````
 M.set_keymap = function(bind)
-    if bind.key == nil then
+    if bind[1] == nil then
         vim.notify("key not specified")
         return
     end
@@ -104,7 +104,7 @@ M.set_keymap = function(bind)
         silent = false,
         noremap = true,
         nowait = true,
-        desc = bind.desc or bind.cmd,
+        desc = bind.desc or bind[2],
     }
     bind.opts = bind.opts or opts
     if bind.opts.silent ~= nil then
@@ -113,13 +113,13 @@ M.set_keymap = function(bind)
     if bind.opts.noremap ~= nil then
         opts.noremap = bind.opts.noremap
     end
-    if type(bind.key) == "table" then
-        for _, k in ipairs(bind.key) do
-            vim.keymap.set(bind.mode or "n", k, bind.cmd, opts)
+    if type(bind[1]) == "table" then
+        for _, k in ipairs(bind[1]) do
+            vim.keymap.set(bind.mode or "n", k, bind[2], opts)
         end
         return
     end
-    vim.keymap.set(bind.mode or "n", bind.key, bind.cmd, opts)
+    vim.keymap.set(bind.mode or "n", bind[1], bind[2], opts)
 end
 
 -- Batch set keymaps. Usage: `batch_set(binds)`
@@ -127,10 +127,10 @@ end
 -- The `binds` is a list of `bind`. Structure of `bind`:
 -- ```lua
 -- {
---   mode = "n",
---   key = "<Left>",
---   cmd = "<C-w>h",
+--   [1] = "<Left>",
+--   [2] = "<C-w>h",
 --   desc = "Window navigates left",
+--   mode = "n",
 --   opts = {
 --     buffer = nil,
 --     silent = true,
@@ -153,10 +153,10 @@ end
 -- Structure of `bind`:
 -- ```lua
 -- {
---   mode = "n",
---   key = "<Left>",
---   cmd = "<C-w>h",
+--   [1] = "<Left>",
+--   [2] = "<C-w>h",
 --   desc = "Window navigates left",
+--   mode = "n",
 --   opts = {
 --     buffer = nil,
 --     silent = true,
@@ -166,12 +166,16 @@ end
 -- }
 -- ````
 M.set_buffer_keymap = function(bind, bufnr)
+    if bind[1] == nil then
+        vim.notify("key not specified")
+        return
+    end
     local opts = {
         silent = false,
         noremap = true,
         nowait = true,
         buffer = bufnr,
-        desc = bind.desc or bind.cmd,
+        desc = bind.desc or bind[2],
     }
     bind.opts = bind.opts or opts
     if bind.opts.silent ~= nil then
@@ -180,13 +184,13 @@ M.set_buffer_keymap = function(bind, bufnr)
     if bind.opts.noremap ~= nil then
         opts.noremap = bind.opts.noremap
     end
-    if type(bind.key) == "table" then
-        for _, k in ipairs(bind.key) do
-            vim.keymap.set(bind.mode or "n", k, bind.cmd, opts)
+    if type(bind[1]) == "table" then
+        for _, k in ipairs(bind[1]) do
+            vim.keymap.set(bind.mode or "n", k, bind[2], opts)
         end
         return
     end
-    vim.keymap.set(bind.mode or "n", bind.key, bind.cmd, opts)
+    vim.keymap.set(bind.mode or "n", bind[1], bind[2], opts)
 end
 
 

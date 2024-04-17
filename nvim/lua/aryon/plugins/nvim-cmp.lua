@@ -62,7 +62,7 @@ return {
             "onsails/lspkind.nvim",
             "zbirenbaum/copilot-cmp",
         },
-        event = { "InsertEnter", "CmdlineEnter" },
+        event = require("utils.lazy").events.SetC,
         config = function()
             local luasnip = require("luasnip")
             local cmp = require("cmp")
@@ -338,6 +338,6 @@ return {
             },
             "hrsh7th/nvim-cmp", -- load after nvim-cmp
         },
-        event = { "InsertEnter", "CmdlineEnter" },
+        event = require("utils.lazy").events.SetC,
     },
 }

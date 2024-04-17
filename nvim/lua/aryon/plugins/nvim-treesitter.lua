@@ -5,7 +5,7 @@ return {
             "nvim-treesitter/nvim-treesitter-textobjects",
         },
         build = ":TSUpdate",
-        event = { "BufReadPre", "BufWritePre", "BufNewFile", "VeryLazy" },
+        event = require("utils.lazy").events.SetA,
         config = function()
             ---@diagnostic disable-next-line: missing-fields
             require("nvim-treesitter.configs").setup({
@@ -73,7 +73,7 @@ return {
         enabled = false,
         -- REF: https://github.com/LazyVim/LazyVim/blob/50b7f426f287ecfc542dd9c197e430b0aca8af04/lua/lazyvim/plugins/treesitter.lua#L120
         -- event = "LazyFile",
-        event = { "BufReadPost", "BufWritePost", "BufNewFile" },
+        event = require("utils.lazy").events.SetB,
         init = function()
             require("utils.vim").create_autocmd({
                 events = { "ColorScheme" },

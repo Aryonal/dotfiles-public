@@ -3,74 +3,75 @@ local cfg = require("aryon.config").keymaps
 local all_modes = { "n", "i", "v", "t", "c" }
 
 local fixed_bindings = {
-    -- { key = "d",         cmd = [["_d]],             desc = "Do Not Cut",           mode = { "n", "v" } },
-    -- { key = "<C-h>",     cmd = "<Left>",            desc = "Left",                 mode = all_modes },
-    -- { key = "<C-j>",     cmd = "<Down>",            desc = "Down",                 mode = all_modes },
-    -- { key = "<C-k>",     cmd = "<Up>",              desc = "Up",                   mode = all_modes },
-    -- { key = "<C-l>",     cmd = "<Right>",           desc = "Right",                mode = all_modes },
-    { key = "+",         cmd = "<C-a>",             desc = "Increase" },
-    { key = "-",         cmd = "<C-x>",             desc = "Decrease" },
-    { key = "<C-[>",     cmd = "<Esc>",             desc = "Esc",                  mode = { "i", "n" } },
-    { key = "<C-a>",     cmd = "<C-o>I",            desc = "[I] Insert at beg",    mode = "i" },
-    { key = "<C-b>",     cmd = "<C-o>b",            desc = "[I] Move prev word",   mode = "i" },
-    { key = "<C-e>",     cmd = "3<C-e>",            desc = "Scroll Down (Faster)", mode = { "n", "v" } },
-    { key = "<C-e>",     cmd = "<C-o>A",            desc = "[I] Insert end",       mode = "i" },
-    { key = "<C-f>",     cmd = "<C-o>w",            desc = "[I] Move next word",   mode = "i" },
-    { key = "<C-w>+",    cmd = "5<C-w>+",           desc = "[Win] Height incr" },
-    { key = "<C-w>-",    cmd = "5<C-w>-",           desc = "[Win] Height decr" },
-    { key = "<C-w><",    cmd = "5<C-w><",           desc = "[Win] Width decr " },
-    { key = "<C-w>>",    cmd = "5<C-w>>",           desc = "[Win] Width incr " },
-    { key = "<C-y>",     cmd = "3<C-y>",            desc = "Scroll Up (Faster)",   mode = { "n", "v" } },
-    { key = "c",         cmd = [["_c]],             desc = "Do Not Cut",           mode = { "n", "v" } },
-    { key = "ge",        cmd = "<cmd>tabprev<CR>",  desc = "[Tab] Previous" },
-    { key = "gt",        cmd = "<cmd>tabnext<CR>",  desc = "[Tab] Next" },
-    { key = "p",         cmd = [["_dP]],            desc = "Do Not Cut",           mode = "v" },
-    { key = "te",        cmd = "<C-w>T",            desc = "[Tab] New from buffer" },
-    { key = "tn",        cmd = "<cmd>tabnew<CR>",   desc = "[Tab] New" },
-    { key = "tq",        cmd = "<cmd>tabclose<CR>", desc = "[Tab] Close" },
-    { key = "tt",        cmd = "<cmd>sp +term<CR>", desc = "[Term] New" },
-    { key = [[<C-\>n]],  cmd = [[<C-\><C-n>]],      desc = "[Term] Normal mode",   mode = "t" },
-    { key = [[<C-\>]],   cmd = [[<C-\><C-n>]],      desc = "[Term] Normal mode",   mode = "t" },
-    { key = cfg.ed.fold, cmd = "za",                desc = "Toggle folding" },
+    -- { "d",         [["_d]],             desc = "Do Not Cut",           mode = { "n", "v" } },
+    -- { "<C-h>",     "<Left>",            desc = "Left",                 mode = all_modes },
+    -- { "<C-j>",     "<Down>",            desc = "Down",                 mode = all_modes },
+    -- { "<C-k>",     "<Up>",              desc = "Up",                   mode = all_modes },
+    -- { "<C-l>",     "<Right>",           desc = "Right",                mode = all_modes },
+    { "+",         "<C-a>",             desc = "Increase" },
+    { "-",         "<C-x>",             desc = "Decrease" },
+    { "<C-[>",     "<Esc>",             desc = "Esc",                  mode = { "i", "n" } },
+    { "<C-a>",     "<C-o>I",            desc = "[I] Insert at beg",    mode = "i" },
+    { "<C-b>",     "<C-o>b",            desc = "[I] Move prev word",   mode = "i" },
+    { "<C-e>",     "3<C-e>",            desc = "Scroll Down (Faster)", mode = { "n", "v" } },
+    { "<C-e>",     "<C-o>A",            desc = "[I] Insert end",       mode = "i" },
+    { "<C-f>",     "<C-o>w",            desc = "[I] Move next word",   mode = "i" },
+    { "<C-w>+",    "5<C-w>+",           desc = "[Win] Height incr" },
+    { "<C-w>-",    "5<C-w>-",           desc = "[Win] Height decr" },
+    { "<C-w><",    "5<C-w><",           desc = "[Win] Width decr " },
+    { "<C-w>>",    "5<C-w>>",           desc = "[Win] Width incr " },
+    { "<C-y>",     "3<C-y>",            desc = "Scroll Up (Faster)",   mode = { "n", "v" } },
+    { "c",         [["_c]],             desc = "Do Not Cut",           mode = { "n", "v" } },
+    { "ge",        "<cmd>tabp<CR>",     desc = "[Tab] Previous" },
+    { "gt",        "<cmd>tabnext<CR>",  desc = "[Tab] Next" },
+    { "p",         [["_dP]],            desc = "Do Not Cut",           mode = "v" },
+    { "te",        "<C-w>T",            desc = "[Tab] New from buffer" },
+    { "tn",        "<cmd>tabnew<CR>",   desc = "[Tab] New" },
+    { "tq",        "<cmd>tabclose<CR>", desc = "[Tab] Close" },
+    { "tt",        "<cmd>sp +term<CR>", desc = "[Term] New" },
+    { [[<C-\>n]],  [[<C-\><C-n>]],      desc = "[Term] Normal mode",   mode = "t" },
+    { [[<C-\>]],   [[<C-\><C-n>]],      desc = "[Term] Normal mode",   mode = "t" },
+    { cfg.ed.fold, "za",                desc = "Toggle folding" },
 
-    { key = "<BS>",      cmd = "<C-g>u<BS>",        desc = "Keep insert",          mode = "v" },
+    { "<BS>",      "<C-g>u<BS>",        desc = "Keep insert",          mode = "v" },
 }
 
 local win_bindings = {
-    -- { key = { "<C-w>j", "<C-w><Down>" },  cmd = "<cmd>wincmd j<CR>", desc = "[Term] Navigate down",  mode = "t" },
-    -- { key = { "<C-w>k", "<C-w><Up>" },    cmd = "<cmd>wincmd k<CR>", desc = "[Term] Navigate up",    mode = "t" },
-    -- { key = { "<C-w>l", "<C-w><Right>" }, cmd = "<cmd>wincmd l<CR>", desc = "[Term] Navigate right", mode = "t" },
-    -- { key = { "<C-w>h", "<C-w><Left>" },  cmd = "<cmd>wincmd h<CR>", desc = "[Term] Navigate left",  mode = "t" },
-    { key = { "<Down>", "<C-j>" },  cmd = "<C-w>j", desc = "[Window] Navigate down" },
-    { key = { "<Left>", "<C-h>" },  cmd = "<C-w>h", desc = "[Window] Navigate left" },
-    { key = { "<Right>", "<C-l>" }, cmd = "<C-w>l", desc = "[Window] Navigate right" },
-    { key = { "<Up>", "<C-k>" },    cmd = "<C-w>k", desc = "[Window] Navigate up" },
+    -- { { "<C-w>j", "<C-w><Down>" },  "<cmd>wincmd j<CR>", desc = "[Term] Navigate down",  mode = "t" },
+    -- { { "<C-w>k", "<C-w><Up>" },    "<cmd>wincmd k<CR>", desc = "[Term] Navigate up",    mode = "t" },
+    -- { { "<C-w>l", "<C-w><Right>" }, "<cmd>wincmd l<CR>", desc = "[Term] Navigate right", mode = "t" },
+    -- { { "<C-w>h", "<C-w><Left>" },  "<cmd>wincmd h<CR>", desc = "[Term] Navigate left",  mode = "t" },
+    { { "<Down>", "<C-j>" },  "<C-w>j",       desc = "[Win] Navigate down" },
+    { { "<Left>", "<C-h>" },  "<C-w>h",       desc = "[Win] Navigate left" },
+    { { "<Right>", "<C-l>" }, "<C-w>l",       desc = "[Win] Navigate right" },
+    { { "<Up>", "<C-k>" },    "<C-w>k",       desc = "[Win] Navigate up" },
+    { "<C-w>o",               "<C-w>|<C-w>_", desc = "[Win] Expand buffer" },
 }
 
 local lsp_bindings = {
-    { key = "<leader>e",  cmd = vim.diagnostic.open_float, desc = "[LSP] Diagnostics (float)" },
-    { key = "]d",         cmd = vim.diagnostic.goto_next,  desc = "[LSP] Next Diagnostic" },
-    { key = "[d",         cmd = vim.diagnostic.goto_prev,  desc = "[LSP] Previous Diagnostic" },
-    { key = "<leader>cl", cmd = vim.lsp.codelens.run,      desc = "[LSP] Run Codelens" },
+    { "<leader>e",  vim.diagnostic.open_float, desc = "[LSP] Diagnostics (float)" },
+    { "]d",         vim.diagnostic.goto_next,  desc = "[LSP] Next Diagnostic" },
+    { "[d",         vim.diagnostic.goto_prev,  desc = "[LSP] Previous Diagnostic" },
+    { "<leader>cl", vim.lsp.codelens.run,      desc = "[LSP] Run Codelens" },
 }
 
 --<leader> + number to quick jump tab
 for i = 1, 9 do
     table.insert(fixed_bindings, {
-        mode = "n",
-        key = "<leader>" .. tostring(i),
-        cmd = tostring(i) .. "gt",
+        "<leader>" .. tostring(i),
+        tostring(i) .. "gt",
         desc = "[Tab] Jump to tab" .. tostring(i),
+        mode = { "n" },
     })
 end
 
 --<C-w> + number to quick jump window
 for i = 1, 9 do
     table.insert(fixed_bindings, {
-        mode = "n",
-        key = "<C-w>" .. tostring(i),
-        cmd = tostring(i) .. "<C-w>w",
-        desc = "[Window] Jump to window" .. tostring(i),
+        "<C-w>" .. tostring(i),
+        tostring(i) .. "<C-w>w",
+        desc = "[Win] Jump to window" .. tostring(i),
+        mode = { "n" },
     })
 end
 

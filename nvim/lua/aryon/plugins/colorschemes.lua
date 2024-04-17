@@ -9,6 +9,7 @@ local common_opts = {
                 vim.cmd([[
                     hi! link EndOfBuffer NonText
                     hi! link NormalFloat Normal
+                    hi! link LspCodeLens DiagnosticInfo
                 ]])
             end,
         })
@@ -17,7 +18,7 @@ local common_opts = {
 local plugins = {
     {
         "gbprod/nord.nvim",
-        enabled = true,
+        enabled = false,
         config = function()
             require("nord").setup({
                 on_highlights = function(hl, c)
@@ -41,7 +42,7 @@ local plugins = {
     },
     {
         "ellisonleao/gruvbox.nvim",
-        enabled = false,
+        enabled = true,
         config = function()
             require("gruvbox").setup({})
             vim.cmd("colorscheme gruvbox")

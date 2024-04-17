@@ -12,15 +12,15 @@ local function lsp_buf_keymaps(bufnr)
     local list_work_dirs_fn = function() print(vim.inspect(vim.lsp.buf.list_workspace_folders())) end
     local sync_format_fn = function() vim.lsp.buf.format({ async = false }) end
     local keymaps = {
-        { key = "<leader>wa", cmd = vim.lsp.buf.add_workspace_folder,    desc = "[LSP] Add workspace folders" },
-        { key = "<leader>wr", cmd = vim.lsp.buf.remove_workspace_folder, desc = "[LSP] Remove workspace folders" },
-        { key = "<leader>wl", cmd = list_work_dirs_fn,                   desc = "[LSP] List workspace folders" },
-        { key = "<leader>f",  cmd = sync_format_fn,                      desc = "[LSP] Formatting" },
-        { key = "<leader>f",  cmd = sync_format_fn,                      desc = "[LSP] Formatting",              mode = "v" },
-        { key = "<leader>rn", cmd = vim.lsp.buf.rename,                  desc = "[LSP] Rename" },
-        { key = "<leader>ca", cmd = vim.lsp.buf.code_action,             desc = "[LSP] Code action" },
-        { key = "<leader>sg", cmd = vim.lsp.buf.signature_help,          desc = "[LSP] Signature" },
-        { key = "<C-s>",      cmd = vim.lsp.buf.signature_help,          desc = "[I][LSP] Signature",            mode = "i" },
+        { "<leader>wa", vim.lsp.buf.add_workspace_folder,    desc = "[LSP] Add workspace folders" },
+        { "<leader>wr", vim.lsp.buf.remove_workspace_folder, desc = "[LSP] Remove workspace folders" },
+        { "<leader>wl", list_work_dirs_fn,                   desc = "[LSP] List workspace folders" },
+        { "<leader>f",  sync_format_fn,                      desc = "[LSP] Formatting" },
+        { "<leader>f",  sync_format_fn,                      desc = "[LSP] Formatting",              mode = "v" },
+        { "<leader>rn", vim.lsp.buf.rename,                  desc = "[LSP] Rename" },
+        { "<leader>ca", vim.lsp.buf.code_action,             desc = "[LSP] Code action" },
+        { "<leader>sg", vim.lsp.buf.signature_help,          desc = "[LSP] Signature" },
+        { "<C-s>",      vim.lsp.buf.signature_help,          desc = "[I][LSP] Signature",            mode = "i" },
     }
 
     -- setup on_attach function for lsp
@@ -51,6 +51,18 @@ local function on_attach(client, bufnr)
             vim.lsp.inlay_hints.enable(bufnr, true)
         end
     end
+
+    vim.api.nvim_create_autocmd({ "CursorHold", "InsertLeave" }, {
+        buffer = 0, -- current buffer only
+        group = custom_aug,
+        desc = "Refresh CodeLens",
+        callback = function()
+            if client.server_capabilities.codeLensProvider then
+                vim.lsp.codelens.refresh()
+            end
+        end
+    })
+
     lsp_buf_keymaps(bufnr)
 end
 

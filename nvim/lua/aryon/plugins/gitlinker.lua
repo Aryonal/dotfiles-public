@@ -41,13 +41,13 @@ return {
         -- additional keymaps to open selected in browser
         local map = require("utils.vim").set_keymap
         map({
-            key = keymaps.open_in_browser,
-            cmd = '<cmd>lua require"gitlinker".get_buf_range_url("n", {action_callback = require"gitlinker.actions".open_in_browser})<cr>',
+            keymaps.open_in_browser,
+            '<cmd>lua require"gitlinker".get_buf_range_url("n", {action_callback = require"gitlinker.actions".open_in_browser})<cr>',
             desc = "[GitLinker] Goto Browser",
         })
         map({
-            key = keymaps.open_in_browser,
-            cmd = [[<cmd>lua require"gitlinker".get_buf_range_url("v", {action_callback = require"gitlinker.actions".open_in_browser})<cr>]],
+            keymaps.open_in_browser,
+            [[<cmd>lua require"gitlinker".get_buf_range_url("v", {action_callback = require"gitlinker.actions".open_in_browser})<cr>]],
             mode = "v",
             desc = "[GitLinker] Goto Browser",
         })

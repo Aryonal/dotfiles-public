@@ -1,6 +1,6 @@
 return {
     "RRethy/vim-illuminate", -- To highlight occurrences under cursor
-    event = { "BufReadPost", "BufWritePost", "BufNewFile" },
+    event = require("utils.lazy").events.SetB,
     init = function()
         require("utils.vim").create_autocmd({
             events = { "ColorScheme" },

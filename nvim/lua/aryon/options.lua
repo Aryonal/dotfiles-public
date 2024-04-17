@@ -41,7 +41,7 @@ o.colorcolumn = tostring(style.MAX_LENGTH)
 o.termguicolors = true
 o.bg = bg
 
--- o.equalalways = false
+o.equalalways = true
 
 vim.opt.wildignore:append({ "*/node_modules/*", "*/vendor/*" })
 vim.opt.shortmess:append({ I = true }) -- disable :intro
