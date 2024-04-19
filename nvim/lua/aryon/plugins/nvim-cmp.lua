@@ -41,8 +41,10 @@ return {
         "L3MON4D3/LuaSnip",
         dependencies = {
             "rafamadriz/friendly-snippets",
+            "saadparwaiz1/cmp_luasnip",
+            "hrsh7th/nvim-cmp",
         },
-        version = "*",
+        version = "v2.*",
         lazy = true,
         -- install jsregexp (optional!).
         build = "make install_jsregexp",
@@ -53,13 +55,13 @@ return {
     {
         "hrsh7th/nvim-cmp",
         dependencies = {
-            "L3MON4D3/LuaSnip",
             "hrsh7th/cmp-buffer",
             "hrsh7th/cmp-cmdline",
             "hrsh7th/cmp-nvim-lsp",
             "hrsh7th/cmp-nvim-lua",
             "hrsh7th/cmp-path",
             "onsails/lspkind.nvim",
+            "saadparwaiz1/cmp_luasnip",
             "zbirenbaum/copilot-cmp",
         },
         event = require("utils.lazy").events.SetC,
@@ -291,7 +293,10 @@ return {
 
             -- Set configuration for specific filetype.
             cmp.setup.filetype("gitcommit", {
-                sources = { { name = "buffer" } },
+                sources = {
+                    { name = "copilot" },
+                    { name = "buffer" },
+                },
             })
 
             -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
@@ -320,24 +325,5 @@ return {
             -- setup hl for copilot
             vim.api.nvim_set_hl(0, "CmpItemKindCopilot", { fg = "#72c44d", default = true })
         end,
-    },
-    {
-        "saadparwaiz1/cmp_luasnip",
-        dependencies = {
-            {
-                "L3MON4D3/LuaSnip",
-                dependencies = {
-                    "rafamadriz/friendly-snippets",
-                },
-                version = "*",
-                -- install jsregexp (optional!).
-                build = "make install_jsregexp",
-                config = function()
-                    require("luasnip.loaders.from_vscode").lazy_load()
-                end,
-            },
-            "hrsh7th/nvim-cmp", -- load after nvim-cmp
-        },
-        event = require("utils.lazy").events.SetC,
     },
 }

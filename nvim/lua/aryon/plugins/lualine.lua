@@ -34,25 +34,51 @@ return {
         end
 
         local function winnr()
-            return vim.api.nvim_win_get_number(0)
+            return function()
+                return vim.api.nvim_win_get_number(0)
+            end
         end
 
         local function indentation()
-            local spacetab = "Tab"
-            local indents = vim.bo.tabstop
-            if vim.bo.expandtab then
-                spacetab = ""
-                indents = vim.bo.softtabstop
-                if indents < 0 then
-                    indents = vim.bo.shiftwidth
+            return function()
+                local spacetab = "Tab"
+                local indents = vim.bo.tabstop
+                if vim.bo.expandtab then
+                    spacetab = ""
+                    indents = vim.bo.softtabstop
+                    if indents < 0 then
+                        indents = vim.bo.shiftwidth
+                    end
                 end
-            end
-            local shifts = vim.bo.shiftwidth
+                local shifts = vim.bo.shiftwidth
 
-            return spacetab .. " " .. indents .. ":" .. shifts
+                return spacetab .. " " .. indents .. ":" .. shifts
+            end
         end
 
-        local function get_aerial_component()
+        local function encoding()
+            return function()
+                local enc = vim.opt.fileencoding:get()
+                if enc == "utf-8" then
+                    return ""
+                end
+                return enc
+            end
+        end
+
+        local function format()
+            return {
+                "fileformat",
+                icons_enabled = true,
+                symbols = {
+                    unix = "LF",
+                    dos = "CRLF",
+                    mac = "CR",
+                },
+            }
+        end
+
+        local function aerial()
             if aerial_ok then
                 return {
                     "aerial",
@@ -66,7 +92,7 @@ return {
             return {}
         end
 
-        local function get_git_branch_component()
+        local function branch()
             return {
                 "branch",
                 icon = icons.git_branch,
@@ -75,7 +101,7 @@ return {
             }
         end
 
-        local function get_diff_component()
+        local function diff()
             if gitsigns_ok then
                 return {
                     "diff",
@@ -95,67 +121,44 @@ return {
             return { "diff", colored = true }
         end
 
-        local function get_window_static_info_components()
+        local function diagnostics()
             return {
-                indentation,
-                -- "encoding",
-                function()
-                    local enc = vim.opt.fileencoding:get()
-                    if enc == "utf-8" then
-                        return ""
-                    end
-                    return enc
-                end,
-                {
-                    "fileformat",
-                    icons_enabled = true,
-                    symbols = {
-                        unix = "LF",
-                        dos = "CRLF",
-                        mac = "CR",
-                    },
-                },
-                "filetype",
-                "progress",
-                "location",
-            }
-        end
-
-        local function get_window_dynamic_info_components()
-            return {
-                get_diff_component(),
-                {
-                    "diagnostics",
-                    icons_enabled = true,
-                    symbols = {
-                        error = icons.error .. ":",
-                        warn = icons.warn .. ":",
-                        info = icons.info .. ":",
-                        hint = icons.hint .. ":",
-                    },
+                "diagnostics",
+                icons_enabled = true,
+                symbols = {
+                    error = icons.error .. ":",
+                    warn = icons.warn .. ":",
+                    info = icons.info .. ":",
+                    hint = icons.hint .. ":",
                 },
             }
         end
 
-        local function get_file_navigation_components()
+        local function tab()
             return {
-                winnr,
-                {
-                    "filename",
-                    file_status = true, -- displays file status (readonly status, modified status)
-                    newfile_status = false,
-                    icons_enabled = true,
-                    path = 1, -- 0: just the filename
-                    -- 1: relative path
-                    -- 2: absolute path
-                    -- 3: absolute path, with tilde as the home directory
+                "tabs",
+                tab_max_length = 32,
+                max_length = vim.o.columns,
+                mode = 2, -- 0: Shows tab_nr 1: Shows tab_name 2: Shows tab_nr + tab_name
+                path = 4, -- 1: relative 2: absolute 3: shortened absolute 4: file name
+            }
+        end
 
-                    shorting_target = 32, -- shortens path to leave 40 spaces in the window
-                    -- for other components. (terrible name, any suggestions?)
-                    symbols = {
-                        unnamed = icons.noname,
-                        readonly = icons.readonly,
-                    },
+        local function filename()
+            return {
+                "filename",
+                file_status = true, -- displays file status (readonly status, modified status)
+                newfile_status = false,
+                icons_enabled = true,
+                path = 1, -- 0: just the filename
+                -- 1: relative path
+                -- 2: absolute path
+                -- 3: absolute path, with tilde as the home directory
+
+                shorting_target = 32, -- shortens path to leave 32 spaces in the window
+                symbols = {
+                    unnamed = icons.noname,
+                    readonly = icons.readonly,
                 },
             }
         end
@@ -176,11 +179,22 @@ return {
             sections = {
                 lualine_a = {
                     function() return path_util.get_cwd_short(32) end,
-                    get_git_branch_component(),
                 },
-                lualine_b = {},
-                lualine_c = get_window_dynamic_info_components(),
-                lualine_x = get_window_static_info_components(),
+                lualine_b = {
+                },
+                lualine_c = {
+                    branch(),
+                    diff(),
+                    diagnostics(),
+                },
+                lualine_x = {
+                    indentation(),
+                    encoding(),
+                    format(),
+                    "filetype",
+                    "progress",
+                    "location",
+                },
                 lualine_y = {},
                 lualine_z = {},
             },
@@ -188,20 +202,15 @@ return {
                 lualine_a = {},
                 lualine_b = {},
                 lualine_c = {},
-                lualine_x = { "location" },
+                lualine_x = {
+                    "location",
+                },
                 lualine_y = {},
                 lualine_z = {},
             },
             tabline = {
                 lualine_a = {
-                    -- function() return path_util.get_cwd_short(32) end,
-                    {
-                        "tabs",
-                        tab_max_length = 32,
-                        max_length = vim.o.columns,
-                        mode = 2, -- 0: Shows tab_nr 1: Shows tab_name 2: Shows tab_nr + tab_name
-                        path = 4, -- 1: relative 2: absolute 3: shortened absolute 4: file name
-                    },
+                    tab(),
                 },
                 lualine_b = {
                 },
@@ -212,8 +221,13 @@ return {
             },
             winbar = {
                 lualine_a = {},
-                lualine_b = get_file_navigation_components(),
-                lualine_c = get_aerial_component(),
+                lualine_b = {
+                    winnr(),
+                    filename(),
+                },
+                lualine_c = {
+                    aerial()
+                },
                 lualine_x = {},
                 lualine_y = {},
                 lualine_z = {},
@@ -221,7 +235,10 @@ return {
             inactive_winbar = {
                 lualine_a = {},
                 lualine_b = {},
-                lualine_c = get_file_navigation_components(),
+                lualine_c = {
+                    winnr(),
+                    filename(),
+                },
                 lualine_x = {},
                 lualine_y = {},
                 lualine_z = {},

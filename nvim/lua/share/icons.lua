@@ -5,6 +5,7 @@ return {
     info = "I",
     debug = "D",
     code_action = "C",
+    code_action_virt_text = "  💡",
     -- for git
     git_unstaged = "M",
     git_staged = "✓",

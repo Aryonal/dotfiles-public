@@ -15,4 +15,5 @@ use `WhichKey` to find all keymaps.
 - node
 - go
 - rust (cargo)
+- (optional) fzf
 - (optional) nerd-fonts

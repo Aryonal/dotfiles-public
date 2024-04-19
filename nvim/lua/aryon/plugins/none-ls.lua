@@ -1,3 +1,4 @@
+---@diagnostic disable: missing-parameter
 return {
     "nvimtools/none-ls.nvim",
     enabled = true,
@@ -23,7 +24,7 @@ return {
         local sources = {
             -- tools without local executable
             null_ls.builtins.completion.spell,
-            null_ls.builtins.code_actions.gitsigns,
+            -- null_ls.builtins.code_actions.gitsigns,
         }
         -- for more sources, refer https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md
 
@@ -51,11 +52,11 @@ return {
             return _executable(exec)
         end
 
-        ---@param tb: table, source tables
-        ---@param interf: string, name of interface, one of diagnostics, code_actions, hover, formatting...
-        ---@param name: string, name of resource
-        ---@param exec: string | table, executable name or path
-        ---@param opts: table, null-ls resource options, will be passed to `null_ls.builtin.interf.name.with()`
+        ---@param tb table: source tables
+        ---@param interf string: name of interface, one of diagnostics, code_actions, hover, formatting...
+        ---@param name string: name of resource
+        ---@param exec string | table: executable name or path
+        ---@param opts table: null-ls resource options, will be passed to `null_ls.builtin.interf.name.with()`
         local function _append_source(tb, interf, name, exec, opts)
             if not exec then
                 exec = name

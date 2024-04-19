@@ -19,6 +19,7 @@ local function lsp_buf_keymaps(bufnr)
         { "<leader>f",  sync_format_fn,                      desc = "[LSP] Formatting",              mode = "v" },
         { "<leader>rn", vim.lsp.buf.rename,                  desc = "[LSP] Rename" },
         { "<leader>ca", vim.lsp.buf.code_action,             desc = "[LSP] Code action" },
+        { "<leader>cl", vim.lsp.codelens.run,                desc = "[LSP] Run Codelens" },
         { "<leader>sg", vim.lsp.buf.signature_help,          desc = "[LSP] Signature" },
         { "<C-s>",      vim.lsp.buf.signature_help,          desc = "[I][LSP] Signature",            mode = "i" },
     }
@@ -52,11 +53,12 @@ local function on_attach(client, bufnr)
         end
     end
 
+
     vim.api.nvim_create_autocmd({ "CursorHold", "InsertLeave" }, {
         buffer = 0, -- current buffer only
         group = custom_aug,
         desc = "Refresh CodeLens",
-        callback = function()
+        callback = function(ev)
             if client.server_capabilities.codeLensProvider then
                 vim.lsp.codelens.refresh()
             end
@@ -69,12 +71,14 @@ end
 local function client_capabilities()
     local cap = vim.lsp.protocol.make_client_capabilities()
 
+    local c = {}
     local ok, _ = pcall(require, "cmp_nvim_lsp")
     if ok then
-        local c = require("cmp_nvim_lsp").default_capabilities()
+        c = require("cmp_nvim_lsp").default_capabilities()
         c.textDocument.completion.completionItem.snippetSupport = true
-        cap = c
     end
+
+    cap = vim.tbl_deep_extend("force", {}, cap, c)
 
     -- REF: https://github.com/kevinhwang91/nvim-ufo#minimal-configuration
     cap.textDocument.foldingRange = {

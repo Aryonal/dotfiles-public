@@ -20,14 +20,14 @@ return {
             -- local set = require("utils.vim").set_keymap
 
             -- set({
-            --     key = "<C-w>o",
-            --     cmd = "<cmd>SaveLocalSession<CR><C-w>o",
+            --     "<C-w>o",
+            --     "<cmd>SaveLocalSession<CR><C-w>o",
             --     desc = "Full screen buffer",
             -- })
             -- set({
-            --     key = "<C-w>u",
-            --     cmd = "<cmd>LoadLocalSession<CR>",
-            --     desc = "Restore full screen",
+            --     "<C-w>u",
+            --     "<cmd>LoadLocalSession<CR>",
+            --     desc = "Revert full screen",
             -- })
         end
     },
@@ -41,13 +41,13 @@ return {
             "go",
         },
         build = function()
-            local dir = vim.fn.expand(go_cfg.go_tests_template_dir)
+            local dir = vim.fn.expand(go_cfg.go_tests_template_root)
             if not vim.loop.fs_stat(dir) then
                 vim.notify(vim.fn.system({
                     "git",
                     "clone",
                     "https://github.com/cweill/gotests.git",
-                    "--branch=develop", -- latest stable release
+                    "--branch=develop",
                     "--depth=1",
                     dir,
                 }))
@@ -60,7 +60,7 @@ return {
                 },
                 gotests = {
                     named = true,
-                    template_dir = go_cfg.go_tests_template_dir .. "/templates/testify/",
+                    template_dir = go_cfg.go_tests_template_root .. "/templates/testify/",
                 }
             })
         end

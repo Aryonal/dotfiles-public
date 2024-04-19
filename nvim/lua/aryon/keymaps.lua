@@ -49,10 +49,9 @@ local win_bindings = {
 }
 
 local lsp_bindings = {
-    { "<leader>e",  vim.diagnostic.open_float, desc = "[LSP] Diagnostics (float)" },
-    { "]d",         vim.diagnostic.goto_next,  desc = "[LSP] Next Diagnostic" },
-    { "[d",         vim.diagnostic.goto_prev,  desc = "[LSP] Previous Diagnostic" },
-    { "<leader>cl", vim.lsp.codelens.run,      desc = "[LSP] Run Codelens" },
+    { "<leader>e", vim.diagnostic.open_float, desc = "[LSP] Diagnostics (float)" },
+    { "]d",        vim.diagnostic.goto_next,  desc = "[LSP] Next Diagnostic" },
+    { "[d",        vim.diagnostic.goto_prev,  desc = "[LSP] Previous Diagnostic" },
 }
 
 --<leader> + number to quick jump tab
