@@ -6,6 +6,7 @@ local M = {}
 -- ```lua
 -- {
 --      events = {},
+--      buffer = 0,
 --      group_name = "",
 --      desc = "",
 --      pattern = nil,
@@ -16,6 +17,7 @@ function M.create_autocmd(opts)
     local custom_aug = vim.api.nvim_create_augroup(opts.group_name, { clear = true })
     vim.api.nvim_create_autocmd(opts.events, {
         group = custom_aug,
+        buffer = opts.buffer,
         desc = opts.desc,
         pattern = opts.pattern,
         callback = opts.callback,

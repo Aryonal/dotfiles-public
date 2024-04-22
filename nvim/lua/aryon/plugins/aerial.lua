@@ -45,7 +45,7 @@ return {
             -- -- Useful for setting keymaps. Takes a single `bufnr` argument.
             on_attach = function(bufnr)
                 bmap({ "<leader>a", "<cmd>AerialToggle!<CR>", desc = "[Aerial] Toggle" }, bufnr)
-                bmap({ c.motion.buffer.aerial_previous, "<cmd>AerialPrev<CR>", desc = "[Aerial] Previous" }, bufnr)
+                bmap({ c.motion.buffer.aerial_prev, "<cmd>AerialPrev<CR>", desc = "[Aerial] Previous" }, bufnr)
                 bmap({ c.motion.buffer.aerial_next, "<cmd>AerialNext<CR>", desc = "[Aerial] Next" }, bufnr)
             end,
         })

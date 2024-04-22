@@ -51,7 +51,7 @@ local plugins = {
 }
 
 for i, plugin in ipairs(plugins) do
-    plugins[i] = require("utils.lua").merge_tbl(plugin, common_opts)
+    plugins[i] = vim.tbl_deep_extend("force", plugin, common_opts)
 end
 
 return plugins

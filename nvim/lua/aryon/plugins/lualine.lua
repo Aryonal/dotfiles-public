@@ -140,7 +140,7 @@ return {
                 tab_max_length = 32,
                 max_length = vim.o.columns,
                 mode = 2, -- 0: Shows tab_nr 1: Shows tab_name 2: Shows tab_nr + tab_name
-                path = 4, -- 1: relative 2: absolute 3: shortened absolute 4: file name
+                path = 1, -- 1: relative 2: absolute 3: shortened absolute 4: file name
             }
         end
 
@@ -155,7 +155,7 @@ return {
                 -- 2: absolute path
                 -- 3: absolute path, with tilde as the home directory
 
-                shorting_target = 32, -- shortens path to leave 32 spaces in the window
+                -- shorting_target = 32, -- shortens path to leave 32 spaces in the window
                 symbols = {
                     unnamed = icons.noname,
                     readonly = icons.readonly,
@@ -243,7 +243,6 @@ return {
                 lualine_y = {},
                 lualine_z = {},
             },
-            -- extensions = { "aerial" },
         })
     end,
 }

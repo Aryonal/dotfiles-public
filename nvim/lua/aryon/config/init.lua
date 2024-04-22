@@ -4,6 +4,7 @@ local cfg = {
         go = {
             MAX_LENGTH = 120,
             go_tests_template_root = "~/.local/share/gotests",
+            org_prefix = "", -- "github.com/company/"
         },
         sql = {
             dialect = "mysql",
@@ -55,16 +56,18 @@ local cfg = {
         },
         motion = {
             buffer = {
-                diagnostics_next = "]d",
-                diagnostics_previous = "[d",
+                diag_next = "]d",
+                diag_prev = "[d",
                 git_hunk_next = "]h",
-                git_hunk_previous = "[h",
+                git_hunk_prev = "[h",
                 aerial_next = "]a",
-                aerial_previous = "[a",
-                -- textobjext
+                aerial_prev = "[a",
+                -- treesitter
                 function_next = "]f",
-                function_previous = "[f",
+                function_prev = "[f",
                 -- vim default
+                diff_next = "]c",
+                diff_prev = "[c",
                 pattern_next = "*",
                 fold_end = "]z",
                 fold_beg = "[z",

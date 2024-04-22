@@ -63,7 +63,7 @@ return {
             --   enable = false
             -- },
             on_attach = function(bufnr)
-                local gs = package.loaded.gitsigns
+                local gs = require("gitsigns")
 
                 local function map(mode, l, r, opts)
                     opts = opts or {}
@@ -71,88 +71,58 @@ return {
                     vim.keymap.set(mode, l, r, opts)
                 end
 
-                -- Navigation
-                -- map("n", "]c", function()
-                --     if vim.wo.diff then
-                --         return "]c"
-                --     end
-                --     vim.schedule(function()
-                --         gs.next_hunk()
-                --     end)
-                --     return "<Ignore>"
-                -- end, { expr = true })
+                bmap({
+                    c.motion.buffer.git_hunk_next,
+                    function() gs.nav_hunk("next") end,
+                    desc = "[Gitsigns] Next hunk",
+                }, bufnr)
 
                 bmap({
-                    key = c.motion.buffer.git_hunk_next,
-                    cmd = function()
+                    c.motion.buffer.git_hunk_prev,
+                    function() gs.nav_hunk("prev") end,
+                    desc = "[Gitsigns] Previous hunk",
+                }, bufnr)
+
+                bmap({
+                    "]c",
+                    function()
                         if vim.wo.diff then
-                            return c.motion.buffer.git_hunk_next
+                            vim.cmd.normal({ "]c", bang = true })
+                        else
+                            gs.nav_hunk("next")
                         end
-                        vim.schedule(function()
-                            gs.next_hunk()
-                        end)
-                        return "<Ignore>"
                     end,
                     desc = "[Gitsigns] Next hunk",
                 }, bufnr)
 
-                -- map("n", "[c", function()
-                --     if vim.wo.diff then
-                --         return "[c"
-                --     end
-                --     vim.schedule(function()
-                --         gs.prev_hunk()
-                --     end)
-                --     return "<Ignore>"
-                -- end, { expr = true })
-
                 bmap({
-                    key = c.motion.buffer.git_hunk_previous,
-                    cmd = function()
+                    "[c",
+                    function()
                         if vim.wo.diff then
-                            return c.motion.buffer.git_hunk_previous
+                            vim.cmd.normal({ "[c", bang = true })
+                        else
+                            gs.nav_hunk("prev")
                         end
-                        vim.schedule(function()
-                            gs.prev_hunk()
-                        end)
-                        return "<Ignore>"
                     end,
                     desc = "[Gitsigns] Previous hunk",
                 }, bufnr)
 
                 -- Actions
-                -- map({ "n", "v" }, "<leader>hs", ":Gitsigns stage_hunk<CR>")
-                -- map({ "n", "v" }, "<leader>hr", ":Gitsigns reset_hunk<CR>")
-                -- map("n", "<leader>hS", gs.stage_buffer)
-                -- map("n", "<leader>hu", gs.undo_stage_hunk)
-                -- map("n", "<leader>hR", gs.reset_buffer)
-                -- map("n", "<leader>hp", gs.preview_hunk)
                 bmap({
-                    key = "<leader>hp",
-                    cmd = gs.preview_hunk,
+                    "<leader>hp",
+                    gs.preview_hunk,
                     desc = "[Gitsigns] Preview hunk",
                 }, bufnr)
-                -- map("n", "<leader>hb", function()
-                --     gs.blame_line({ full = true })
-                -- end)
-                -- map("n", "<leader>tb", gs.toggle_current_line_blame)
-                -- map("n", "<leader>hd", gs.diffthis)
                 bmap({
-                    key = "<leader>hd",
-                    cmd = gs.diffthis,
+                    "<leader>hd",
+                    gs.diffthis,
                     desc = "[Gitsigns] Diff this",
                 }, bufnr)
-                -- map("n", "<leader>hD", function()
-                --     gs.diffthis("~")
-                -- end)
                 bmap({
-                    key = "<leader>hD",
-                    cmd = function()
-                        gs.diffthis("~")
-                    end,
+                    "<leader>hD",
+                    function() gs.diffthis("~") end,
                     desc = "[Gitsigns] Diff this",
                 }, bufnr)
-                -- map("n", "<leader>td", gs.toggle_deleted)
 
                 -- Text object
                 map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", { desc = "[Gitsigns] inner hunk" })

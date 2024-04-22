@@ -11,7 +11,7 @@ return {
     git_staged = "✓",
     git_add = "A",
     git_unmerged = "",
-    git_renamed = "→",
+    git_renamed = "R", -- "→",
     git_untracked = "U",
     git_deleted = "D",
     git_ignored = "",

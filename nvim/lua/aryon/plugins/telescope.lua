@@ -1,4 +1,3 @@
----@diagnostic disable: unused-local
 local c = require("aryon.config").keymaps
 
 local previewer_maker_default_opts = {
@@ -20,7 +19,7 @@ local function previewer_maker_factory(previewers, factory_opts)
             if not stat then
                 return
             end
-            if stat.size > factory_opts.large_file_threshold then
+            if factory_opts.disable_large_file and stat.size > factory_opts.large_file_threshold then
                 return
             else
                 previewers.buffer_previewer_maker(filepath, bufnr, opts)
@@ -151,7 +150,7 @@ return {
         require("utils.vim").create_autocmd({
             events = { "ColorScheme" },
             group_name = "aryon/telescope.lua",
-            desc = "Link TelescopeBorder to FloatBorder",
+            desc = "Link Telescope Hihglights",
             callback = function()
                 vim.cmd([[
                         hi! link TelescopeBorder FloatBorder
@@ -168,7 +167,7 @@ return {
         local telescope = require("telescope")
         local actions = require("telescope.actions")
         local previewers = require("telescope.previewers")
-        local trouble_ok, trouble = pcall(require, "trouble.providers.telescope")
+        -- local trouble_ok, trouble = pcall(require, "trouble.providers.telescope")
         local icons = require("share.icons")
 
         local lga_actions = require("telescope-live-grep-args.actions")

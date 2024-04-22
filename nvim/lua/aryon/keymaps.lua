@@ -37,10 +37,6 @@ local fixed_bindings = {
 }
 
 local win_bindings = {
-    -- { { "<C-w>j", "<C-w><Down>" },  "<cmd>wincmd j<CR>", desc = "[Term] Navigate down",  mode = "t" },
-    -- { { "<C-w>k", "<C-w><Up>" },    "<cmd>wincmd k<CR>", desc = "[Term] Navigate up",    mode = "t" },
-    -- { { "<C-w>l", "<C-w><Right>" }, "<cmd>wincmd l<CR>", desc = "[Term] Navigate right", mode = "t" },
-    -- { { "<C-w>h", "<C-w><Left>" },  "<cmd>wincmd h<CR>", desc = "[Term] Navigate left",  mode = "t" },
     { { "<Down>", "<C-j>" },  "<C-w>j",       desc = "[Win] Navigate down" },
     { { "<Left>", "<C-h>" },  "<C-w>h",       desc = "[Win] Navigate left" },
     { { "<Right>", "<C-l>" }, "<C-w>l",       desc = "[Win] Navigate right" },
@@ -49,9 +45,13 @@ local win_bindings = {
 }
 
 local lsp_bindings = {
-    { "<leader>e", vim.diagnostic.open_float, desc = "[LSP] Diagnostics (float)" },
-    { "]d",        vim.diagnostic.goto_next,  desc = "[LSP] Next Diagnostic" },
-    { "[d",        vim.diagnostic.goto_prev,  desc = "[LSP] Previous Diagnostic" },
+    { cfg.lsp.show_diagnostics_inline, vim.diagnostic.open_float, desc = "[LSP] Diagnostics (float)" },
+    { cfg.motion.buffer.diag_next,     vim.diagnostic.goto_next,  desc = "[LSP] Next Diagnostic" },
+    { cfg.motion.buffer.diag_prev,     vim.diagnostic.goto_prev,  desc = "[LSP] Previous Diagnostic" },
+}
+
+local typos = {
+    { "Wa", "wa", desc = "[Typo] wa", mode = "c" },
 }
 
 --<leader> + number to quick jump tab
@@ -79,6 +79,7 @@ local bindings = {}
 vim.list_extend(bindings, fixed_bindings)
 vim.list_extend(bindings, win_bindings)
 vim.list_extend(bindings, lsp_bindings)
+vim.list_extend(bindings, typos)
 
 local maps = require("utils.vim").batch_set_keymap
 maps(bindings)

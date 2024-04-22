@@ -75,50 +75,21 @@ return {
         _append_source(sources, "diagnostics", "codespell")
         -- _append_source(sources, "formatting", "codespell")
         _append_source(sources, "formatting", "prettier", { "./node_modules/.bin/prettier", "prettier" }, {
-            prefer_local = "node_modules/.bin",
-        })
+            prefer_local = "node_modules/.bin" })
         -- _append_source(sources, "formatting", "prettierd")
         -- _append_source(sources, "formatting", "prettier_d_slim")
-        -- _append_source(sources, "formatting", "codespell")
-        _append_source(sources, "code_actions", "refactoring")
+        -- _append_source(sources, "code_actions", "refactoring")
         _append_source(sources, "hover", "dictionary", "curl")
 
         -- Golang
-        -- _append_source(sources, "formatting", "goimports", "goimports", {
-        --     extra_args = { "-local", style.go.org_prefix },
-        -- })
         _append_source(sources, "formatting", "gofumpt")
         local _args = { "-rm-unused", "-format", "$FILENAME" }
-        if style.go.org_prefix then
+        if style.go.org_prefix and style.go.org_prefix ~= "" then
             _args = vim.list_extend({ "-company-prefixes", style.go.org_prefix }, _args)
         end
         _append_source(sources, "formatting", "goimports_reviser", "goimports-reviser", { args = _args })
         _append_source(sources, "formatting", "golines", "golines", {
-            extra_args = { "-m", tostring(style.go.MAX_LENGTH), "-w" },
-        })
-        -- _append_source(sources, "diagnostics", "golangci_lint", "golangci-lint")
-        -- _append_source(sources, "diagnostics", "staticcheck")
-        -- _append_source(sources, "diagnostics", "revive") -- it's laggy
-
-        -- JS/TS/JSX/TSX/Vue
-        _append_source(sources, "code_actions", "eslint", { "./node_modules/.bin/eslint", "eslint" }, {
-            only_local = "node_modules/.bin",
-        })
-        -- _append_source(sources, "code_actions", "eslint_d")
-        -- _append_source(sources, "code_actions", "xo")
-        _append_source(sources, "diagnostics", "eslint", { "./node_modules/.bin/eslint", "eslint" }, {
-            only_local = "node_modules/.bin",
-        })
-        -- _append_source(sources, "diagnostics", "eslint_d")
-        -- _append_source(sources, "diagnostics", "tsc")
-        -- _append_source(sources, "diagnostics", "xo")
-        -- _append_source(sources, "formatting", "eslint",{"./node_modules/.bin/eslint", "eslint"}, {
-        --     only_local = "node_modules/.bin",
-        -- })
-        -- _append_source(sources, "formatting", "eslint_d")
-        -- _append_source(sources, "formatting", "rome")
-        _append_source(sources, "formatting", "rustywind")
-        -- _append_source(sources, "formatting", "prettier_standard", "prettier-standard")
+            extra_args = { "-m", tostring(style.go.MAX_LENGTH), "-w" } })
 
         -- SQL
         _append_source(sources, "diagnostics", "sqlfluff", "sqlfluff", {
@@ -130,13 +101,9 @@ return {
         -- _append_source(sources, "formatting", "sqlfmt")
         -- _append_source(sources, "formatting", "sql_formatter", "sql-formatter")
 
-        -- Lua
-        -- _append_source(sources, "formatting", "stylua") -- use lua_ls builtin
+        -- Lua -> use lua_ls
 
-        -- Python
-        _append_source(sources, "formatting", "black")
-        _append_source(sources, "formatting", "isort")
-        _append_source(sources, "diagnostics", "pylint")
+        -- Python -> Use ruff
 
         -- Terraform
         -- _append_source(sources, "formatting", "terraform_fmt", "terraform")

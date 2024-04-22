@@ -10,13 +10,13 @@ local function lsp_buf_keymaps(bufnr)
 
     -- Mappings.
     local list_work_dirs_fn = function() print(vim.inspect(vim.lsp.buf.list_workspace_folders())) end
-    local sync_format_fn = function() vim.lsp.buf.format({ async = false }) end
+    -- local sync_format_fn = function() vim.lsp.buf.format({ async = false }) end
     local keymaps = {
         { "<leader>wa", vim.lsp.buf.add_workspace_folder,    desc = "[LSP] Add workspace folders" },
         { "<leader>wr", vim.lsp.buf.remove_workspace_folder, desc = "[LSP] Remove workspace folders" },
         { "<leader>wl", list_work_dirs_fn,                   desc = "[LSP] List workspace folders" },
-        { "<leader>f",  sync_format_fn,                      desc = "[LSP] Formatting" },
-        { "<leader>f",  sync_format_fn,                      desc = "[LSP] Formatting",              mode = "v" },
+        -- { "<leader>f",  sync_format_fn,                      desc = "[LSP] Formatting" },
+        -- { "<leader>f",  sync_format_fn,                      desc = "[LSP] Formatting",              mode = "v" },
         { "<leader>rn", vim.lsp.buf.rename,                  desc = "[LSP] Rename" },
         { "<leader>ca", vim.lsp.buf.code_action,             desc = "[LSP] Code action" },
         { "<leader>cl", vim.lsp.codelens.run,                desc = "[LSP] Run Codelens" },
@@ -54,15 +54,16 @@ local function on_attach(client, bufnr)
     end
 
 
-    vim.api.nvim_create_autocmd({ "CursorHold", "InsertLeave" }, {
-        buffer = 0, -- current buffer only
-        group = custom_aug,
+    require("utils.vim").create_autocmd({
+        group_name = "aryon/lsp.lua",
+        buffer = 0,
+        events = { "CursorHold", "InsertLeave" },
         desc = "Refresh CodeLens",
-        callback = function(ev)
+        callback = function()
             if client.server_capabilities.codeLensProvider then
                 vim.lsp.codelens.refresh()
             end
-        end
+        end,
     })
 
     lsp_buf_keymaps(bufnr)
@@ -89,9 +90,11 @@ local function client_capabilities()
     return cap
 end
 
+local capabilities = client_capabilities()
+
 -- TODO: use `LspAttach` event
 M.on_attach = on_attach
-M.capabilities = client_capabilities()
+M.capabilities = capabilities
 
 M.default = {
     on_attach = on_attach,
@@ -160,17 +163,7 @@ M.sumneko = {
     on_attach = on_attach,
     capabilities = capabilities,
     settings = {
-        -- fix diagnostics "undefined global `vim`"
-        -- REF: https://www.reddit.com/r/neovim/comments/khk335/comment/gglrg7k/?utm_source=share&utm_medium=web2x&context=3
-        -- can be configured in .luarc.json as well
-        Lua = {
-            diagnostics = {
-                globals = { "vim" },
-            },
-            format = {
-                enable = true,
-            },
-        },
+        -- use .luarc.json
     },
 }
 
