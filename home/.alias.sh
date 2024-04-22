@@ -2,16 +2,6 @@
 # $ tail .bashrc # or .zshrc
 # [ -f path/to/.alias.sh ] && source path/to/.alias.sh
 
-# XDG configuration
-# REF: https://wiki.archlinux.org/title/XDG_Base_Directory
-export XDG_CONFIG_HOME="$HOME/.config"
-export XDG_CACHE_HOME="$HOME/.cache"
-export XDG_DATA_HOME="$HOME/.local/share"
-export XDG_STATE_HOME="$HOME/.local/state"
-
-export XDG_DATA_DIRS="/usr/local/share:/usr/share"
-export XDG_CONFIG_DIRS="/etc/xdg"
-
 # user local binaries
 export PATH=$PATH:$HOME/.local/bin:$HOME/.bin
 
@@ -115,25 +105,30 @@ fi
 if command -v tmux &> /dev/null
 then
     alias tmd="tmux detach" # tmux detach
-    # alias tmk="tmux kill-session -t" # tmux kill session by name # use tkss
-    # alias tmka="tmux ls -F \#S | xargs -IX tmux kill-session -t X" # tmux kill all session # use tksv
     alias tmr="tmux rename" # tmux rename session
+	alias tl="tmux ls" # tmux list session
+	alias ts="tmux new -s" # tmux new session
 
-    if command -v z &> /dev/null
-    then
-        function tm () {
-            if ! [[ -n $@ ]]; then
-                tmux
-                return $?
-            elif tmux list-sessions | grep $1 &> /dev/null; then
-                tmux attach -d -t $1
-                return $?
-            else
-                (z $1 && tmux new-session -s $1)
-                return $?
-            fi
-        }
-    fi
+	function tm () {
+		if ! [[ -n $@ ]]; then
+			if tmux list-sessions &> /dev/null; then
+				tmux attach
+				return $?
+			fi
+			tmux
+			return $?
+		elif tmux list-sessions | grep $1 &> /dev/null; then
+			tmux attach -d -t $1
+			return $?
+		else
+			if command -v z &> /dev/null; then
+				(z $1 && tmux new-session -s $1)
+				return $?
+			fi
+			tmux new-session -s $1
+			return $?
+		fi
+	}
 fi
 
 
@@ -151,5 +146,3 @@ alias vi=nvim
 # n: node version manager
 export N_PREFIX="$HOME/n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"  # Added by n-install (see http://git.io/n-install-repo).
 
-# mysql-client
-export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
