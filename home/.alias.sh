@@ -1,6 +1,8 @@
 # Alias shared between bash and zsh
 # $ tail .bashrc # or .zshrc
 # [ -f path/to/.alias.sh ] && source path/to/.alias.sh
+# e.g.
+# [ -f ${ZDOTDIR:-$HOME}/.alias.sh ] && source ${ZDOTDIR:-$HOME}/.alias.sh
 
 # user local binaries
 export PATH=$PATH:$HOME/.local/bin:$HOME/.bin
@@ -23,9 +25,21 @@ alias ll="LC_COLLATE=C ls -AlhF"
 alias la="LC_COLLATE=C ls -AlhF"
 alias lla="LC_COLLATE=C ls -alhF"
 
-# Shortcut
+
+# REF: https://github.com/rothgar/mastering-zsh/blob/master/docs/helpers/aliases.md
 alias e0="exit 0"
 alias cl="clear"
+alias :q="exit 0"
+alias :wq="exit 0"
+alias :w="echo saved!"
+alias :wq="echo saved!"
+alias ..='cd ..'
+alias ....='cd ../..'
+
+# Search through your command history and print the top 10 commands
+alias history-stat='history 0 | awk ''{print $2}'' | sort | uniq -c | sort -n -r | head'
+# Use `which` to find aliases and functions including binaries
+which='(alias; declare -f) | /usr/bin/which --tty-only --read-alias --read-functions --show-tilde --show-dot'
 
 # Datetime format
 if [[ $OSTYPE == 'darwin'* ]]; then
@@ -142,7 +156,4 @@ export EDITOR="nvim"
 
 alias vi=nvim
 # alias vim=nvim
-
-# n: node version manager
-export N_PREFIX="$HOME/n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"  # Added by n-install (see http://git.io/n-install-repo).
 

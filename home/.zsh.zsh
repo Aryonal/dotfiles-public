@@ -1,15 +1,51 @@
 # Minimal zsh config
+# $ tail .zshrc
+# [ -f ${ZDOTDIR:-$HOME}/.zsh.zsh ] && source ${ZDOTDIR:-$HOME}/.zsh.zsh
+
+set -o emacs # use C-X C-V to vi mode
+
+# options
+# REF: https://github.com/rothgar/mastering-zsh
+setopt INC_APPEND_HISTORY        # Write to the history file immediately, not when the shell exits.
+setopt SHARE_HISTORY             # Share history between all sessions.
+setopt HIST_EXPIRE_DUPS_FIRST    # Expire a duplicate event first when trimming history.
+setopt HIST_IGNORE_DUPS          # Do not record an event that was just recorded again.
+setopt HIST_IGNORE_ALL_DUPS      # Delete an old recorded event if a new event is a duplicate.
+setopt HIST_FIND_NO_DUPS         # Do not display a previously found event.
+setopt HIST_IGNORE_SPACE         # Do not record an event starting with a space.
+setopt HIST_SAVE_NO_DUPS         # Do not write a duplicate event to the history file.
+setopt HIST_VERIFY               # Do not execute immediately upon history expansion.
+setopt APPEND_HISTORY            # append to history file
+setopt HIST_NO_STORE             # Don't store history commands
+
+function default-backward-delete-word () {
+    local WORDCHARS="*?_[]~=/&;!#$%^(){}<>"
+    zle backward-delete-word
+}
+zle -N default-backward-delete-word
+bindkey '^W' default-backward-delete-word
 
 XDG_DATA_HOME=${XDG_DATA_HOME:-$HOME/.local/share}
 XDG_CACHE_HOME=${XDG_CACHE_HOME:-$HOME/.cache}
 
 # add zsh-complaints to fpath
 # REF: https://github.com/zsh-users/zsh-completions
-[ -d $XDG_DATA_HOME/zsh-completions/src ] && fpath=($XDG_DATA_HOME/zsh-completions/src $fpath)
+[ -d $XDG_DATA_HOME/zsh/zsh-completions/src ] && fpath=($XDG_DATA_HOME/zsh/zsh-completions/src $fpath)
 
 # add zshz
 # REF: https://github.com/agkozak/zsh-z?tab=readme-ov-file#installation
-[ -f $XDG_DATA_HOME/zsh-z/zsh-z.plugin.zsh ] && source $XDG_DATA_HOME/zsh-z/zsh-z.plugin.zsh
+[ -f $XDG_DATA_HOME/zsh/zsh-z/zsh-z.plugin.zsh ] && source $XDG_DATA_HOME/zsh/zsh-z/zsh-z.plugin.zsh
+
+# add p10k
+# REF: https://github.com/romkatv/powerlevel10k
+[ -f $XDG_DATA_HOME/zsh/powerlevel10k/powerlevel10k.zsh-theme ] && source $XDG_DATA_HOME/zsh/powerlevel10k/powerlevel10k.zsh-theme
+
+# add auto-suggestions
+# REF: https://github.com/zsh-users/zsh-autosuggestions
+[ -f $XDG_DATA_HOME/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh ] && source $XDG_DATA_HOME/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+# bindkey '^F' autosuggest-accept
+# bindkey '^E' autosuggest-accept
+
 
 autoload -Uz compinit
 [[ -f $XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION ]] || mkdir -p $XDG_CACHE_HOME/zsh && touch $XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION
@@ -17,15 +53,22 @@ compinit -d $XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION
 zstyle ":completion:*" cache-path $XDG_CACHE_HOME/zsh/zcompcache
 zstyle ":completion:*" menu select
 
+# use p10k instead
 # git prompt
-autoload -Uz vcs_info
-precmd_vcs_info() { vcs_info }
-precmd_functions+=( precmd_vcs_info )
-
-# prompt
-setopt PROMPT_SUBST
-NL=$'\n'
-PROMPT='%F{blue}%~%f ${vcs_info_msg_0_}${NL}%(?.%F{green}.%?%F{red})%(!.#.>)%f '
-
-zstyle ":vcs_info:*" enable git
-zstyle ":vcs_info:git:*" formats "%F{yellow}(%s:%b)%f"
+# function git_branch() {
+#     local ref
+#     ref=$(git symbolic-ref HEAD 2> /dev/null) || return
+#     echo "${ref#refs/heads/}"
+# }
+#
+# function git_dirty() {
+#     [[ -n $(git status --porcelain 2> /dev/null) ]] && echo " !"
+# }
+#
+# # prompt
+# setopt PROMPT_SUBST
+# NL=$'\n'
+# PROMPT='%(?.%F{green}.%F{red}%?)%f%F{blue}%~%f %F{yellow}$(git_branch)%f%F{red}$(git_dirty)%f${NL}%(!.#.>)%f '
+#
+# zstyle ":vcs_info:*" enable git
+# zstyle ":vcs_info:git:*" formats "%F{yellow}%b%f"
