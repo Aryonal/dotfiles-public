@@ -4,6 +4,7 @@
 
 - kitty
 - neovim
+- tmux
 - fzf
 - zsh
 - n
