@@ -12,10 +12,3 @@ export XDG_STATE_HOME="$HOME/.local/state"
 
 export XDG_DATA_DIRS="/usr/local/share:/usr/share"
 export XDG_CONFIG_DIRS="/etc/xdg"
-
-# Moving zsh history to xdg
-# zsh config is placed in $ZDOTDIR
-# config $ZDOTDIR by editing $HOME/.zshenv
-# $ export ZDOTDIR=$HOME/.config/zsh
-[[ -f $XDG_STATE_HOME/zsh/history ]] || mkdir -p $XDG_STATE_HOME/zsh
-export HISTFILE="$XDG_STATE_HOME"/zsh/history

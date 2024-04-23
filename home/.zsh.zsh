@@ -4,6 +4,14 @@
 
 set -o emacs # use C-X C-V to vi mode
 
+
+# Moving zsh history to xdg
+# zsh config is placed in $ZDOTDIR
+# config $ZDOTDIR by editing $HOME/.zshenv
+# $ export ZDOTDIR=$HOME/.config/zsh
+[[ -f $XDG_STATE_HOME/zsh/history ]] || mkdir -p $XDG_STATE_HOME/zsh
+export HISTFILE="$XDG_STATE_HOME"/zsh/history
+
 # options
 # REF: https://github.com/rothgar/mastering-zsh
 setopt INC_APPEND_HISTORY        # Write to the history file immediately, not when the shell exits.
@@ -27,6 +35,7 @@ bindkey '^W' default-backward-delete-word
 
 XDG_DATA_HOME=${XDG_DATA_HOME:-$HOME/.local/share}
 XDG_CACHE_HOME=${XDG_CACHE_HOME:-$HOME/.cache}
+XDG_STATE_HOME=${XDG_STATE_HOME:-$HOME/.local/state}
 
 # add zsh-complaints to fpath
 # REF: https://github.com/zsh-users/zsh-completions
