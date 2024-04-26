@@ -10,13 +10,13 @@ return {
     git_unstaged = "M",
     git_staged = "✓",
     git_add = "A",
-    git_unmerged = "",
+    git_unmerged = "C",
     git_renamed = "R", -- "→",
     git_untracked = "U",
     git_deleted = "D",
     git_ignored = "",
-    git_conflict = "!!",
-    git_branch = "⎇", -- 
+    git_conflict = "C",
+    git_branch = "", --   ⎇   󰒤 󰙁
     diff_add = "+",
     diff_change = "~",
     diff_delete = "-",

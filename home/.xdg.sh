@@ -1,3 +1,4 @@
+#! /bin/sh
 # XDG configuration
 # $ tail .bashrc # or .zshrc
 # [ -f /path/to/.xdg.sh ] && source /path/to/.xdg.sh

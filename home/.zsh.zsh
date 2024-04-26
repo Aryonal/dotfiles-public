@@ -4,6 +4,9 @@
 
 set -o emacs # use C-X C-V to vi mode
 
+XDG_DATA_HOME=${XDG_DATA_HOME:-$HOME/.local/share}
+XDG_CACHE_HOME=${XDG_CACHE_HOME:-$HOME/.cache}
+XDG_STATE_HOME=${XDG_STATE_HOME:-$HOME/.local/state}
 
 # Moving zsh history to xdg
 # zsh config is placed in $ZDOTDIR
@@ -27,15 +30,11 @@ setopt APPEND_HISTORY            # append to history file
 setopt HIST_NO_STORE             # Don't store history commands
 
 function default-backward-delete-word () {
-    local WORDCHARS="*?_[]~=/&;!#$%^(){}<>"
+    local WORDCHARS="*?_[]~!#$%^(){}<>"
     zle backward-delete-word
 }
 zle -N default-backward-delete-word
 bindkey '^W' default-backward-delete-word
-
-XDG_DATA_HOME=${XDG_DATA_HOME:-$HOME/.local/share}
-XDG_CACHE_HOME=${XDG_CACHE_HOME:-$HOME/.cache}
-XDG_STATE_HOME=${XDG_STATE_HOME:-$HOME/.local/state}
 
 # add zsh-complaints to fpath
 # REF: https://github.com/zsh-users/zsh-completions
@@ -44,6 +43,8 @@ XDG_STATE_HOME=${XDG_STATE_HOME:-$HOME/.local/state}
 # add zshz
 # REF: https://github.com/agkozak/zsh-z?tab=readme-ov-file#installation
 [ -f $XDG_DATA_HOME/zsh/zsh-z/zsh-z.plugin.zsh ] && source $XDG_DATA_HOME/zsh/zsh-z/zsh-z.plugin.zsh
+[ -d $XDG_STATE_HOME/zsh ] || mkdir -p $XDG_STATE_HOME/zsh
+ZSHZ_DATA=$XDG_STATE_HOME/zsh/.z
 
 # add p10k
 # REF: https://github.com/romkatv/powerlevel10k
@@ -52,6 +53,7 @@ XDG_STATE_HOME=${XDG_STATE_HOME:-$HOME/.local/state}
 # add auto-suggestions
 # REF: https://github.com/zsh-users/zsh-autosuggestions
 [ -f $XDG_DATA_HOME/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh ] && source $XDG_DATA_HOME/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
 # bindkey '^F' autosuggest-accept
 # bindkey '^E' autosuggest-accept
 
@@ -61,6 +63,12 @@ autoload -Uz compinit
 compinit -d $XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION
 zstyle ":completion:*" cache-path $XDG_CACHE_HOME/zsh/zcompcache
 zstyle ":completion:*" menu select
+
+# keep syntax-highlighting after zle -N and compinit
+# add syntax-highlighting
+# REF: https://github.com/zsh-users/zsh-syntax-highlighting
+[ -f $XDG_DATA_HOME/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ] && source $XDG_DATA_HOME/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
 
 # use p10k instead
 # git prompt

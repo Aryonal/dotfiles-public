@@ -12,7 +12,7 @@ Plug 'tpope/vim-surround'
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 
 " theme
-Plug 'nordtheme/vim'
+" Plug 'nordtheme/vim'
 
 " Initialize plugin system
 call plug#end()
@@ -66,12 +66,14 @@ nnoremap tq :tabclose<CR>
 
 nnoremap <C-\> :e .<CR>
 
+" TODO: emacs keybindings in insert mode
+
 " tree
 let g:netrw_liststyle = 3
 
 " Appearance
 set background=dark
-colorscheme nord
+colorscheme industry
 
 syntax on
 

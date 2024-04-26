@@ -1,3 +1,4 @@
+#! /bin/sh
 # Alias shared between bash and zsh
 # $ tail .bashrc # or .zshrc
 # [ -f path/to/.alias.sh ] && source path/to/.alias.sh
@@ -30,8 +31,10 @@ alias lla="LC_COLLATE=C ls -alhF"
 alias e0="exit 0"
 alias cl="clear"
 alias :q="exit 0"
+alias :qa="exit 0"
 alias :wq="exit 0"
 alias :w="echo saved!"
+alias :wa="echo saved!"
 alias :wq="echo saved!"
 alias ..='cd ..'
 alias ....='cd ../..'
@@ -118,10 +121,9 @@ fi
 # tmux
 if command -v tmux &> /dev/null
 then
-    alias tmd="tmux detach" # tmux detach
-    alias tmr="tmux rename" # tmux rename session
-	alias tl="tmux ls" # tmux list session
-	alias ts="tmux new -s" # tmux new session
+    alias tmr="tmux rename" # <C-b>$
+	alias tl="tmux ls"
+	alias ts="tmux new -s"
 
 	function tm () {
 		if ! [[ -n $@ ]]; then
@@ -136,7 +138,7 @@ then
 			return $?
 		else
 			if command -v z &> /dev/null; then
-				(z $1 && tmux new-session -s $1)
+				(z $1 && tmux new-session -s $1) &>/dev/null || tmux new-session -s $1
 				return $?
 			fi
 			tmux new-session -s $1
@@ -157,3 +159,8 @@ export EDITOR="nvim"
 alias vi=nvim
 # alias vim=nvim
 
+# fzf
+if command -v fzf &> /dev/null
+then
+	eval "$(fzf --zsh)"
+fi

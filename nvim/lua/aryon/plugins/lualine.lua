@@ -71,7 +71,7 @@ return {
                 "fileformat",
                 icons_enabled = true,
                 symbols = {
-                    unix = "LF",
+                    unix = "", -- default, don't show
                     dos = "CRLF",
                     mac = "CR",
                 },
@@ -97,7 +97,7 @@ return {
                 "branch",
                 icon = icons.git_branch,
                 icons_enabled = true,
-                fmt = trunc(80, 16, 60),
+                fmt = trunc(100, 8, 60)
             }
         end
 
@@ -155,7 +155,7 @@ return {
                 -- 2: absolute path
                 -- 3: absolute path, with tilde as the home directory
 
-                -- shorting_target = 32, -- shortens path to leave 32 spaces in the window
+                shorting_target = 32, -- shortens path to leave 32 spaces in the window
                 symbols = {
                     unnamed = icons.noname,
                     readonly = icons.readonly,
@@ -174,20 +174,22 @@ return {
                     winbar = ft.lualine_winbar_exclude,
                 },
                 padding = { left = 1, right = 1 },
-                globalstatus = true,
+                globalstatus = false,
             },
             sections = {
                 lualine_a = {
-                    function() return path_util.get_cwd_short(32) end,
+                    -- function() return path_util.get_cwd_short(32) end,
                 },
                 lualine_b = {
                 },
                 lualine_c = {
-                    branch(),
+                    winnr(),
+                    filename(),
                     diff(),
                     diagnostics(),
                 },
                 lualine_x = {
+                    branch(),
                     indentation(),
                     encoding(),
                     format(),
@@ -201,7 +203,10 @@ return {
             inactive_sections = {
                 lualine_a = {},
                 lualine_b = {},
-                lualine_c = {},
+                lualine_c = {
+                    winnr(),
+                    filename(),
+                },
                 lualine_x = {
                     "location",
                 },
@@ -210,9 +215,10 @@ return {
             },
             tabline = {
                 lualine_a = {
-                    tab(),
+                    function() return path_util.get_cwd_short(32) end,
                 },
                 lualine_b = {
+                    tab(),
                 },
                 lualine_c = {},
                 lualine_x = {},
@@ -222,11 +228,11 @@ return {
             winbar = {
                 lualine_a = {},
                 lualine_b = {
-                    winnr(),
-                    filename(),
+                    -- winnr(),
+                    -- filename(),
                 },
                 lualine_c = {
-                    aerial()
+                    -- aerial()
                 },
                 lualine_x = {},
                 lualine_y = {},
@@ -236,8 +242,8 @@ return {
                 lualine_a = {},
                 lualine_b = {},
                 lualine_c = {
-                    winnr(),
-                    filename(),
+                    -- winnr(),
+                    -- filename(),
                 },
                 lualine_x = {},
                 lualine_y = {},

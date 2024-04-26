@@ -18,7 +18,7 @@ local common_opts = {
 local plugins = {
     {
         "gbprod/nord.nvim",
-        enabled = false,
+        enabled = true,
         config = function()
             require("nord").setup({
                 on_highlights = function(hl, c)
@@ -42,7 +42,7 @@ local plugins = {
     },
     {
         "ellisonleao/gruvbox.nvim",
-        enabled = true,
+        enabled = false,
         config = function()
             require("gruvbox").setup({})
             vim.cmd("colorscheme gruvbox")

@@ -80,26 +80,27 @@ return {
     },
     {
         "echasnovski/mini.pairs",
-        enabled = false,
+        enabled = true,
         version = false,
         event = "InsertEnter",
         config = function()
             require("mini.pairs").setup({
                 modes = { insert = true, command = false, terminal = false },
                 mappings = {
-                    ["("] = { action = "open", pair = "()", neigh_pattern = "[^\\]." },
-                    ["["] = { action = "open", pair = "[]", neigh_pattern = "[^\\]." },
-                    ["{"] = { action = "open", pair = "{}", neigh_pattern = "[^\\]." },
-                    -- ["<"] = { action = "open", pair = "<>", neigh_pattern = "[^\\]." },
+                    ["("] = { action = "open", pair = "()", neigh_pattern = "[^\\][\n) ]" },
+                    ["["] = { action = "open", pair = "[]", neigh_pattern = "[^\\][\n ]" },
+                    ["{"] = { action = "open", pair = "{}", neigh_pattern = "[^\\][\n} ]" },
+                    -- ["<"] = { action = "open", pair = "<>", neigh_pattern = "[^\\] " },
 
                     [")"] = { action = "close", pair = "()", neigh_pattern = "[^\\]." },
                     ["]"] = { action = "close", pair = "[]", neigh_pattern = "[^\\]." },
                     ["}"] = { action = "close", pair = "{}", neigh_pattern = "[^\\]." },
-                    [">"] = { action = "close", pair = "<>", neigh_pattern = "[^\\]." },
+                    -- [">"] = { action = "close", pair = "<>", neigh_pattern = "[^\\] " },
 
-                    ['"'] = { action = "closeopen", pair = '""', neigh_pattern = '[^"%S\\].', register = { cr = false } },
-                    ["'"] = { action = "closeopen", pair = "''", neigh_pattern = "[^'%S\\].", register = { cr = false } },
-                    ["`"] = { action = "closeopen", pair = "``", neigh_pattern = "[^`%S\\].", register = { cr = false } },
+                    -- or use pattern `[^'%S\\a-zA-Z0-9][^a-zA-Z0-9]`
+                    ['"'] = { action = "closeopen", pair = '""', neigh_pattern = " [\n ]", register = { cr = false } },
+                    ["'"] = { action = "closeopen", pair = "''", neigh_pattern = " [\n ]", register = { cr = false } },
+                    ["`"] = { action = "closeopen", pair = "``", neigh_pattern = " [\n ]", register = { cr = false } },
                 },
             })
         end

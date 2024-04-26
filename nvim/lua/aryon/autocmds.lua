@@ -38,10 +38,10 @@ vim.api.nvim_create_autocmd({ "VimEnter" }, {
 vim.api.nvim_create_autocmd({ "TermOpen" }, {
     group = custom_aug,
     desc = "Disable line numbers in terminal buffers",
-    pattern = "*",
-    callback = function()
-        vim.o.number = false
+    callback = function(ev)
+        vim.wo.number = false
 
+        -- FIXME: some issue with telescope planets, but not big deal
         vim.cmd [[
             startinsert
         ]]
@@ -51,9 +51,9 @@ vim.api.nvim_create_autocmd({ "TermOpen" }, {
 vim.api.nvim_create_autocmd({ "TermClose" }, {
     group = custom_aug,
     desc = "Close window on terminal close",
-    pattern = "*",
-    callback = function()
-        vim.api.nvim_buf_delete(0, {})
+    callback = function(ev)
+        local cr = vim.api.nvim_replace_termcodes("<cr>", true, false, true)
+        vim.api.nvim_feedkeys(cr, "t", false)
     end
 })
 
@@ -66,4 +66,3 @@ vim.api.nvim_create_autocmd({ "TextYankPost" }, {
         vim.highlight.on_yank()
     end,
 })
-
