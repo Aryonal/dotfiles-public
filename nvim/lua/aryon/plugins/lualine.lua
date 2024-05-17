@@ -3,7 +3,7 @@ return {
     "nvim-lualine/lualine.nvim",
     enabled = true,
     dependencies = {
-        "nvim-tree/nvim-web-devicons",
+        -- "nvim-tree/nvim-web-devicons",
     },
     -- lazy = false,
     config = function()
@@ -97,7 +97,7 @@ return {
                 "branch",
                 icon = icons.git_branch,
                 icons_enabled = true,
-                fmt = trunc(100, 8, 60)
+                fmt = trunc(100, 8, 50)
             }
         end
 
@@ -155,7 +155,7 @@ return {
                 -- 2: absolute path
                 -- 3: absolute path, with tilde as the home directory
 
-                shorting_target = 32, -- shortens path to leave 32 spaces in the window
+                shorting_target = 68, -- shortens path to leave 32 spaces in the window
                 symbols = {
                     unnamed = icons.noname,
                     readonly = icons.readonly,
@@ -193,7 +193,7 @@ return {
                     indentation(),
                     encoding(),
                     format(),
-                    "filetype",
+                    -- "filetype",
                     "progress",
                     "location",
                 },
@@ -215,10 +215,11 @@ return {
             },
             tabline = {
                 lualine_a = {
-                    function() return path_util.get_cwd_short(32) end,
+                    -- function() return path_util.get_cwd_short(32) end,
+                    tab(),
                 },
                 lualine_b = {
-                    tab(),
+                    -- tab(),
                 },
                 lualine_c = {},
                 lualine_x = {},

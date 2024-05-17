@@ -32,8 +32,7 @@ return {
         end
     },
     {
-        "aryonal/gou.nvim",
-        -- dir = "~/src/aryonal/gou.nvim",
+        "aryonal/go.nvim",
         dependencies = {
             "nvim-lua/plenary.nvim",
             "nvim-treesitter/nvim-treesitter",
@@ -56,8 +55,9 @@ return {
         end,
         config = function()
             local templ = go_cfg.go_tests_template_root .. "/templates/testify/"
-            require("gou").setup({
+            require("go").setup({
                 run = {
+                    async = false,
                     test_flag = { "-count=1", "-race" },
                 },
                 gotests = {

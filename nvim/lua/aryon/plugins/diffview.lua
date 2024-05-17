@@ -7,6 +7,7 @@ local keymaps = {
 
 return {
     "sindrets/diffview.nvim", -- tool for git diff view
+    enabled = true,
     cmd = {
         "DiffviewOpen",
         "DiffviewFileHistory",

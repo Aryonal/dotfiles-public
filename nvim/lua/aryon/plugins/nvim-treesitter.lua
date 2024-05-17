@@ -71,8 +71,6 @@ return {
     {
         "nvim-treesitter/nvim-treesitter-context",
         enabled = true,
-        -- REF: https://github.com/LazyVim/LazyVim/blob/50b7f426f287ecfc542dd9c197e430b0aca8af04/lua/lazyvim/plugins/treesitter.lua#L120
-        -- event = "LazyFile",
         event = require("utils.lazy").events.SetB,
         init = function()
             require("utils.vim").create_autocmd({

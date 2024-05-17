@@ -34,7 +34,7 @@ return {
     arrow_void = " ",
     -- buffers
     added = "[+]",
-    readonly = "[-]",
+    readonly = "[RO]",
     noname = "[無名]",
     -- lsp
     diagnostics_prefix = "■", -- Could be '' '■' '●' '▎' 'x' '@'

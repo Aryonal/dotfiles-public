@@ -1,3 +1,5 @@
+---configs to be shared across components,
+---do not put everything here
 local cfg = {
     code_style = {
         MAX_LENGTH = 120, -- magic number
@@ -14,7 +16,6 @@ local cfg = {
         background = "dark",
     },
     lsp = {
-        ensured_servers = {},
         semantic_tokens = false,
         inlay_hints = false, -- FIX: enabled in > v0.10.0
     },
@@ -30,6 +31,7 @@ local cfg = {
             highlights = "NormalFloat:NormalFloat,Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None",
         },
     },
+    ---only to avoid conflicts
     keymaps = {
         leader = ",",
         -- editor
@@ -53,6 +55,7 @@ local cfg = {
             goto_type_defenitions = "gD",
             show_diagnostics_inline = "<leader>e",
             show_diagnostics_float_buffer = "<leader>q",
+            format = "<leader>f",
         },
         motion = {
             buffer = {

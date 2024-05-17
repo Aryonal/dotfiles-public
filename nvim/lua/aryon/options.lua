@@ -7,7 +7,7 @@ local bg = require("aryon.config").colors.background
 
 -- global options
 -- o.updatetime = 1000 -- the timeout for CursorHold
-o.scrolloff = 8 -- keep cursor vertically centralized
+o.scrolloff = 3 -- keep cursor vertically centralized
 o.autoindent = true
 o.autoread = true
 o.dir = "/tmp"
@@ -35,7 +35,7 @@ o.softtabstop = 4
 vim.opt.list = true
 -- vim.opt.listchars:append("space:⋅")
 -- vim.opt.listchars:append("eol:↴")
-vim.opt.listchars:append("tab:» ")
+vim.opt.listchars:append("tab:» ") -- ⇥
 
 o.colorcolumn = tostring(style.MAX_LENGTH)
 o.termguicolors = true

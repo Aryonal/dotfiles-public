@@ -1,6 +1,6 @@
 local M = {}
 
-local base_exclude = {
+local base = {
     "DiffviewFiles",
     "DressingInput",
     "NvimTree",
@@ -18,11 +18,11 @@ local base_exclude = {
     "toggleterm",
 }
 
-local extend = {
+local extended = vim.list_extend({
     "neo-tree",
     "help",
     "",
-}
+}, base)
 
 local function to_table(ls)
     local tbl = {}
@@ -32,18 +32,20 @@ local function to_table(ls)
     return tbl
 end
 
-M.base_exclude = base_exclude
+M.base_exclude = base
 
-M.lsp_on_attach_exclude = vim.list_extend(extend, base_exclude)
+M.extended_exclude = extended
+
+M.lsp_on_attach_exclude = extended
 
 M.lsp_on_attach_exclude_map = to_table(M.lsp_on_attach_exclude)
 
-M.illuminate_exclude = vim.list_extend(extend, base_exclude)
+M.illuminate_exclude = extended
 
-M.lualine_winbar_exclude = vim.list_extend({}, base_exclude)
+M.lualine_winbar_exclude = base
 
-M.lualine_statusbar_exclude = vim.list_extend({}, base_exclude)
+M.lualine_statusbar_exclude = base
 
-M.comment_toggle_exclude = vim.list_extend(extend, base_exclude)
+M.comment_toggle_exclude = extended
 
 return M

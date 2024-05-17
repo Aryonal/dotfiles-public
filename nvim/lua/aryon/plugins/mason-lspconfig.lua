@@ -41,12 +41,11 @@ return {
         event = require("utils.lazy").events.setA,
         config = function()
             local mason_lspconfig = require("mason-lspconfig")
-            local ensured_servers = require("aryon.config").lsp.ensured_servers
 
             mason_lspconfig.setup({ -- will internally run `require("lspconfig.**")`
                 -- A list of servers to automatically install if they're not already installed. Example: { "rust_analyzer@nightly", "sumneko_lua" }
                 -- This setting has no relation with the `automatic_installation` setting.
-                ensure_installed = ensured_servers,
+                ensure_installed = {},
 
                 -- Whether servers that are set up (via lspconfig) should be automatically installed if they're not already installed.
                 -- This setting has no relation with the `ensure_installed` setting.

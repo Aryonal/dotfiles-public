@@ -6,7 +6,7 @@ return {
     branch = "v3.x",
     dependencies = {
         "nvim-lua/plenary.nvim",
-        "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
+        -- "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
         "MunifTanjim/nui.nvim",
     },
     keys = {
@@ -90,7 +90,7 @@ return {
                     folder_empty = icons.arrow_void,
                     -- The next two settings are only a fallback, if you use nvim-web-devicons and configure default icons there
                     -- then these will never be used.
-                    default = icons.file_default,
+                    default = "", -- icons.file_default,
                     highlight = "NeoTreeFileIcon",
                 },
                 modified = {
@@ -158,12 +158,12 @@ return {
                     [k.file.delete] = "delete",
                     [k.file.rename] = "rename",
                     -- [k.vim.float.close[1]] = "revert_preview",
-                    -- [k.vim.float.close[1]] = "close_window",
-                    -- [k.vim.float.close[2]] = "close_window",
-                    -- [k.vim.float.close[3]] = "close_window",
-                    [k.vim.float.close[1]] = false,
-                    [k.vim.float.close[2]] = false,
-                    [k.vim.float.close[3]] = false,
+                    [k.vim.float.close[1]] = "close_window",
+                    [k.vim.float.close[2]] = "close_window",
+                    [k.vim.float.close[3]] = "close_window",
+                    -- [k.vim.float.close[1]] = false,
+                    -- [k.vim.float.close[2]] = false,
+                    -- [k.vim.float.close[3]] = false,
                     -- [k.vim.terminal.toggle] = "close_window", -- "close_window",
                     [k.file.refresh_list[1]] = "refresh",
                     [k.file.refresh_list[2]] = "refresh",
@@ -337,6 +337,7 @@ return {
             },
             symlink_target = {
                 enabled = true,
+                required_width = 10, -- min width of window required to show this column
             },
             renderers = {
                 directory = {

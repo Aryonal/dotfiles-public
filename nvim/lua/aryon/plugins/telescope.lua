@@ -85,6 +85,11 @@ return {
             desc = "[Telescope] Live grep",
         },
         {
+            ";q",
+            "<cmd>Telescope diagnostics<CR>",
+            desc = "[Telescope] Diagnostics",
+        },
+        {
             ";?",
             "<cmd>Telescope help_tags<CR>",
             desc = "[Telescope] Help tags",

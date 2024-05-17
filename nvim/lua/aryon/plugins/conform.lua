@@ -1,5 +1,5 @@
---- Use conform for Minimal format diffs,
---- Use other tools to manage tools.
+---Use conform for Minimal format diffs,
+---Use other tools to manage tools.
 return {
     "stevearc/conform.nvim",
     init = function()
@@ -9,7 +9,7 @@ return {
     cmd = { "ConformInfo" },
     keys = {
         {
-            "<leader>f",
+            require("aryon.config").keymaps.lsp.format,
             function()
                 require("conform").format({ lsp_fallback = true, async = false })
             end,

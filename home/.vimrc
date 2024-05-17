@@ -26,12 +26,12 @@ set ignorecase
 set incsearch
 set mouse=a
 set nu
-set scrolloff=8
 set splitbelow
 set splitright
 set termguicolors
 set title
 set wrap
+set equalalways
 
 set foldmethod=indent
 set foldlevel=99
@@ -39,12 +39,11 @@ set foldlevel=99
 set directory=/tmp
 
 " Keymaps
-let mapleader = ","
-
-nnoremap <C-e> 5<C-e>
-nnoremap <C-y> 5<C-y>
-vnoremap <C-e> 5<C-e>
-vnoremap <C-y> 5<C-y>
+let mapleader = ','
+nnoremap <C-e> 3<C-e>
+nnoremap <C-y> 3<C-y>
+vnoremap <C-e> 3<C-e>
+vnoremap <C-y> 3<C-y>
 
 nnoremap <Space> za
 
@@ -63,10 +62,20 @@ nnoremap <C-[> <Esc>
 nnoremap te <C-w>T
 nnoremap tn :tabnew .<CR>
 nnoremap tq :tabclose<CR>
+nnoremap ge :tabprev<CR>
 
 nnoremap <C-\> :e .<CR>
 
-" TODO: emacs keybindings in insert mode
+nnoremap sn :nohl<CR>
+
+" inoremap <C-w> <C-o>vbd
+inoremap <C-a> <C-o>I
+inoremap <C-b> <C-o>b
+inoremap <C-d> <C-o>x
+inoremap <C-e> <C-o>A
+inoremap <C-f> <C-o>e
+inoremap <Tab> <C-t>
+inoremap <S-Tab> <C-d>
 
 " tree
 let g:netrw_liststyle = 3
@@ -79,3 +88,5 @@ syntax on
 
 " clipboard
 set clipboard+=unnamedplus
+nnoremap y "*y
+nnoremap c "_c
