@@ -194,8 +194,8 @@ return {
                     encoding(),
                     format(),
                     -- "filetype",
-                    "progress",
                     "location",
+                    "progress",
                 },
                 lualine_y = {},
                 lualine_z = {},
@@ -209,6 +209,7 @@ return {
                 },
                 lualine_x = {
                     "location",
+                    "progress",
                 },
                 lualine_y = {},
                 lualine_z = {},

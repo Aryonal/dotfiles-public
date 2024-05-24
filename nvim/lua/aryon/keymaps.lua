@@ -29,8 +29,6 @@ local fixed_bindings = {
     { "tq",        "<cmd>tabclose<CR>", desc = "[Tab] Close" },
     { "tt",        "<cmd>sp +term<CR>", desc = "[Term] New" },
     { [[<C-\>]],   [[<C-\><C-n>]],      desc = "[Term] Normal mode",   mode = "t" },
-    { [[<C-[>]],   [[<C-\><C-n>]],      desc = "[Term] Normal mode",   mode = "t" },
-    { "<Esc>",     [[<C-\><C-n>]],      desc = "[Term] Normal mode",   mode = "t" },
     { cfg.ed.fold, "za",                desc = "Toggle folding" },
 
     { "<BS>",      "<C-g>u<BS>",        desc = "Keep insert",          mode = "v" },

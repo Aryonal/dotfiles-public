@@ -163,7 +163,7 @@ command -v git &>/dev/null && alias g="git"
 
 # nvim & vim
 # set nvim as default editor
-if command -v lsd &>/dev/null; then
+if command -v nvim &>/dev/null; then
     export KUBE_EDITOR="nvim"
     export EDITOR="nvim"
     alias vi=nvim

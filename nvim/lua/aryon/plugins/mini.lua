@@ -1,51 +1,5 @@
 return {
     {
-        "echasnovski/mini.comment",
-        version = "*",
-        event = require("utils.lazy").events.SetB,
-        keys = {
-            {
-                "gcc",
-                mode = { "n" },
-                desc = "[Comment] Toggle"
-            },
-            {
-                "gc",
-                mode = { "v" },
-                desc = "[Comment] Toggle"
-            },
-        },
-        config = function()
-            local ft = require("aryon.config.ft")
-
-            require("mini.comment").setup({
-                mappings = {
-                    -- FIXME: builtin comment in https://github.com/neovim/neovim/pull/28176
-                    comment = "gc",        -- use `gcip`
-                    comment_line = "gcc",  -- current line
-                    comment_visual = "gc", -- visual mode
-                    textobject = "gc",     -- dgc
-                },
-                hooks = {
-                    pre = function()
-                        local buf = vim.api.nvim_win_get_buf(0)
-                        if vim.bo[buf].readonly then
-                            return false
-                        end
-                        -- ignore certain ft
-                        local buf_ft = vim.bo.filetype
-
-                        for _, t in ipairs(ft.comment_toggle_exclude) do
-                            if buf_ft == t then
-                                return false
-                            end
-                        end
-                    end,
-                },
-            })
-        end
-    },
-    {
         "echasnovski/mini.splitjoin",
         version = false,
         event = require("utils.lazy").events.SetB,

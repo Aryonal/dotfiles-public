@@ -17,7 +17,7 @@ local cfg = {
     },
     lsp = {
         semantic_tokens = false,
-        inlay_hints = false, -- FIX: enabled in > v0.10.0
+        inlay_hints = true, -- FIX: enabled in > v0.10.0
     },
     vim = {
         default_delay_ms = 300,

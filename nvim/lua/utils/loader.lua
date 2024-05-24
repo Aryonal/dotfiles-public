@@ -12,9 +12,12 @@ local function chunk_to_path(chk)
     return chk:gsub("%.", "/") .. "/"
 end
 
----loads all first-level lua files in a directory from neovim config
+---loads all first-level lua modules with a prefix from neovim config
 ---and returns a list
 ---files are loaded in alphabetical order
+---Example:
+--- - load("aryon.config") -> loads all lua files under "/lua/aryon/config", loads "aryon.config.a" if exists, but not "aryon.config.a.b"
+--- - load(".") -> loads all files in lua/
 ---@param chk_prefix string: chunk prefix, e.g. "aryon.config", or "."
 ---@return table: list of loaded chunks
 function M.load(chk_prefix)

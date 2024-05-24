@@ -49,22 +49,22 @@ local function on_attach(client, bufnr)
     -- default to be off
     if cfg.lsp.inlay_hints then
         if client.server_capabilities.inlayHintProvider then
-            vim.lsp.inlay_hints.enable(bufnr, true)
+            vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
         end
     end
 
 
-    require("utils.vim").create_autocmd({
-        group_name = "aryon/lsp.lua",
-        buffer = 0,
-        events = { "CursorHold", "InsertLeave" },
-        desc = "Refresh CodeLens",
-        callback = function()
-            if client.server_capabilities.codeLensProvider then
-                vim.lsp.codelens.refresh()
-            end
-        end,
-    })
+    if client.supports_method("textDocument/codeLens") then
+        require("utils.vim").create_autocmd({
+            group_name = "aryon/lsp.lua",
+            buffer = bufnr,
+            events = { "CursorHold", "InsertLeave" },
+            desc = "Refresh CodeLens",
+            callback = function()
+                vim.lsp.codelens.refresh({bufnr=bufnr})
+            end,
+        })
+    end
 
     lsp_buf_keymaps(bufnr)
 end
@@ -134,7 +134,7 @@ M.gopls = {
                 vendor = true,
             },
             hints = {
-                assignVariableTypes = true,
+                assignVariableTypes = false,
                 compositeLiteralFields = true,
                 compositeLiteralTypes = true,
                 constantValues = true,

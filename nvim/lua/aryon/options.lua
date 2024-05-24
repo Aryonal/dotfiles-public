@@ -41,6 +41,8 @@ o.colorcolumn = tostring(style.MAX_LENGTH)
 o.termguicolors = true
 o.bg = bg
 
+-- o.statusline = [[%<%f %h%m%r%=%-14.(%l,%c%V%) %P]]
+
 o.equalalways = true
 
 vim.opt.wildignore:append({ "*/node_modules/*", "*/vendor/*" })

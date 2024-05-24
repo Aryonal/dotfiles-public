@@ -1,6 +1,6 @@
 local keymaps = {
     open = "<leader>df",
-    diff_head = "<leader>dm",
+    diff_head = "<leader>do",
     close = "<leader>dc",
     history_current_file = "<leader>dh",
 }
@@ -42,7 +42,7 @@ return {
         require("diffview").setup({
             -- diff_binaries = false,    -- Show diffs for binaries
             -- enhanced_diff_hl = false, -- See ':h diffview-config-enhanced_diff_hl'
-            -- use_icons = true,         -- Requires nvim-web-devicons
+            use_icons = false, -- Requires nvim-web-devicons
             icons = {
                 -- Only applies when use_icons is true.
                 folder_closed = signs.arrow_right,
@@ -51,8 +51,8 @@ return {
                 -- folder_open = "",
             },
             signs = {
-                fold_closed = "",
-                fold_open = "",
+                fold_closed = signs.arrow_right,
+                fold_open = signs.arrow_open,
             },
             -- file_panel = {
             --   listing_style = "tree",             -- One of 'list' or 'tree'
