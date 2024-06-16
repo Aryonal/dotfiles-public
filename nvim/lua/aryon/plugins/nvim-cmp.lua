@@ -1,6 +1,18 @@
 ---@diagnostic disable: deprecated, unused-function, unused-local
 return {
     {
+        "folke/lazydev.nvim",
+        ft = "lua", -- only load on lua files
+        opts = {
+            library = {
+                -- See the configuration section for more details
+                -- Load luvit types when the `vim.uv` word is found
+                { path = "luvit-meta/library", words = { "vim%.uv" } },
+            },
+        },
+    },
+    { "Bilal2453/luvit-meta", lazy = true }, -- optional `vim.uv` typings
+    {
         "zbirenbaum/copilot.lua",
         cmd = "Copilot",
         lazy = true,
@@ -259,6 +271,7 @@ return {
                     { name = "nvim_lsp" },
                     { name = "luasnip" },
                     { name = "nvim_lua" },
+                    { name = "lazydev", group_index = 0 } -- set group index to 0 to skip loading LuaLS completions
                 }
             end
 

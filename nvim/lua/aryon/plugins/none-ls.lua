@@ -122,8 +122,8 @@ return {
         _append_source(sources, "formatting", "protolint")
 
         -- Bazel
-        -- _append_source(sources, "formatting", "buildifier")
-        -- _append_source(sources, "diagnostics", "buildifier")
+        _append_source(sources, "formatting", "buildifier")
+        _append_source(sources, "diagnostics", "buildifier")
 
         -- Makefile
         _append_source(sources, "diagnostics", "checkmake")

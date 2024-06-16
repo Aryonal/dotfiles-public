@@ -61,7 +61,7 @@ local function on_attach(client, bufnr)
             events = { "CursorHold", "InsertLeave" },
             desc = "Refresh CodeLens",
             callback = function()
-                vim.lsp.codelens.refresh({bufnr=bufnr})
+                vim.lsp.codelens.refresh({ bufnr = bufnr })
             end,
         })
     end
@@ -101,7 +101,7 @@ M.default = {
     capabilities = capabilities,
 }
 
-M.gopls = {
+local gopls = {
     on_attach = function(client, bufnr)
         on_attach(client, bufnr)
 
@@ -159,12 +159,35 @@ M.gopls = {
     },
 }
 
-M.sumneko = {
+local sumneko = {
     on_attach = on_attach,
     capabilities = capabilities,
     settings = {
         -- use .luarc.json
     },
+}
+
+local eslint = {
+    on_attach = on_attach,
+    capabilities = capabilities,
+    settings = {
+        workingDirectories = { mode = "auto" },
+    },
+}
+
+local graphql = {
+    on_attach = on_attach,
+    capabilities = capabilities,
+    -- need to set root_dir for graphql manually
+    -- root_dir = lspconfig.util.root_pattern(".graphqlconfig", ".graphqlrc", "package.json"),
+}
+
+M.custom_servers = {
+    gopls = gopls,
+    sumneko_lua = sumneko,
+    lua_ls = sumneko,
+    eslint = eslint,
+    graphql = graphql,
 }
 
 return M

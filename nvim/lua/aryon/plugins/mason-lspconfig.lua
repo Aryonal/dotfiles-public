@@ -36,7 +36,6 @@ return {
         dependencies = {
             "williamboman/mason.nvim",
             "neovim/nvim-lspconfig",
-            "folke/neodev.nvim", -- ensure before lspconfig setup
         },
         event = require("utils.lazy").events.setA,
         config = function()
@@ -67,18 +66,17 @@ return {
             local servers = mason_lspconfig.get_installed_servers()
 
             for _, server in ipairs(servers) do
-                -- setup gopls
-                if server == "gopls" then
-                    -- set by go.nvim
-                    lspconfig.gopls.setup(lsp.gopls)
-                elseif server == "sumneko_lua" then -- setup sumneko_lua
-                    lspconfig.sumneko_lua.setup(lsp.sumneko)
-                elseif server == "lua_ls" then      -- setup lua_ls, renamed from sumneko
-                    lspconfig.lua_ls.setup(lsp.sumneko)
-                else
-                    -- other servers
-                    lspconfig[server].setup(lsp.default)
+                local cfg = lsp.default
+                if lsp.custom_servers[server] then
+                    cfg = lsp.custom_servers[server]
                 end
+                -- other servers
+                -- patches
+                if server == "graphql" then
+                    cfg.root_dir = lspconfig.util.root_pattern(".graphqlconfig", ".graphqlrc", "package.json")
+                end
+
+                lspconfig[server].setup(cfg)
             end
         end,
     },

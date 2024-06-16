@@ -57,7 +57,7 @@ local cmds = {
         exec = function()
             vim.treesitter.inspect_tree()
         end
-    }
+    },
 }
 
 local set_cmd = require("utils.vim").set_cmd

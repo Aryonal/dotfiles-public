@@ -61,24 +61,24 @@ return {
         require("neo-tree").setup({
             popup_border_style = require("aryon.config").ui.float.border, -- use default nui style
             hide_root_node = false,
-            event_handlers = {
-                {
-                    event = "neo_tree_window_after_open",
-                    handler = function(args)
-                        if args.position == "left" or args.position == "right" then
-                            vim.cmd("wincmd =")
-                        end
-                    end,
-                },
-                {
-                    event = "neo_tree_window_after_close",
-                    handler = function(args)
-                        if args.position == "left" or args.position == "right" then
-                            vim.cmd("wincmd =")
-                        end
-                    end,
-                },
-            },
+            -- event_handlers = {
+            --     {
+            --         event = "neo_tree_window_after_open",
+            --         handler = function(args)
+            --             if args.position == "left" or args.position == "right" then
+            --                 vim.cmd("wincmd =")
+            --             end
+            --         end,
+            --     },
+            --     {
+            --         event = "neo_tree_window_after_close",
+            --         handler = function(args)
+            --             if args.position == "left" or args.position == "right" then
+            --                 vim.cmd("wincmd =")
+            --             end
+            --         end,
+            --     },
+            -- },
             default_component_configs = {
                 container = {
                     enable_character_fade = true,
@@ -117,13 +117,13 @@ return {
                     },
                 },
             },
-            commands = {
-                jump_previous = function(_)
-                    vim.cmd([[
-                        wincmd p
-                    ]])
-                end,
-            },
+            -- commands = {
+            --     jump_previous = function(_)
+            --         vim.cmd([[
+            --             wincmd p
+            --         ]])
+            --     end,
+            -- },
             window = {
                 position = "current",     -- float, current, left...
                 auto_expand_width = true, -- adaptive width
@@ -357,20 +357,25 @@ return {
                     {
                         "container",
                         content = {
-                            { "name",       zindex = 10 },
+                            { "name",      zindex = 10 },
                             {
                                 "symlink_target",
                                 zindex = 10,
                                 highlight = "NeoTreeSymbolicLinkTarget",
                             },
-                            { "git_status", zindex = 10, align = "left", hide_when_expanded = true },
-                            { "clipboard",  zindex = 10 },
+                            {
+                                "git_status",
+                                zindex = 10,
+                                align = "left",
+                                -- hide_when_expanded = true,
+                            },
+                            { "clipboard", zindex = 10 },
                             {
                                 "diagnostics",
                                 zindex = 20,
                                 align = "right",
                                 -- errors_only = true,
-                                hide_when_expanded = true,
+                                -- hide_when_expanded = true,
                             },
                         },
                     },

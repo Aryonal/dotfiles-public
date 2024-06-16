@@ -317,6 +317,7 @@ return {
             extensions = {
                 live_grep_args = {
                     -- theme = "dropdown",
+                    show_line = false,
                     initial_mode = "insert",
                     auto_quoting = true, -- enable/disable auto-quoting
                     mappings = {         -- extend mappings

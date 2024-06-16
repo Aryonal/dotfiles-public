@@ -42,11 +42,13 @@ vim.api.nvim_create_autocmd({ "TermOpen" }, {
     desc = "Disable line numbers in terminal buffers",
     callback = function(ev)
         vim.wo.number = false
+        vim.wo.wrap = true
 
         -- FIXME: some issue with telescope planets, but not big deal
         vim.cmd [[
             startinsert
         ]]
+
     end
 })
 
