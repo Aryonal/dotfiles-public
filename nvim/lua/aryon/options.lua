@@ -39,9 +39,7 @@ vim.opt.listchars:append("tab:» ") -- ⇥
 
 o.colorcolumn = tostring(style.MAX_LENGTH)
 o.termguicolors = true
-o.bg = bg
-
--- o.statusline = [[%<%f %h%m%r%=%-14.(%l,%c%V%) %P]]
+-- o.bg = bg
 
 o.equalalways = true
 

@@ -1,7 +1,6 @@
----@diagnostic disable: unused-local, unused-function, missing-parameter
 return {
     "nvim-lualine/lualine.nvim",
-    enabled = true,
+    enabled = false,
     dependencies = {
         -- "nvim-tree/nvim-web-devicons",
     },
@@ -9,7 +8,7 @@ return {
     config = function()
         local ft = require("aryon.config.ft")
         local icons = require("share.icons")
-        local path_util = require("utils.path")
+        -- local path_util = require("utils.path")
 
         -- local aerial_ok, _ = pcall(require, "aerial")
         local aerial_ok = false
@@ -21,6 +20,7 @@ return {
         --- @param hide_width number hides component when window width is smaller then hide_width
         --- @param no_ellipsis boolean whether to disable adding '...' at end after truncation
         --- return function that can format the component accordingly
+        ---@diagnostic disable-next-line: unused-function, unused-local
         local function trunc(trunc_width, trunc_len, hide_width, no_ellipsis)
             return function(str)
                 local win_width = vim.fn.winwidth(0)
@@ -33,51 +33,7 @@ return {
             end
         end
 
-        local function winnr()
-            return function()
-                return vim.api.nvim_win_get_number(0)
-            end
-        end
-
-        local function indentation()
-            return function()
-                local spacetab = "Tab"
-                local indents = vim.bo.tabstop
-                if vim.bo.expandtab then
-                    spacetab = ""
-                    indents = vim.bo.softtabstop
-                    if indents < 0 then
-                        indents = vim.bo.shiftwidth
-                    end
-                end
-                local shifts = vim.bo.shiftwidth
-
-                return spacetab .. " " .. indents .. ":" .. shifts
-            end
-        end
-
-        local function encoding()
-            return function()
-                local enc = vim.opt.fileencoding:get()
-                if enc == "utf-8" then
-                    return ""
-                end
-                return enc
-            end
-        end
-
-        local function format()
-            return {
-                "fileformat",
-                icons_enabled = true,
-                symbols = {
-                    unix = "", -- default, don't show
-                    dos = "CRLF",
-                    mac = "CR",
-                },
-            }
-        end
-
+        ---@diagnostic disable-next-line: unused-local, unused-function
         local function aerial()
             if aerial_ok then
                 return {
@@ -92,15 +48,7 @@ return {
             return {}
         end
 
-        local function branch()
-            return {
-                "branch",
-                icon = icons.git_branch,
-                icons_enabled = true,
-                fmt = trunc(100, 8, 50)
-            }
-        end
-
+        ---@diagnostic disable-next-line: unused-function, unused-local
         local function diff()
             if gitsigns_ok then
                 return {
@@ -121,6 +69,22 @@ return {
             return { "diff", colored = true }
         end
 
+---@diagnostic disable-next-line: unused-local, unused-function
+        local function workspace_diagnostics()
+            return {
+                "diagnostics",
+                icons_enabled = true,
+                sources = { "nvim_workspace_diagnostic" },
+                colored = false,
+                symbols = {
+                    error = icons.error .. ":",
+                    warn = icons.warn .. ":",
+                    info = icons.info .. ":",
+                    hint = icons.hint .. ":",
+                },
+            }
+        end
+        ---@diagnostic disable-next-line: unused-local, unused-function
         local function diagnostics()
             return {
                 "diagnostics",
@@ -134,16 +98,18 @@ return {
             }
         end
 
+---@diagnostic disable-next-line: unused-local, unused-function
         local function tab()
             return {
                 "tabs",
                 tab_max_length = 32,
                 max_length = vim.o.columns,
                 mode = 2, -- 0: Shows tab_nr 1: Shows tab_name 2: Shows tab_nr + tab_name
-                path = 1, -- 1: relative 2: absolute 3: shortened absolute 4: file name
+                path = 4, -- 1: relative 2: absolute 3: shortened absolute 4: file name
             }
         end
 
+        ---@diagnostic disable-next-line: unused-local, unused-function
         local function filename()
             return {
                 "filename",
@@ -166,7 +132,7 @@ return {
         require("lualine").setup({
             options = {
                 icons_enabled = false,
-                theme = "auto",
+                theme = "auto", -- "auto",
                 component_separators = { left = "", right = "" },
                 -- section_separators = "",
                 disabled_filetypes = {
@@ -174,50 +140,15 @@ return {
                     winbar = ft.lualine_winbar_exclude,
                 },
                 padding = { left = 1, right = 1 },
-                globalstatus = false,
+                globalstatus = true,
             },
-            sections = {
-                lualine_a = {
-                    -- function() return path_util.get_cwd_short(32) end,
-                },
-                lualine_b = {
-                },
-                lualine_c = {
-                    winnr(),
-                    filename(),
-                    diff(),
-                    diagnostics(),
-                },
-                lualine_x = {
-                    branch(),
-                    indentation(),
-                    encoding(),
-                    format(),
-                    -- "filetype",
-                    "location",
-                    "progress",
-                },
-                lualine_y = {},
-                lualine_z = {},
-            },
-            inactive_sections = {
-                lualine_a = {},
-                lualine_b = {},
-                lualine_c = {
-                    winnr(),
-                    filename(),
-                },
-                lualine_x = {
-                    "location",
-                    "progress",
-                },
-                lualine_y = {},
-                lualine_z = {},
-            },
+            sections = {},
+            inactive_sections = {},
             tabline = {
                 lualine_a = {
                     -- function() return path_util.get_cwd_short(32) end,
-                    tab(),
+                    -- -- tab(),
+                    -- workspace_diagnostics(),
                 },
                 lualine_b = {
                     -- tab(),
@@ -229,10 +160,7 @@ return {
             },
             winbar = {
                 lualine_a = {},
-                lualine_b = {
-                    -- winnr(),
-                    -- filename(),
-                },
+                lualine_b = {},
                 lualine_c = {
                     -- aerial()
                 },
@@ -243,14 +171,13 @@ return {
             inactive_winbar = {
                 lualine_a = {},
                 lualine_b = {},
-                lualine_c = {
-                    -- winnr(),
-                    -- filename(),
-                },
+                lualine_c = {},
                 lualine_x = {},
                 lualine_y = {},
                 lualine_z = {},
             },
         })
+
+        -- vim.o.showtabline = 1
     end,
 }

@@ -51,7 +51,7 @@ return {
                             filename = selection[1]
                         end
                         -- any way to open the file without triggering auto-close event of neo-tree?
-                        require("neo-tree.sources.filesystem").navigate(state, state.path, filename)
+                        require("neo-tree.sources.filesystem").navigate(state, state.path, filename, function() end)
                     end)
                     return true
                 end,

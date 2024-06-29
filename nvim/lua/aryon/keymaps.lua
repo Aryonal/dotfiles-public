@@ -51,7 +51,7 @@ local win_bindings = {
     { { "<Left>", "<C-h>" },  "<C-w>h",       desc = "[Win] Navigate left" },
     { { "<Right>", "<C-l>" }, "<C-w>l",       desc = "[Win] Navigate right" },
     { { "<Up>", "<C-k>" },    "<C-w>k",       desc = "[Win] Navigate up" },
-    { "<C-w>o",               "<C-w>|<C-w>_", desc = "[Win] Expand buffer" },
+    { { "<C-w>o", "<C-w>z" }, "<C-w>|<C-w>_", desc = "[Win] Expand buffer" },
 }
 
 local global_lsp_bindings = {

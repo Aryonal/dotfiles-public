@@ -1,5 +1,6 @@
 local common_opts = {
     lazy = false,
+    priority = 1000,
     init = function()
         require("utils.vim").create_autocmd({
             events = { "ColorScheme" },
@@ -15,10 +16,21 @@ local common_opts = {
         })
     end,
 }
-local plugins = {
+local themes = {
+    {
+        "catppuccin/nvim",
+        name = "catppuccin",
+        config = function()
+            require("catppuccin").setup({
+                flavour = "frappe",
+            })
+
+            vim.cmd.colorscheme "catppuccin"
+        end,
+    },
     {
         "gbprod/nord.nvim",
-        enabled = true,
+        enabled = false,
         config = function()
             require("nord").setup({
                 on_highlights = function(hl, c)
@@ -59,8 +71,8 @@ local plugins = {
     },
 }
 
-for i, plugin in ipairs(plugins) do
-    plugins[i] = vim.tbl_deep_extend("force", plugin, common_opts)
+for i, plugin in ipairs(themes) do
+    themes[i] = vim.tbl_deep_extend("force", plugin, common_opts)
 end
 
-return plugins
+return themes

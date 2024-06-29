@@ -40,12 +40,15 @@ end
 
 ---crop string b from a,
 -- e.g. crop("abcde", "abc") -> "de"
+--      crop("abcde", "cd") -> "abe"
+--      crop("abcde", "fg") -> "abcde"
 ---@param a string
 ---@param b string
 ---@return string
 function M.crop(a, b)
-    local start_index = #b + 1
-    local result = string.sub(a, start_index)
+    -- escape
+    b = b:gsub("[%(%)%.%%%+%-%*%?%[%]%^%$]", "%%%1")
+    local result = a:gsub(b, "")
     return result
 end
 

@@ -1,6 +1,7 @@
 return {
     {
         "folke/flash.nvim",
+        enabled = false,
         event = require("utils.lazy").events.SetA,
         keys = {
             { "s",     mode = { "n", "x", "o" }, function() require("flash").jump() end,              desc = "Flash" },
