@@ -65,6 +65,7 @@ return {
         enabled = true,
         config = function()
             local stl = require("utils.statusline")
+            local cfg = require("aryon.config")
 
             require("mini.statusline").setup(
             -- No need to copy this inside `setup()`. Will be used automatically.
@@ -73,9 +74,9 @@ return {
                     -- `:h statusline` and code of default contents (used instead of `nil`).
                     content = {
                         -- Content for active window
-                        active = stl.default_active_status,
+                        active = stl.config(cfg.ui.statusline).statusline_string,
                         -- Content for inactive window(s)
-                        inactive = stl.default_inactive_status,
+                        inactive = stl.config(cfg.ui.statusline).inactive_statusline_string,
                     },
 
                     -- Whether to use icons by default

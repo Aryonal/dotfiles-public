@@ -1,8 +1,51 @@
-local M = {}
+--- Statusline utility functions
+--- This module provides utility functions for statusline components.
+--- Example usage:
+--- ```lua
+--- vim.o.tabline = "%!v:lua.require('utils.statusline').config().default_tabline()"
+--- ```
+local M = {
+    -- default config
+    cfg = {
+        hl = {
+            enabled = true,
+            tabline = {
+                enabled = true,
+                fill = "TabLineFill",
+                sel = "TabLineSel",
+                norm = "TabLine",
+            },
+            statusline = {
+                enabled = true,
+                norm = "StatusLine",
+                nc = "StatusLineNC",
+            },
+            diag = {
+                enabled = true,
+                hint = "DiagnosticHint",
+                info = "DiagnosticInfo",
+                warn = "DiagnosticWarn",
+                err = "DiagnosticError",
+            },
+            diff = {
+                enabled = false,
+                added = "Added",
+                changed = "Changed",
+                removed = "Removed",
+            }
+        },
+        icons = {
+            git_branch = "",
+            noname = "[無名]",
+            hint = "H:",
+            info = "I:",
+            warn = "W:",
+            err = "E:",
+        }
+    }
+}
 
 local path_util = require("utils/path")
-
-local git_branch_icon = ""
 
 local format_map = {
     ["dos"] = "CRLF",
@@ -19,13 +62,10 @@ function M.winnr()
 end
 
 ---PERF: use cache
-function M.filepath(noname_icon)
-    if noname_icon == nil then
-        noname_icon = "[無名]"
-    end
+function M.filepath()
     local path = vim.fn.expand("%:p")
     if path == "" then
-        return noname_icon
+        return M.cfg.icons.noname
     else
         -- "%" seems not to be so reliable
         local cwd = vim.fn.getcwd() .. "/"
@@ -34,25 +74,42 @@ function M.filepath(noname_icon)
     end
 end
 
-function M.gitsigns_branch(icon, trunc_len)
-    if icon == nil then
-        icon = git_branch_icon
+function M.gitsigns_g_branch(trunc_len)
+    if trunc_len == nil then
+        trunc_len = 20
     end
+    if vim.g.gitsigns_head then
+        local branch = vim.g.gitsigns_head
+        -- truncate branch name
+        if string.len(branch) > trunc_len then
+            branch = string.sub(branch, 0, trunc_len) .. "..."
+        end
+        return string.format("%s %s", M.cfg.icons.git_branch, branch)
+    end
+    return ""
+end
+
+function M.gitsigns_b_branch(trunc_len, omit)
     if trunc_len == nil then
         trunc_len = 20
     end
     if vim.b.gitsigns_status_dict then
         local branch = vim.b.gitsigns_status_dict.head
+        if omit then
+            if branch == vim.g.gitsigns_head then
+                return ""
+            end
+        end
         -- truncate branch name
         if string.len(branch) > trunc_len then
             branch = string.sub(branch, 0, trunc_len) .. "..."
         end
-        return string.format("%s %s", icon, branch)
+        return string.format("%s %s", M.cfg.icons.git_branch, branch)
     end
     return ""
 end
 
-function M.gitsigns_diff()
+function M.gitsigns_diff(normal_hl)
     if vim.b.gitsigns_status_dict then
         local added = vim.b.gitsigns_status_dict.added
         local changed = vim.b.gitsigns_status_dict.changed
@@ -60,57 +117,78 @@ function M.gitsigns_diff()
 
         local diff = ""
         if added ~= nil and added > 0 then
+            if M.cfg.hl.enabled and M.cfg.hl.diff.enabled then
+                diff = diff .. string.format("%%#%s#", M.cfg.hl.diff.added)
+            end
             diff = diff .. string.format("+%d", added)
         end
         if changed ~= nil and changed > 0 then
+            if M.cfg.hl.enabled and M.cfg.hl.diff.enabled then
+                diff = diff .. string.format("%%#%s#", M.cfg.hl.diff.changed)
+            end
             diff = diff .. string.format("~%d", changed)
         end
         if removed ~= nil and removed > 0 then
+            if M.cfg.hl.enabled and M.cfg.hl.diff.enabled then
+                diff = diff .. string.format("%%#%s#", M.cfg.hl.diff.removed)
+            end
             diff = diff .. string.format("-%d", removed)
         end
 
-        return string.format("%s", diff)
+        return string.format("%s%%#%s#", diff, normal_hl or "StatusLine")
     end
     return ""
 end
 
-function M.diagnostics(bufnr, hint_icon, info_icon, warn_icon, err_icon)
-    if hint_icon == nil then
-        hint_icon = "H:"
-    end
-    if info_icon == nil then
-        info_icon = "I:"
-    end
-    if warn_icon == nil then
-        warn_icon = "W:"
-    end
-    if err_icon == nil then
-        err_icon = "E:"
-    end
-
+function M.diagnostics(bufnr, normal_hl)
     local res = {}
     for _, d in ipairs(vim.diagnostic.get(bufnr)) do
         res[d.severity] = (res[d.severity] or 0) + 1
     end
 
-    local r_s = {}
+    local components = {}
 
-    if res[vim.diagnostic.severity["HINT"]] ~= nil and res[vim.diagnostic.severity["HINT"]] > 0 then
-        table.insert(r_s, string.format("%s%d", hint_icon, res[vim.diagnostic.severity["HINT"]]))
+    local s_hint = res[vim.diagnostic.severity["HINT"]]
+    local s_info = res[vim.diagnostic.severity["INFO"]]
+    local s_warn = res[vim.diagnostic.severity["WARN"]]
+    local s_err = res[vim.diagnostic.severity["ERROR"]]
+
+    if res[s_hint] ~= nil and res[s_hint] > 0 then
+        local s = ""
+        if M.cfg.hl.enabled and M.cfg.hl.diag.enabled then
+            s = s .. "%#" .. M.cfg.hl.diag.hint .. "#"
+        end
+        s = s .. M.cfg.icons.hint .. res[s_hint]
+        table.insert(components, s)
     end
-    if res[vim.diagnostic.severity["INFO"]] ~= nil and res[vim.diagnostic.severity["INFO"]] > 0 then
-        table.insert(r_s, string.format("%s%d", info_icon, res[vim.diagnostic.severity["INFO"]]))
+    if res[s_info] ~= nil and res[s_info] > 0 then
+        local s = ""
+        if M.cfg.hl.enabled and M.cfg.hl.diag.enabled then
+            s = s .. "%#" .. M.cfg.hl.diag.info .. "#"
+        end
+        s = s .. M.cfg.icons.info .. res[s_info]
+        table.insert(components, s)
     end
-    if res[vim.diagnostic.severity["WARN"]] ~= nil and res[vim.diagnostic.severity["WARN"]] > 0 then
-        table.insert(r_s, string.format("%s%d", warn_icon, res[vim.diagnostic.severity["WARN"]]))
+    if res[s_warn] ~= nil and res[s_warn] > 0 then
+        local s = ""
+        if M.cfg.hl.enabled and M.cfg.hl.diag.enabled then
+            s = s .. "%#" .. M.cfg.hl.diag.warn .. "#"
+        end
+        s = s .. M.cfg.icons.warn .. res[s_warn]
+        table.insert(components, s)
     end
-    if res[vim.diagnostic.severity["ERROR"]] ~= nil and res[vim.diagnostic.severity["ERROR"]] > 0 then
-        table.insert(r_s, string.format("%s%d", err_icon, res[vim.diagnostic.severity["ERROR"]]))
+    if res[s_err] ~= nil and res[s_err] > 0 then
+        local s = ""
+        if M.cfg.hl.enabled and M.cfg.hl.diag.enabled then
+            s = s .. "%#" .. M.cfg.hl.diag.err .. "#"
+        end
+        s = s .. M.cfg.icons.err .. res[s_err]
+        table.insert(components, s)
     end
-    if #r_s == 0 then
+    if #components == 0 then
         return ""
     end
-    return table.concat(r_s, " ")
+    return table.concat(components, " ") .. string.format("%%#%s#", normal_hl or "Normal")
 end
 
 function M.indentation()
@@ -151,6 +229,11 @@ function M.buffer_flags(bufnr, winid)
     -- Modified flag
     if bufnr ~= nil and vim.bo[bufnr].modified then
         flags = flags .. "[+]"
+    end
+
+    -- Modifiable
+    if bufnr ~= nil and not vim.bo[bufnr].modifiable then
+        flags = flags .. "[-]"
     end
 
     -- Readonly flag
@@ -196,10 +279,7 @@ local function get_tab_label(n, is_current, noname_icon)
     return label
 end
 
-function M.tabs(noname_icon)
-    if noname_icon == nil then
-        noname_icon = "[無名]"
-    end
+function M.tabs()
     local current_tab = vim.fn.tabpagenr()
     local total_tabs = vim.fn.tabpagenr("$")
 
@@ -209,10 +289,10 @@ function M.tabs(noname_icon)
     for i = 1, total_tabs do
         local is_current = i == current_tab
         if is_current then
-            tabs_cache[i] = get_tab_label(i, true, noname_icon)
+            tabs_cache[i] = get_tab_label(i, true, M.cfg.icons.noname)
         end
         if tabs_cache[i] == nil then
-            tabs_cache[i] = get_tab_label(i, false, noname_icon)
+            tabs_cache[i] = get_tab_label(i, false, M.cfg.icons.noname)
         end
 
 
@@ -228,35 +308,35 @@ function M.tabs(noname_icon)
     -- Fill the rest of the tabline
     s = s .. "%#TabLineFill#%T"
 
+    if total_tabs == 1 then
+        return "%#TabLineFill#"
+    end
+
     return s
 end
 
-function M.default_active_status()
+function M.statusline_string()
     local dyna_info = string.format(
         "%s %s %s %s",
-        M.gitsigns_branch(),
+        M.gitsigns_b_branch(),
         M.indentation(),
         M.file_encoding(),
         M.file_format()
     )
 
-    vim.cmd([[
-    		set rulerformat=%15(%c%V\ %p%%%)
-    ]])
-
     local statusline = string.format(
         " %s %%<%%q%s%%m%%r%%h%%w %s%%= %s %%= %s %%-15(%%l,%%c%%V%%)%%P ",
         M.winnr(),
         M.filepath(),
-        M.gitsigns_diff(),
-        M.diagnostics(0),
+        M.gitsigns_diff("StatusLine"),
+        M.diagnostics(0, "StatusLine"),
         dyna_info
     )
 
     return statusline
 end
 
-function M.default_inactive_status()
+function M.inactive_statusline_string()
     local statusline = string.format(
         " %s %%<%%q%s%%m%%r%%h%%w%%=  %%-15(%%l,%%c%%V%%)%%P ",
         M.winnr(),
@@ -266,13 +346,27 @@ function M.default_inactive_status()
     return statusline
 end
 
-function M.default_tabline()
+function M.tabline_string()
+    local ws_info = M.diagnostics(nil, "TabLineFill")
+    if ws_info ~= "" then
+        ws_info = " (" .. ws_info .. ")> "
+    else
+        ws_info = " > "
+    end
     return string.format(
-        "%%#TabLineFill#%s: %s %%#TabLine#%s",
+        "%%#TabLineFill#%s%s%%#TabLine#%s",
         M.cwd(),
-        M.diagnostics(),
+        ws_info,
         M.tabs()
     )
+end
+
+function M.config(cfg)
+    if cfg == nil then
+        return M
+    end
+    M.cfg = vim.tbl_deep_extend("force", M.cfg, cfg)
+    return M
 end
 
 return M

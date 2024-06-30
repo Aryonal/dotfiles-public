@@ -44,7 +44,7 @@ o.termguicolors = true
 o.equalalways = true
 
 vim.opt.wildignore:append({ "*/node_modules/*", "*/vendor/*" })
-vim.opt.shortmess:append({ I = true }) -- disable :intro
+-- vim.opt.shortmess:append({ I = true }) -- disable :intro
 
 -- window-local options
 -- wo.cursorcolumn = true

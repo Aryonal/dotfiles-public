@@ -30,6 +30,7 @@ local cfg = {
             border = "rounded", -- :help nvim_open_win()
             highlights = "NormalFloat:NormalFloat,Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None",
         },
+        statusline = {}, -- see /utils/statusline.lua, empty means default
     },
     ---only to avoid conflicts
     keymaps = {
@@ -75,6 +76,12 @@ local cfg = {
                 fold_end = "]z",
                 fold_beg = "[z",
             },
+            quickfix = {
+                next = "]q",
+                prev = "[q",
+                first = "[Q",
+                last = "]Q",
+            }
         },
         -- tree browser
         tree = {

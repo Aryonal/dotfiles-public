@@ -19,6 +19,7 @@ local common_opts = {
 local themes = {
     {
         "catppuccin/nvim",
+        enabled = true,
         name = "catppuccin",
         config = function()
             require("catppuccin").setup({

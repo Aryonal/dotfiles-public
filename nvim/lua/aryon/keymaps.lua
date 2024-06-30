@@ -64,6 +64,13 @@ local typos = {
     { "Wa", "wa", desc = "[Typo] wa", mode = "c" },
 }
 
+local others = {
+    { cfg.motion.quickfix.next,  "<cmd>cnext<CR>",  desc = "[QF] Next",  mode = "n" },
+    { cfg.motion.quickfix.first, "<cmd>cfirst<CR>", desc = "[QF] First", mode = "n" },
+    { cfg.motion.quickfix.prev,  "<cmd>cNext<CR>",  desc = "[QF] Prev",  mode = "n" },
+    { cfg.motion.quickfix.last,  "<cmd>clast<CR>",  desc = "[QF] Last",  mode = "n" },
+}
+
 --<leader> + number to quick jump tab
 for i = 1, 9 do
     table.insert(fixed_bindings, {
@@ -91,6 +98,7 @@ vim.list_extend(bindings, ins_bindings)
 vim.list_extend(bindings, win_bindings)
 vim.list_extend(bindings, global_lsp_bindings)
 vim.list_extend(bindings, typos)
+vim.list_extend(bindings, others)
 
 local maps = require("utils.vim").batch_set_keymap
 maps(bindings)
