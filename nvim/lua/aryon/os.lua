@@ -1,9 +1,9 @@
 local function is_linux()
-    return vim.loop.os_uname().sysname == "Linux"
+    return vim.uv.os_uname().sysname == "Linux"
 end
 
 local function is_mac()
-    return vim.loop.os_uname().sysname == "Darwin"
+    return vim.uv.os_uname().sysname == "Darwin"
 end
 
 local function is_wsl()

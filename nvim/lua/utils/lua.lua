@@ -52,4 +52,27 @@ function M.crop(a, b)
     return result
 end
 
+local Lock = {}
+Lock.__index = Lock
+
+function Lock.new()
+    local self = setmetatable({}, Lock)
+    self._lock = false
+    return self
+end
+
+function Lock:lock()
+    self._lock = true
+end
+
+function Lock:unlock()
+    self._lock = false
+end
+
+function Lock:locked()
+    return self._lock
+end
+
+M.Lock = Lock
+
 return M

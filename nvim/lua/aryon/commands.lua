@@ -45,7 +45,7 @@ local cmds = {
         cmd = "CopyWorkDir",
         desc = "Copy absolute path of current work directory",
         exec = function()
-            local path = vim.loop.cwd()
+            local path = vim.uv.cwd()
             vim.fn.setreg("+", path)
             vim.notify('Copied "' .. path .. '" to the clipboard!')
         end,

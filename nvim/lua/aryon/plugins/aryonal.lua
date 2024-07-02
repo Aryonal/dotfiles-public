@@ -42,7 +42,7 @@ return {
         },
         build = function()
             local dir = vim.fn.expand(go_cfg.go_tests_template_root)
-            if not vim.loop.fs_stat(dir) then
+            if not vim.uv.fs_stat(dir) then
                 vim.notify(vim.fn.system({
                     "git",
                     "clone",

@@ -2,7 +2,7 @@
 --- This module provides utility functions for statusline components.
 --- Example usage:
 --- ```lua
---- vim.o.tabline = "%!v:lua.require('utils.statusline').config().default_tabline()"
+--- vim.o.tabline = "%!v:lua.require('utils.statusline').config().tabline_string()"
 --- ```
 local M = {
     -- default config
@@ -41,8 +41,11 @@ local M = {
             info = "I:",
             warn = "W:",
             err = "E:",
+        },
+        g_vars = {
+            git_status = "statusline_git_status",
         }
-    }
+    },
 }
 
 local path_util = require("utils/path")
@@ -74,12 +77,29 @@ function M.filepath()
     end
 end
 
+--- Returns the current git status.
+--- Example:
+---  `"*"` or `""`
+function M.git_g_status()
+    if vim.g[M.cfg.g_vars.git_status] == nil or vim.g[M.cfg.g_vars.git_status] == 0 then
+        return ""
+    end
+
+    return "*"
+end
+
+--- Returns the current git branch name.
+--- Example:
+---   ` master`
 function M.gitsigns_g_branch(trunc_len)
     if trunc_len == nil then
         trunc_len = 20
     end
     if vim.g.gitsigns_head then
         local branch = vim.g.gitsigns_head
+        if branch == nil then
+            return ""
+        end
         -- truncate branch name
         if string.len(branch) > trunc_len then
             branch = string.sub(branch, 0, trunc_len) .. "..."
@@ -89,12 +109,18 @@ function M.gitsigns_g_branch(trunc_len)
     return ""
 end
 
+--- Returns the current git branch name.
+--- Example:
+---   ` master`
 function M.gitsigns_b_branch(trunc_len, omit)
     if trunc_len == nil then
         trunc_len = 20
     end
     if vim.b.gitsigns_status_dict then
         local branch = vim.b.gitsigns_status_dict.head
+        if branch == nil then
+            return ""
+        end
         if omit then
             if branch == vim.g.gitsigns_head then
                 return ""
@@ -148,41 +174,41 @@ function M.diagnostics(bufnr, normal_hl)
 
     local components = {}
 
-    local s_hint = res[vim.diagnostic.severity["HINT"]]
-    local s_info = res[vim.diagnostic.severity["INFO"]]
-    local s_warn = res[vim.diagnostic.severity["WARN"]]
-    local s_err = res[vim.diagnostic.severity["ERROR"]]
+    local lv_hint = res[vim.diagnostic.severity["HINT"]]
+    local lv_info = res[vim.diagnostic.severity["INFO"]]
+    local lv_warn = res[vim.diagnostic.severity["WARN"]]
+    local lv_err = res[vim.diagnostic.severity["ERROR"]]
 
-    if res[s_hint] ~= nil and res[s_hint] > 0 then
+    if lv_hint ~= nil and lv_hint > 0 then
         local s = ""
         if M.cfg.hl.enabled and M.cfg.hl.diag.enabled then
             s = s .. "%#" .. M.cfg.hl.diag.hint .. "#"
         end
-        s = s .. M.cfg.icons.hint .. res[s_hint]
+        s = s .. M.cfg.icons.hint .. lv_hint
         table.insert(components, s)
     end
-    if res[s_info] ~= nil and res[s_info] > 0 then
+    if lv_info ~= nil and lv_info > 0 then
         local s = ""
         if M.cfg.hl.enabled and M.cfg.hl.diag.enabled then
             s = s .. "%#" .. M.cfg.hl.diag.info .. "#"
         end
-        s = s .. M.cfg.icons.info .. res[s_info]
+        s = s .. M.cfg.icons.info .. lv_info
         table.insert(components, s)
     end
-    if res[s_warn] ~= nil and res[s_warn] > 0 then
+    if lv_warn ~= nil and lv_warn > 0 then
         local s = ""
         if M.cfg.hl.enabled and M.cfg.hl.diag.enabled then
             s = s .. "%#" .. M.cfg.hl.diag.warn .. "#"
         end
-        s = s .. M.cfg.icons.warn .. res[s_warn]
+        s = s .. M.cfg.icons.warn .. lv_warn
         table.insert(components, s)
     end
-    if res[s_err] ~= nil and res[s_err] > 0 then
+    if lv_err ~= nil and lv_err > 0 then
         local s = ""
         if M.cfg.hl.enabled and M.cfg.hl.diag.enabled then
             s = s .. "%#" .. M.cfg.hl.diag.err .. "#"
         end
-        s = s .. M.cfg.icons.err .. res[s_err]
+        s = s .. M.cfg.icons.err .. lv_err
         table.insert(components, s)
     end
     if #components == 0 then
@@ -192,10 +218,10 @@ function M.diagnostics(bufnr, normal_hl)
 end
 
 function M.indentation()
-    local spacetab = "Tab"
+    local spacetab = " Tab "
     local indents = vim.bo.tabstop
     if vim.bo.expandtab then
-        spacetab = ""
+        spacetab = " "
         indents = vim.bo.softtabstop
         if indents < 0 then
             indents = vim.bo.shiftwidth
@@ -203,7 +229,7 @@ function M.indentation()
     end
     local shifts = vim.bo.shiftwidth
 
-    return spacetab .. " " .. indents .. ":" .. shifts
+    return spacetab .. indents .. ":" .. shifts
 end
 
 -- Function to get file encoding
@@ -258,10 +284,6 @@ function M.cwd()
     return path_util.get_cwd_short(32)
 end
 
--- cache for tab labels.
--- key: tab number, value: tab label
-local tabs_cache = {}
-
 local function get_tab_label(n, is_current, noname_icon)
     local buflist = vim.fn.tabpagebuflist(n)
     local winnr = vim.fn.tabpagewinnr(n)
@@ -288,11 +310,11 @@ function M.tabs()
     -- Add the tabs
     for i = 1, total_tabs do
         local is_current = i == current_tab
+        local label = ""
         if is_current then
-            tabs_cache[i] = get_tab_label(i, true, M.cfg.icons.noname)
-        end
-        if tabs_cache[i] == nil then
-            tabs_cache[i] = get_tab_label(i, false, M.cfg.icons.noname)
+            label = get_tab_label(i, true, M.cfg.icons.noname)
+        else
+            label = get_tab_label(i, false, M.cfg.icons.noname)
         end
 
 
@@ -302,7 +324,7 @@ function M.tabs()
             s = s .. "%#TabLine#"
         end
         s = s .. "%" .. i .. "T"
-        s = s .. " " .. i .. ":" .. tabs_cache[i] .. " "
+        s = s .. " " .. i .. ":" .. label .. " "
     end
 
     -- Fill the rest of the tabline
@@ -347,16 +369,22 @@ function M.inactive_statusline_string()
 end
 
 function M.tabline_string()
-    local ws_info = M.diagnostics(nil, "TabLineFill")
-    if ws_info ~= "" then
-        ws_info = " (" .. ws_info .. ")> "
+    local git_info = M.gitsigns_g_branch(10)
+    local diag_info = M.diagnostics(nil, "TabLineFill")
+    if git_info ~= "" then
+        local status = M.git_g_status()
+        git_info = string.format(" %s%s", git_info, status)
+    end
+    if diag_info ~= "" then
+        diag_info = string.format(" ( %s )> ", diag_info)
     else
-        ws_info = " > "
+        diag_info = " > "
     end
     return string.format(
-        "%%#TabLineFill#%s%s%%#TabLine#%s",
+        "%%#TabLineFill#%s%s%s%%#TabLine#%s",
         M.cwd(),
-        ws_info,
+        git_info,
+        diag_info,
         M.tabs()
     )
 end

@@ -15,7 +15,7 @@ local function previewer_maker_factory(previewers, factory_opts)
         opts = opts or {}
 
         filepath = vim.fn.expand(filepath)
-        vim.loop.fs_stat(filepath, function(_, stat)
+        vim.uv.fs_stat(filepath, function(_, stat)
             if not stat then
                 return
             end

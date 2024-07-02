@@ -32,6 +32,7 @@ return {
 
         -- vim.o.statuscolumn = "%!v:lua.get_statuscol()"
 
+        ---@diagnostic disable-next-line: missing-fields
         require("ufo").setup({
             fold_virt_text_handler = function(virtText, lnum, endLnum, width, truncate)
                 local newVirtText = {}

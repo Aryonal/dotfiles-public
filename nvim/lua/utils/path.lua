@@ -75,14 +75,14 @@ end
 ---@param path string
 ---@param fn function
 function M.scan_directory(path, fn)
-    local handle, err = vim.loop.fs_scandir(path)
+    local handle, err = vim.uv.fs_scandir(path)
     if not handle then
         vim.notify("Error: " .. err, vim.log.levels.ERROR)
         return
     end
 
     while true do
-        local name, type, err = vim.loop.fs_scandir_next(handle)
+        local name, type, err = vim.uv.fs_scandir_next(handle)
         if not name then
             break
         end
@@ -97,7 +97,7 @@ function M.scan_directory(path, fn)
         fn(name, type)
     end
 
-    vim.loop.fs_scandir_close(handle)
+    vim.uv.fs_scandir_close(handle)
 end
 
 return M

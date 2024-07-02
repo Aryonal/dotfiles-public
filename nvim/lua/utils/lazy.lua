@@ -5,7 +5,7 @@ local lazylock = vim.fn.stdpath("config") .. "/lazy-lock.json"
 
 -- Install lazy.nvim if not exists.
 local function init()
-    if not vim.loop.fs_stat(lazypath) then
+    if not vim.uv.fs_stat(lazypath) then
         vim.fn.system({
             "git",
             "clone",
