@@ -75,4 +75,21 @@ end
 
 M.Lock = Lock
 
+---wrap a function with debouncer.
+---@param interval_ms number: the interval to debounce.
+---@param fn fun() the function to debounce.
+---@return fun()
+function M.debounce(interval_ms, fn)
+    local last = 0
+
+    return function()
+        local now = vim.uv.now()
+        if now - last < interval_ms then
+            return
+        end
+        last = now
+        fn()
+    end
+end
+
 return M

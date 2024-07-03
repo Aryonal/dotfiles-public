@@ -7,18 +7,21 @@ ua.setup_lsp_float_borders(cfg.ui.float.border)
 ua.setup_lsp_diagnostics_icons(signs.error, signs.warn, signs.hint, signs.info)
 ua.setup_lsp_diagnostics_text(signs.diagnostics_prefix, cfg.ui.virtual_text_space)
 
+-- setup statusline and tabline
 local stl = require("utils.statusline").config({
     g_var = {
         git_status = cfg.vim.g_git_status_var
     }
 }) -- use default
-require("utils.git").async_status(2000, function(status)
+local git_watcher = require("utils.git").new(function(status)
     if vim.g[stl.cfg.g_vars.git_status] == nil then
         vim.g[stl.cfg.g_vars.git_status] = 0
     end
 
-    vim.g[stl.cfg.g_vars.git_status] = status.n_changed
+    vim.g[stl.cfg.g_vars.git_status] = status.n_changed and status.n_changed or 0
 end)
+
+git_watcher:start()
 
 local M = {}
 
