@@ -7,23 +7,33 @@ ua.setup_lsp_float_borders(cfg.ui.float.border)
 ua.setup_lsp_diagnostics_icons(signs.error, signs.warn, signs.hint, signs.info)
 ua.setup_lsp_diagnostics_text(signs.diagnostics_prefix, cfg.ui.virtual_text_space)
 
--- setup statusline and tabline
-local stl = require("utils.statusline").config({
-    g_var = {
-        git_status = cfg.vim.g_git_status_var
-    }
-}) -- use default
 local git_watcher = require("utils.git").new(function(status)
-    if vim.g[stl.cfg.g_vars.git_status] == nil then
-        vim.g[stl.cfg.g_vars.git_status] = 0
+    if vim.g[cfg.vim.g_var_git_status] == nil then
+        vim.g[cfg.vim.g_var_git_status] = 0
     end
 
-    vim.g[stl.cfg.g_vars.git_status] = status.n_changed and status.n_changed or 0
+    status.n_changed = status.n_changed or 0
+    if vim.g[cfg.vim.g_var_git_status] ~= status.n_changed then
+        vim.g[cfg.vim.g_var_git_status] = status.n_changed
+
+        vim.schedule(function()
+            vim.cmd([[
+                redrawtabline
+            ]])
+        end)
+    end
 end)
 
 git_watcher:start()
 
 local M = {}
+
+-- setup statusline and tabline
+local stl = require("utils.statusline").config({
+    g_var = {
+        git_status = cfg.vim.g_var_git_status
+    }
+})
 
 function M.tabline_string()
     return stl.tabline_string()

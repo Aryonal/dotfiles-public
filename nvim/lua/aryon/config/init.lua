@@ -23,7 +23,8 @@ local cfg = {
         default_delay_ms = 300,
         auto_load_session_local = true,
         auto_save_session_local = true,
-        g_git_status_var = "statusline_git_status",
+        g_var_git_status = "statusline_git_status",
+        g_var_git_branch = "statusline_git_branch",
     },
     ui = {
         virtual_text_space = 1,

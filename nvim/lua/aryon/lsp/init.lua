@@ -55,12 +55,16 @@ local function on_attach(client, bufnr)
 
 
     if client.supports_method("textDocument/codeLens") then
-        require("utils.vim").create_autocmd({
-            group_name = "aryon/lsp.lua",
+        local au = vim.api.nvim_create_augroup("aryon/lsp/init.lua", { clear = true })
+
+        vim.api.nvim_create_autocmd({ "CursorHold", "InsertLeave" }, {
+            group = au,
             buffer = bufnr,
-            events = { "CursorHold", "InsertLeave" },
-            desc = "Refresh CodeLens",
+            desc = "refresh codelens",
             callback = function()
+                if client.is_stopped() then
+                    return
+                end
                 vim.lsp.codelens.refresh({ bufnr = bufnr })
             end,
         })

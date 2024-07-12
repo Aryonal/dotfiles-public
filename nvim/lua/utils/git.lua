@@ -8,16 +8,11 @@ G.__index = G
 ---@class Status
 ---@field n_changed number? number of changed files
 
----@class Lock
----@field lock fun() lock the object
----@field unlock fun() unlock the object
----@field locked fun() check if object is locked
-
-
 ---@param cb fun(_:Status) callback function to handle status
 function G.new(cb)
     local self = setmetatable({}, G)
     self.locked = false ---@type boolean locked status
+    self.git_dir = "" ---@type string git directory
     self.fs_event = nil ---@type uv_fs_event_t? fs_event handle
     self.git_index_event = nil ---@type uv_fs_event_t? fs_event handle
     self.git_head_event = nil ---@type uv_fs_event_t? fs_event handle
@@ -28,80 +23,8 @@ end
 
 local git_status_cmd = { "git", "status", "-s" }
 
----get git root directory, worktree is not supported
----@param path string? path to check
----@return (string|nil) root path of git repository, nil if not in git repository
-local function git_root(path)
-    if path == nil then
-        return nil
-    end
-    path = vim.fn.expand(path)
-    if path == nil then
-        return nil
-    end
-    local orig_path = path
-    -- recursively check if `.git` directory exists
-    while true do
-        local git_dir = path .. "/.git"
-        if vim.fn.isdirectory(git_dir) == 1 then
-            return path
-        end
-        if path == "/" then
-            print("[utils/git] not git repository: " .. orig_path)
-            return nil
-        end
-        path = vim.fn.fnamemodify(path, ":h")
-    end
-end
-
----watch a path for changes, and fetch git status under certain condition
----@param path string path to watch
----@param recursive boolean true if watch recursively
----@param ignore_fn fun(filename: string): boolean function to check filename from fs_event, return true if ignore filename
----@param process_fn fun() function to process on change
----@return uv_fs_event_t? fs_event handle, nil if failed
-local function watch_fs(path, recursive, ignore_fn, process_fn)
-    local fs_event = vim.uv.new_fs_event()
-    if fs_event == nil then
-        vim.notify("[utils/git] failed to create fs_event")
-        return nil
-    end
-
-    local success = fs_event:start(
-        path,
-        { recursive = recursive },
-        function(err, filename, ev)
-            if err ~= nil then
-                vim.notify("[utils/git] Error in fs_event:" .. err)
-                return
-            end
-            if not ev.change and not ev.rename then
-                return
-            end
-            -- ignore path with .git included
-            -- FIXME: one commit will trigger multiple runs
-
-            ---check if filename should be ignored
-            ---@return boolean true if filename should be ignored
-            local ignore = ignore_fn
-            if ignore(filename) then
-                return
-            end
-            -- print(vim.uv.now() .. "[utils/git][debug] fs_event: process " .. filename)
-
-            process_fn()
-        end
-    )
-    if not success then
-        vim.notify("[utils/git] failed to start fs_event")
-        fs_event:stop()
-        return nil
-    end
-
-    return fs_event
-end
-
 ---start git status polling in cwd
+---and register autocmd to stop or refresh fs_event on VimLeavePre and DirChanged
 ---@return nil
 function G:start()
     if require("utils.os").is_windows() then
@@ -132,20 +55,103 @@ function G:start()
     })
 end
 
+---get git root directory, worktree is not supported
+---@param path string? path to check
+---@return string|nil: root path of git repository, nil if not in git repository
+local function git_root(path)
+    if path == nil then
+        return nil
+    end
+    path = vim.fn.expand(path)
+    if path == nil then
+        return nil
+    end
+    local orig_path = path
+    -- recursively check if `.git` directory exists
+    while true do
+        local git_dir = path .. "/.git"
+        if vim.fn.isdirectory(git_dir) == 1 then
+            return path
+        end
+        if path == "/" then
+            print("[utils/git] not git repository: " .. orig_path)
+            return nil
+        end
+        path = vim.fn.fnamemodify(path, ":h")
+    end
+end
+
+---watch a path for changes, and fetch git status under certain condition
+---@param path string path to watch
+---@param recursive boolean true if watch recursively
+---@param ignore_fn fun(filename: string): boolean function to check filename from fs_event, return true if ignore filename
+---@param process_fn fun() function to process on change
+---@return uv_fs_event_t?: fs_event handle, nil if failed
+local function watch_fs(path, recursive, ignore_fn, process_fn)
+    local fs_event = vim.uv.new_fs_event()
+    if fs_event == nil then
+        vim.notify("[utils/git] failed to create fs_event" .. path)
+        return nil
+    end
+
+    local success, err_name, _ = fs_event:start(
+        path,
+        { recursive = recursive },
+        function(err, filename, ev)
+            if err ~= nil then
+                vim.notify("[utils/git] Error in fs_event:" .. err)
+                return
+            end
+            if not ev.change and not ev.rename then
+                return
+            end
+            if ignore_fn(filename) then
+                return
+            end
+            -- print(vim.uv.now() .. "[utils/git][debug] fs_event: process " .. filename)
+
+            process_fn()
+        end
+    )
+    if not success then
+        vim.notify("[utils/git] failed to start fs_event: " .. path .. ": " .. err_name)
+        fs_event:stop()
+        return nil
+    end
+
+    return fs_event
+end
+
 ---watch a path for changes, and fetch git status under certain condition
 ---@param path string? path to watch
 function G:_watch(path)
-    -- stop anyway
-    self:_stop()
-
     local root = git_root(path)
     if root == nil then
         -- not git repository
+        -- force update with callback
         self.cb({})
-        -- TODO: fixed variable name
+        -- TODO: gitsigns fixed variable name
         vim.g.gitsigns_head = nil
+        -- stop fs_event watcher for non git repository
+        self.git_dir = ""
+        self:_stop()
+
         return
     end
+
+    if root == self.git_dir then
+        -- same git repository
+        return
+    end
+
+    -- it's a new git repository,
+    -- stop and start new fs_event watcher
+    self.git_dir = root
+
+    print("[utils/git][debug] refresh watcher: " .. root)
+
+    -- stop anyway
+    self:_stop()
 
     self:_async_git_status()
 
@@ -172,14 +178,14 @@ function G:_watch(path)
         return false
     end, process_fn)
 
-    process_fn = require("utils/lua").debounce(2000, function()
+    process_fn = debounce(2000, function()
         self:_async_git_status()
     end)
     self.git_head_event = watch_fs(root .. "/.git/HEAD", false, function(_)
         return false
     end, process_fn)
 
-    process_fn = require("utils/lua").debounce(2000, function()
+    process_fn = debounce(2000, function()
         self:_async_git_status()
     end)
     self.git_refs_event = watch_fs(root .. "/.git/refs", true, function(_)

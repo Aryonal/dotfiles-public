@@ -57,7 +57,7 @@ return {
             local templ = go_cfg.go_tests_template_root .. "/templates/testify/"
             require("go").setup({
                 run = {
-                    test_flag = { "-count=1", "-race" },
+                    test_flag = { "-count=1", "-race", "-cover" },
                 },
                 gotests = {
                     named = true,
