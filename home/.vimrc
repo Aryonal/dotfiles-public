@@ -11,6 +11,9 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'tpope/vim-surround'
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 
+Plug 'tpope/vim-commentary'
+Plug 'machakann/vim-highlightedyank'
+
 " theme
 " Plug 'nordtheme/vim'
 

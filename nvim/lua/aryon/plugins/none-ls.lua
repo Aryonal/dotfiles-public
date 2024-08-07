@@ -91,6 +91,10 @@ return {
         _append_source(sources, "formatting", "golines", "golines", {
             extra_args = { "-m", tostring(style.go.MAX_LENGTH), "-w" } })
 
+        -- Kotlin
+        -- _append_source(sources, "diagnostics", "ktlint")
+        -- _append_source(sources, "formatting", "ktlint")
+
         -- SQL
         _append_source(sources, "diagnostics", "sqlfluff", "sqlfluff", {
             extra_args = { "--dialect", style.sql.dialect },

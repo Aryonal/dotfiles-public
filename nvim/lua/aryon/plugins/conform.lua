@@ -20,7 +20,9 @@ return {
     config = function()
         require("conform").setup({
             -- Map of filetype to formatters
-            formatters_by_ft = {}
+            formatters_by_ft = {
+                kotlin = { "ktfmt", lsp_format = "fallback" },
+            }
         })
     end
 }

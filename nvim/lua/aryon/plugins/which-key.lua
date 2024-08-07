@@ -9,7 +9,7 @@ return {
                 separator = " ", -- symbol used between a key and it's label
                 group = "+", -- symbol prepended to a group
             },
-            window = {
+            win = {
                 -- border = require("aryon.config").ui.float.border,
                 border = "none",
             },
