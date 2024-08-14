@@ -339,8 +339,9 @@ end
 
 function M.statusline_string()
     local dyna_info = string.format(
-        "%s %s %s %s",
+        "%s%s %s %s %s",
         M.gitsigns_b_branch(),
+        M.git_g_status(),
         M.indentation(),
         M.file_encoding(),
         M.file_format()
