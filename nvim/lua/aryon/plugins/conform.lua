@@ -11,7 +11,7 @@ return {
         {
             require("aryon.config").keymaps.lsp.format,
             function()
-                require("conform").format({ lsp_fallback = true, async = false })
+                require("conform").format({ lsp_fallback = true, async = true, undojoin = true })
             end,
             mode = { "n", "v" },
             desc = "[Conform] Format",
@@ -21,7 +21,9 @@ return {
         require("conform").setup({
             -- Map of filetype to formatters
             formatters_by_ft = {
-                kotlin = { "ktfmt", lsp_format = "fallback" },
+                kotlin = { "ktlint", lsp_format = "never" },
+                python = { "black", "isort", "autoflake", lsp_format = "never" },
+                json = { "jq", "fixjson", lsp_format = "never" },
             }
         })
     end

@@ -1,5 +1,11 @@
 return {
     {
+        "echasnovski/mini.icons",
+        enabled = false,
+        lazy = true,
+        version = "*",
+    },
+    {
         "echasnovski/mini.splitjoin",
         version = false,
         event = require("utils.lazy").events.SetB,
@@ -62,7 +68,7 @@ return {
     {
         "echasnovski/mini.statusline",
         version = "*",
-        enabled = true,
+        enabled = false,
         config = function()
             local stl = require("utils.statusline")
             local cfg = require("aryon.config")
@@ -74,9 +80,9 @@ return {
                     -- `:h statusline` and code of default contents (used instead of `nil`).
                     content = {
                         -- Content for active window
-                        active = stl.config(cfg.ui.statusline).statusline_string,
+                        active = stl.setup(cfg.ui.statusline).statusline_string,
                         -- Content for inactive window(s)
-                        inactive = stl.config(cfg.ui.statusline).inactive_statusline_string,
+                        inactive = stl.setup(cfg.ui.statusline).inactive_statusline_string,
                     },
 
                     -- Whether to use icons by default

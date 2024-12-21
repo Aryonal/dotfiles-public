@@ -48,21 +48,27 @@ return {
                         set_jumps = true, -- whether to set jumps in the jumplist
                         goto_next_start = {
                             ["]f"] = { query = "@function.outer", desc = "[TS] Next function start" },
+                            ["]r"] = { query = "@return.outer", desc = "[TS] Next return start" },
+                            ["]]"] = { query = "@fold", query_group = "folds", desc = "[TS] Next fold" },
                         },
-                        goto_next_end = {},
+                        goto_next_end = {
+                            ["]F"] = { query = "@function.inner", desc = "[TS] Next function end" },
+                            ["]R"] = { query = "@return.inner", desc = "[TS] Next return end" },
+                        },
                         goto_previous_start = {
                             ["[f"] = { query = "@function.outer", desc = "[TS] Previous function start" },
+                            ["[r"] = { query = "@return.outer", desc = "[TS] Previous return start" },
+                            ["[["] = { query = "@fold", query_group = "folds", desc = "[TS] Previous fold" },
                         },
-                        goto_previous_end = {},
+                        goto_previous_end = {
+                            ["[F"] = { query = "@function.inner", desc = "[TS] Previous function end" },
+                            ["[R"] = { query = "@return.inner", desc = "[TS] Previous return end" },
+                        },
                         -- Below will go to either the start or the end, whichever is closer.
                         -- Use if you want more granular movements
                         -- Make it even more gradual by adding multiple queries and regex.
-                        goto_next = {
-                            ["]]"] = { query = "@block.*", desc = "[TS] Next block" },
-                        },
-                        goto_previous = {
-                            ["[["] = { query = "@block.*", desc = "[TS] Previous block" },
-                        },
+                        goto_next = {},
+                        goto_previous = {},
                     },
                 },
             })
@@ -73,6 +79,9 @@ return {
         enabled = true,
         event = require("utils.lazy").events.SetB,
         init = function()
+            vim.cmd([[
+                hi! link TreesitterContext CursorLine
+            ]])
             require("utils.vim").create_autocmd({
                 events = { "ColorScheme" },
                 group_name = "aryon/nvim-treesitter.lua",

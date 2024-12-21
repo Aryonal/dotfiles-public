@@ -1,16 +1,5 @@
 ---@diagnostic disable: deprecated, unused-function, unused-local
 return {
-    {
-        "folke/lazydev.nvim",
-        ft = "lua", -- only load on lua files
-        opts = {
-            library = {
-                -- See the configuration section for more details
-                -- Load luvit types when the `vim.uv` word is found
-                { path = "luvit-meta/library", words = { "vim%.uv" } },
-            },
-        },
-    },
     { "Bilal2453/luvit-meta", lazy = true }, -- optional `vim.uv` typings
     {
         "zbirenbaum/copilot.lua",
@@ -18,7 +7,10 @@ return {
         lazy = true,
         config = function()
             require("copilot").setup({
-                suggestion = { enabled = false },
+                suggestion = {
+                    enabled = false,
+                    auto_trigger = false,
+                },
                 panel = { enabled = false },
                 filetypes = {
                     yaml = false,
@@ -66,6 +58,7 @@ return {
     },
     {
         "hrsh7th/nvim-cmp",
+        enabled = false,
         dependencies = {
             "hrsh7th/cmp-buffer",
             "hrsh7th/cmp-cmdline",

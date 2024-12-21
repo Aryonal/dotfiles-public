@@ -1,5 +1,16 @@
 return {
     {
+        "folke/lazydev.nvim",
+        ft = "lua", -- only load on lua files
+        opts = {
+            library = {
+                -- See the configuration section for more details
+                -- Load luvit types when the `vim.uv` word is found
+                { path = "luvit-meta/library", words = { "vim%.uv" } },
+            },
+        },
+    },
+    {
         "williamboman/mason.nvim",
         config = function()
             local mason = require("mason")
@@ -9,19 +20,26 @@ return {
         end,
     },
     {
-        "neovim/nvim-lspconfig",
-        init = function()
-            require("utils.vim").create_autocmd({
-                events = { "ColorScheme" },
-                group_name = "aryon/lspconfig.lua",
-                desc = "Link LspInfoBorder to FloatBorder",
-                callback = function()
-                    vim.cmd([[
-                        hi! link LspInfoBorder FloatBorder
-                    ]])
-                end,
+        "williamboman/mason-lspconfig.nvim",
+        dependencies = {
+            "williamboman/mason.nvim",
+        },
+        event = require("utils.lazy").events.setA,
+        config = function()
+            local mason_lspconfig = require("mason-lspconfig")
+
+            mason_lspconfig.setup({
+                ensure_installed = {},
+                automatic_installation = false,
             })
         end,
+    },
+    {
+        "neovim/nvim-lspconfig",
+        dependencies = {
+            "williamboman/mason.nvim",
+            "williamboman/mason-lspconfig.nvim",
+        },
         config = function()
             -- border for LspInfo window
             -- REF: https://neovim.discourse.group/t/lspinfo-window-border/1566/2
@@ -29,35 +47,10 @@ return {
             win.default_options = {
                 border = require("aryon.config").ui.float.border,
             }
-        end,
-    },
-    {
-        "williamboman/mason-lspconfig.nvim",
-        dependencies = {
-            "williamboman/mason.nvim",
-            "neovim/nvim-lspconfig",
-        },
-        event = require("utils.lazy").events.setA,
-        config = function()
-            local mason_lspconfig = require("mason-lspconfig")
 
-            mason_lspconfig.setup({ -- will internally run `require("lspconfig.**")`
-                -- A list of servers to automatically install if they're not already installed. Example: { "rust_analyzer@nightly", "sumneko_lua" }
-                -- This setting has no relation with the `automatic_installation` setting.
-                ensure_installed = {},
 
-                -- Whether servers that are set up (via lspconfig) should be automatically installed if they're not already installed.
-                -- This setting has no relation with the `ensure_installed` setting.
-                -- Can either be:
-                --   - false: Servers are not automatically installed.
-                --   - true: All servers set up via lspconfig are automatically installed.
-                --   - { exclude: string[] }: All servers set up via lspconfig, except the ones provided in the list, are automatically installed.
-                --       Example: automatic_installation = { exclude = { "rust_analyzer", "solargraph" } }
-                automatic_installation = false,
-            })
-
-            -- TODO: replaced with mason-lspconfig automatic server setup
-            local ok, lspconfig = pcall(require, "lspconfig")
+            local lspconfig = require("lspconfig")
+            local ok, mason_lspconfig = pcall(require, "mason-lspconfig")
             if not ok then
                 return
             end

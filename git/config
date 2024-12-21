@@ -39,6 +39,8 @@
 ; [user]
 ;     name = John
 ;     email = john.doe@gmail.com
+; [tag]
+;     gpgsign = true
 ; [commit]
 ;     gpgsign = true
 ; [user]

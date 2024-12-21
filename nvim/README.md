@@ -12,8 +12,9 @@ use `WhichKey` to find all keymaps.
 
 - ripgrep
 - fd
-- node
-- go
-- rust (cargo)
+- node (recommend `n` as version manager)
+- luarocks
+- (optional) go
+- (optional) rust (cargo)
 - (optional) fzf
 - (optional) nerd-fonts

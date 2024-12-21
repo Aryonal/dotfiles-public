@@ -152,19 +152,27 @@ return {
         "Telescope",
     },
     init = function()
+        vim.cmd([[
+            hi! link TelescopeBorder FloatBorder
+            hi! link TelescopePromptBorder FloatBorder
+            hi! link TelescopeResultsBorder FloatBorder
+            hi! link TelescopePreviewBorder FloatBorder
+
+            hi! link TelescopePromptCounter FloatNornal
+        ]])
         require("utils.vim").create_autocmd({
             events = { "ColorScheme" },
             group_name = "aryon/telescope.lua",
             desc = "Link Telescope Hihglights",
             callback = function()
                 vim.cmd([[
-                        hi! link TelescopeBorder FloatBorder
-                        hi! link TelescopePromptBorder FloatBorder
-                        hi! link TelescopeResultsBorder FloatBorder
-                        hi! link TelescopePreviewBorder FloatBorder
+                    hi! link TelescopeBorder FloatBorder
+                    hi! link TelescopePromptBorder FloatBorder
+                    hi! link TelescopeResultsBorder FloatBorder
+                    hi! link TelescopePreviewBorder FloatBorder
 
-                        hi! link TelescopePromptCounter FloatNornal
-                    ]])
+                    hi! link TelescopePromptCounter FloatNornal
+                ]])
             end,
         })
     end,

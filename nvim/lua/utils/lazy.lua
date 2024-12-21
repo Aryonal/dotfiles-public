@@ -107,6 +107,7 @@ end
 return {
     events = {
         SetA = { "BufReadPre", "BufWritePre", "BufNewFile", "VeryLazy" },
+        -- LazyFile
         SetB = { "BufReadPost", "BufWritePost", "BufNewFile" },
         SetC = { "InsertEnter", "CmdlineEnter" },
     },

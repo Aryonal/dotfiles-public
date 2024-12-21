@@ -2,6 +2,11 @@ local common_opts = {
     lazy = false,
     priority = 1000,
     init = function()
+        vim.cmd([[
+            hi! link EndOfBuffer NonText
+            hi! link NormalFloat Normal
+            hi! link LspCodeLens DiagnosticInfo
+        ]])
         require("utils.vim").create_autocmd({
             events = { "ColorScheme" },
             group_name = "aryon/colorscheme.lua",
@@ -19,7 +24,7 @@ local common_opts = {
 local themes = {
     {
         "catppuccin/nvim",
-        enabled = true,
+        enabled = false,
         name = "catppuccin",
         config = function()
             require("catppuccin").setup({
@@ -63,9 +68,13 @@ local themes = {
     },
     {
         "projekt0n/github-nvim-theme",
-        enabled = false,
+        enabled = true,
         config = function()
-            require("github-theme").setup({})
+            require("github-theme").setup({
+                options = {
+                    hide_nc_statusline = false,
+                },
+            })
 
             vim.cmd("colorscheme github_dark_dimmed")
         end

@@ -61,24 +61,24 @@ return {
         require("neo-tree").setup({
             popup_border_style = require("aryon.config").ui.float.border, -- use default nui style
             hide_root_node = false,
-            -- event_handlers = {
-            --     {
-            --         event = "neo_tree_window_after_open",
-            --         handler = function(args)
-            --             if args.position == "left" or args.position == "right" then
-            --                 vim.cmd("wincmd =")
-            --             end
-            --         end,
-            --     },
-            --     {
-            --         event = "neo_tree_window_after_close",
-            --         handler = function(args)
-            --             if args.position == "left" or args.position == "right" then
-            --                 vim.cmd("wincmd =")
-            --             end
-            --         end,
-            --     },
-            -- },
+            event_handlers = {
+                {
+                    event = "neo_tree_window_after_open",
+                    handler = function(args)
+                        if args.position == "left" or args.position == "right" then
+                            vim.cmd("wincmd =")
+                        end
+                    end,
+                },
+                {
+                    event = "neo_tree_window_after_close",
+                    handler = function(args)
+                        if args.position == "left" or args.position == "right" then
+                            vim.cmd("wincmd =")
+                        end
+                    end,
+                },
+            },
             default_component_configs = {
                 container = {
                     enable_character_fade = true,
@@ -125,7 +125,7 @@ return {
             --     end,
             -- },
             window = {
-                position = "current",     -- float, current, left...
+                position = "left",     -- float, current, left...
                 auto_expand_width = true, -- adaptive width
                 width = 10,
                 popup = {

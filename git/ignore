@@ -13,5 +13,8 @@
 # Python Pre-commit
 .pre-commit-config.yaml
 
+# Kotlin LS
+kls_database.db
+
 # macOS
 .DS_Store

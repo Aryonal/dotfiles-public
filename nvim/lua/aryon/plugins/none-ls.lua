@@ -1,17 +1,20 @@
 ---@diagnostic disable: missing-parameter
 return {
     "nvimtools/none-ls.nvim",
-    enabled = true,
+    enabled = false,
     dependencies = { "nvim-lua/plenary.nvim", "mason.nvim" },
     init = function()
+        vim.cmd([[
+            hi! link NulllsInfoBorder FloatBorder
+        ]])
         require("utils.vim").create_autocmd({
             events = { "ColorScheme" },
             group_name = "aryon/none-ls.lua",
             desc = "Link NulllsInfoBorder to FloatBorder",
             callback = function()
                 vim.cmd([[
-                        hi! link NulllsInfoBorder FloatBorder
-                    ]])
+                    hi! link NulllsInfoBorder FloatBorder
+                ]])
             end,
         })
     end,
@@ -92,7 +95,7 @@ return {
             extra_args = { "-m", tostring(style.go.MAX_LENGTH), "-w" } })
 
         -- Kotlin
-        -- _append_source(sources, "diagnostics", "ktlint")
+        _append_source(sources, "diagnostics", "ktlint")
         -- _append_source(sources, "formatting", "ktlint")
 
         -- SQL

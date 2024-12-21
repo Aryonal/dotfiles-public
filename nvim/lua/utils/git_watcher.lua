@@ -31,10 +31,18 @@ function G:start()
         vim.notify("[utils/git.lua] Windows is not supported")
         return
     end
-    self:_watch(vim.uv.cwd())
 
     -- register autocmd to stop fs_event on VimLeavePre
     local au = vim.api.nvim_create_augroup("utils/git.lua", { clear = true })
+
+    vim.api.nvim_create_autocmd({ "VimEnter" }, {
+        group = au,
+        desc = "[utils/git.lua] stop wather",
+        pattern = "*",
+        callback = function()
+            self:_watch(vim.uv.cwd())
+        end,
+    })
 
     vim.api.nvim_create_autocmd({ "VimLeavePre" }, {
         group = au,

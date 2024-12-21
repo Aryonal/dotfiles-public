@@ -117,12 +117,14 @@ if command -v kubectl &>/dev/null; then
         }
     else
         # short alias to set/show context/namespace (only works for bash and bash-compatible shells, current context to be set before using kn to set namespace)
-        function kx() { [ "$1" ] && kubectl config use-context $1 || kubectl config current-context; }
-        function kn() { [ "$1" ] && kubectl config set-context --current --namespace $1 || kubectl config view --minify | grep namespace | cut -d" " -f6; }
+        function kx() { [ "$1" ] && kubectl config use-context $1 || kubectl config get-contexts; }
+        function kxc() { kubectl config current-context }
+        function kn() { [ "$1" ] && kubectl config set-context --current --namespace $1 || kubectl get ns; }
+        function knc() { kubectl config view --minify | grep namespace | cut -d" " -f6 }
         function kc() {
             echo
             echo "${bold}current context:${normal}"
-            echo "    ${red}$(kx)${noc} | ${red}$(kn)${noc}"
+            echo "    ${red}$(kxc)${noc} | ${red}$(knc)${noc}"
             echo
         }
     fi
@@ -176,3 +178,10 @@ if command -v fzf &> /dev/null; then
     eval "$(fzf --zsh)"
 fi
 
+# n
+if command -v n &> /dev/null; then
+    export N_PREFIX="${XDG_DATA_HOME:-$HOME/.local/share}/n"
+    export PATH=$N_PREFIX/bin:$PATH
+fi
+
+alias rm="echo 'use trash instead'"

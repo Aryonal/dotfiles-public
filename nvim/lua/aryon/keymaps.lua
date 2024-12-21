@@ -22,9 +22,9 @@ local fixed_bindings = {
     { "c",         [["_c]],             desc = "Do Not Cut",           mode = { "n", "v" } },
     { "ge",        "<cmd>tabp<CR>",     desc = "[Tab] Previous" },
     { "gt",        "<cmd>tabnext<CR>",  desc = "[Tab] Next" },
-    { "p",         [["_dP]],            desc = "Do Not Cut",           mode = "v" },
+    -- { "p",         [["_dP]],            desc = "Do Not Cut",           mode = "v" }, -- use P
     { "sn",        "<cmd>nohl<CR>",     desc = "No search highlight" },
-    { "te",        "<C-w>T",            desc = "[Tab] New from buffer" },
+    { "te",        "<C-w>s<C-w>T",      desc = "[Tab] New from buffer" },
     { "tn",        "<cmd>tabnew<CR>",   desc = "[Tab] New" },
     { "tq",        "<cmd>tabclose<CR>", desc = "[Tab] Close" },
     { "tt",        "<cmd>sp +term<CR>", desc = "[Term] New" },
@@ -52,6 +52,8 @@ local win_bindings = {
     { { "<Right>", "<C-l>" }, "<C-w>l",       desc = "[Win] Navigate right" },
     { { "<Up>", "<C-k>" },    "<C-w>k",       desc = "[Win] Navigate up" },
     { { "<C-w>o", "<C-w>z" }, "<C-w>|<C-w>_", desc = "[Win] Expand buffer" },
+    { [[<C-w>\]],             "<C-w>v",       desc = "[Win] vsplit" },
+    { [[<C-w>-]],             "<C-w>s",       desc = "[Win] split" },
 }
 
 local global_lsp_bindings = {

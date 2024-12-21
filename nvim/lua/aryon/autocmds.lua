@@ -3,7 +3,7 @@ local config = require("aryon.config").vim
 
 local custom_aug = vim.api.nvim_create_augroup("aryon/autocmd.lua", { clear = true })
 
-if false then
+if true then
     vim.api.nvim_create_autocmd({ "VimEnter" }, {
         group = custom_aug,
         desc = "Update cwd based on argument",
@@ -17,16 +17,18 @@ if false then
 
             if is_directory then
                 -- create a new, empty buffer
-                -- vim.cmd.new()
+                vim.cmd.new()
+
                 -- wipe the directory buffer
                 vim.cmd.bw(args.buf)
+
                 -- change to the directory
                 vim.cmd.cd(args.file)
             end
 
             if is_real_file then
                 -- change to directory of file
-                vim.cmd.cd(vim.fs.dirname(args.file))
+                -- vim.cmd.cd(vim.fs.dirname(args.file))
                 return
             end
 

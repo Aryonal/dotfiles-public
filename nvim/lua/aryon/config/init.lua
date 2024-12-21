@@ -17,14 +17,12 @@ local cfg = {
     },
     lsp = {
         semantic_tokens = false,
-        inlay_hints = true,
+        inlay_hints = false,
     },
     vim = {
         default_delay_ms = 300,
         auto_load_session_local = true,
         auto_save_session_local = true,
-        g_var_git_status = "statusline_git_status",
-        g_var_git_branch = "statusline_git_branch",
     },
     ui = {
         virtual_text_space = 1,
@@ -32,7 +30,17 @@ local cfg = {
             border = "rounded", -- :help nvim_open_win()
             highlights = "NormalFloat:NormalFloat,Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None",
         },
-        statusline = {}, -- see /utils/statusline.lua, empty means default
+        statusline = {
+            global = false,
+            excluded_ft = require("aryon.config.ft").statusbar_exclude,
+        },
+        tabline = {
+            hide_if_only_one_tab = false,
+            excluded_ft = require("aryon.config.ft").winbar_exclude,
+        },
+        winbar = {
+            excluded_ft = require("aryon.config.ft").winbar_exclude,
+        },
     },
     ---only to avoid conflicts
     keymaps = {

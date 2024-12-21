@@ -136,8 +136,8 @@ return {
                 component_separators = { left = "", right = "" },
                 -- section_separators = "",
                 disabled_filetypes = {
-                    statusline = ft.lualine_statusbar_exclude,
-                    winbar = ft.lualine_winbar_exclude,
+                    statusline = ft.statusbar_exclude,
+                    winbar = ft.winbar_exclude,
                 },
                 padding = { left = 1, right = 1 },
                 globalstatus = true,

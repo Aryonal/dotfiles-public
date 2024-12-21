@@ -2,16 +2,21 @@ return {
     "RRethy/vim-illuminate", -- To highlight occurrences under cursor
     event = require("utils.lazy").events.SetB,
     init = function()
+        vim.cmd([[
+            hi! link IlluminatedWordRead CursorLine
+            hi! link IlluminatedWordWrite CursorLine
+            hi! link IlluminatedWordText CursorLine
+        ]])
         require("utils.vim").create_autocmd({
             events = { "ColorScheme" },
             group_name = "aryon/illuminate.lua",
             desc = "Link IlluminatedWord* to Visual",
             callback = function()
                 vim.cmd([[
-                        hi! link IlluminatedWordRead CursorLine
-                        hi! link IlluminatedWordWrite CursorLine
-                        hi! link IlluminatedWordText CursorLine
-                    ]])
+                    hi! link IlluminatedWordRead CursorLine
+                    hi! link IlluminatedWordWrite CursorLine
+                    hi! link IlluminatedWordText CursorLine
+                ]])
             end,
         })
     end,

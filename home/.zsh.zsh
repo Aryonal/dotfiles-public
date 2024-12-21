@@ -38,20 +38,24 @@ bindkey '^W' default-backward-delete-word
 
 # add zsh-complaints to fpath
 # REF: https://github.com/zsh-users/zsh-completions
+# git clone --depth=1 https://github.com/zsh-users/zsh-completions $XDG_DATA_HOME/zsh/zsh-completions
 [ -d $XDG_DATA_HOME/zsh/zsh-completions/src ] && fpath=($XDG_DATA_HOME/zsh/zsh-completions/src $fpath)
 
 # add zshz
 # REF: https://github.com/agkozak/zsh-z?tab=readme-ov-file#installation
+# git clone --depth=1 https://github.com/agkozak/zsh-z $XDG_DATA_HOME/zsh/zsh-z
 [ -f $XDG_DATA_HOME/zsh/zsh-z/zsh-z.plugin.zsh ] && source $XDG_DATA_HOME/zsh/zsh-z/zsh-z.plugin.zsh
 [ -d $XDG_STATE_HOME/zsh ] || mkdir -p $XDG_STATE_HOME/zsh
 ZSHZ_DATA=$XDG_STATE_HOME/zsh/.z
 
 # add p10k
 # REF: https://github.com/romkatv/powerlevel10k
+# git clone --depth=1 https://github.com/romkatv/powerlevel10k.git $XDG_DATA_HOME/zsh/powerlevel10k
 [ -f $XDG_DATA_HOME/zsh/powerlevel10k/powerlevel10k.zsh-theme ] && source $XDG_DATA_HOME/zsh/powerlevel10k/powerlevel10k.zsh-theme
 
 # add auto-suggestions
 # REF: https://github.com/zsh-users/zsh-autosuggestions
+# git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions $XDG_DATA_HOME/zsh/zsh-autosuggestions
 [ -f $XDG_DATA_HOME/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh ] && source $XDG_DATA_HOME/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
 # bindkey '^F' autosuggest-accept
@@ -67,8 +71,12 @@ zstyle ":completion:*" menu select
 # keep syntax-highlighting after zle -N and compinit
 # add syntax-highlighting
 # REF: https://github.com/zsh-users/zsh-syntax-highlighting
+# git clone --depth=1 https://github.com/zsh-users/zsh-syntax-highlighting $XDG_DATA_HOME/zsh/zsh-syntax-highlighting
 [ -f $XDG_DATA_HOME/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ] && source $XDG_DATA_HOME/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
+# Use fzf key bindings
+# # Set up fzf key bindings and fuzzy completion
+# source <(fzf --zsh)
 
 # use p10k instead
 # git prompt

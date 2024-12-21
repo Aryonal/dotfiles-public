@@ -11,6 +11,7 @@ local base = {
     "lazy",
     "lspinfo",
     "mason",
+    "neo-tree",
     "neo-tree-popup",
     "nerdtree",
     "no-neck-pain",
@@ -42,9 +43,9 @@ M.lsp_on_attach_exclude_map = to_table(M.lsp_on_attach_exclude)
 
 M.illuminate_exclude = extended
 
-M.lualine_winbar_exclude = base
+M.winbar_exclude = base
 
-M.lualine_statusbar_exclude = base
+M.statusbar_exclude = base
 
 M.comment_toggle_exclude = extended
 

@@ -218,13 +218,20 @@ end
 -- Setup the LSP diagnostics icons.
 --
 -- `error_sign`, `warn_sign`, `hint_sign`, `info_sign` are strings of the icons. Example: `error_sign = ""`
-function M.setup_lsp_diagnostics_icons(error_sign, warn_sign, hint_sign, info_sign)
+function M.setup_lsp_diagnostics_icons_sidebar(error_sign, warn_sign, hint_sign, info_sign)
+    if vim.fn.has("nvim-0.10.0") == 1 then
+        -- no need for nvim >= 0.10.0
+        return
+    end
+
     -- setup diagnostics icons
     local _signs = { Error = error_sign, Warn = warn_sign, Hint = hint_sign, Info = info_sign }
     for type, icon in pairs(_signs) do
         local hl = "DiagnosticSign" .. type
         vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
     end
+    vim.diagnostic.config({
+    })
 end
 
 -- Setup the LSP diagnostics virtual text.
@@ -236,14 +243,19 @@ end
 --
 -- `diagnostics_prefix` is a string of the prefix of the virtual text. Example: `diagnostics_prefix = "■"`
 -- `virtual_text_spaces` is a number of the spaces between the prefix and the message. Example: `virtual_text_spaces = 2`
-function M.setup_lsp_diagnostics_text(diagnostics_prefix, virtual_text_spaces)
-    -- print("prefix: "..diagnostics_prefix.."\nspaces: "..tostring(virtual_text_spaces))
+function M.setup_lsp_diagnostics(diagnostics_prefix, virtual_text_spaces, diag_signs)
+    if diagnostics_prefix == "dynamic" then
+        if vim.fn.has("nvim-0.10.0") == 0 then
+            diagnostics_prefix = nil
+        end
+        diagnostics_prefix = function(diagnostic)
+            return diag_signs[diagnostic.severity] .. ":"
+        end
+    end
     diagnostics_prefix = diagnostics_prefix or "■"
     virtual_text_spaces = virtual_text_spaces or 2
-    -- print("prefix: "..diagnostics_prefix.."\nspaces: "..tostring(virtual_text_spaces))
 
     vim.diagnostic.config({
-        signs = true,
         float = {
             source = true, -- Or "always"
             -- format = function(diagnostic)
@@ -261,6 +273,9 @@ function M.setup_lsp_diagnostics_text(diagnostics_prefix, virtual_text_spaces)
             -- end,
         },
         severity_sort = true,
+        signs = {
+            text = diag_signs,
+        },
     })
 end
 

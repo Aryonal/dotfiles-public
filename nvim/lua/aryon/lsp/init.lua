@@ -57,7 +57,7 @@ local function on_attach(client, bufnr)
     if client.supports_method("textDocument/codeLens") then
         local au = vim.api.nvim_create_augroup("aryon/lsp/init.lua", { clear = true })
 
-        vim.api.nvim_create_autocmd({ "CursorHold", "InsertLeave" }, {
+        vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "InsertLeave" }, {
             group = au,
             buffer = bufnr,
             desc = "refresh codelens",
@@ -76,14 +76,17 @@ end
 local function client_capabilities()
     local cap = vim.lsp.protocol.make_client_capabilities()
 
-    local c = {}
-    local ok, _ = pcall(require, "cmp_nvim_lsp")
+    local ok, nvim_cmp_lsp = pcall(require, "cmp_nvim_lsp")
     if ok then
-        c = require("cmp_nvim_lsp").default_capabilities()
+        local c = nvim_cmp_lsp.default_capabilities()
         c.textDocument.completion.completionItem.snippetSupport = true
+        cap = vim.tbl_deep_extend("force", {}, cap, c)
     end
 
-    cap = vim.tbl_deep_extend("force", {}, cap, c)
+    local ok, blink = pcall(require, "blink.cmp")
+    if ok then
+        cap = blink.get_lsp_capabilities(cap)
+    end
 
     -- REF: https://github.com/kevinhwang91/nvim-ufo#minimal-configuration
     cap.textDocument.foldingRange = {
@@ -105,93 +108,84 @@ M.default = {
     capabilities = capabilities,
 }
 
-local gopls = {
-    on_attach = function(client, bufnr)
-        on_attach(client, bufnr)
+M.custom_servers = {
+    gopls = {
+        on_attach = function(client, bufnr)
+            on_attach(client, bufnr)
 
-        -- gopls semantic tokens support
-        if not cfg.lsp.semantic_tokens then
-            return
-        end
-        if not client.server_capabilities.semanticTokensProvider then
-            local semantic = client.config.capabilities.textDocument.semanticTokens
-            client.server_capabilities.semanticTokensProvider = {
-                full = true,
-                legend = { tokenModifiers = semantic.tokenModifiers, tokenTypes = semantic.tokenTypes },
-                range = true,
-            }
-        end
-    end,
-    capabilities = capabilities,
-    settings = {
-        -- REF: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/extras/lang/go.lua#L23-L56
-        gopls = {
-            gofumpt = true,
-            codelenses = {
-                gc_details = false,
-                generate = true,
-                regenerate_cgo = true,
-                run_govulncheck = true,
-                test = true,
-                tidy = true,
-                upgrade_dependency = true,
-                vendor = true,
+            -- gopls semantic tokens support
+            if not cfg.lsp.semantic_tokens then
+                return
+            end
+            if not client.server_capabilities.semanticTokensProvider then
+                local semantic = client.config.capabilities.textDocument.semanticTokens
+                client.server_capabilities.semanticTokensProvider = {
+                    full = true,
+                    legend = { tokenModifiers = semantic.tokenModifiers, tokenTypes = semantic.tokenTypes },
+                    range = true,
+                }
+            end
+        end,
+        capabilities = capabilities,
+        settings = {
+            -- REF: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/extras/lang/go.lua#L23-L56
+            gopls = {
+                gofumpt = true,
+                codelenses = {
+                    gc_details = false,
+                    generate = true,
+                    regenerate_cgo = true,
+                    run_govulncheck = true,
+                    test = true,
+                    tidy = true,
+                    upgrade_dependency = true,
+                    vendor = true,
+                },
+                hints = {
+                    assignVariableTypes = false,
+                    compositeLiteralFields = true,
+                    compositeLiteralTypes = true,
+                    constantValues = true,
+                    functionTypeParameters = true,
+                    parameterNames = true,
+                    rangeVariableTypes = true,
+                },
+                analyses = {
+                    fieldalignment = false,
+                    nilness = true,
+                    unusedparams = true,
+                    unusedwrite = true,
+                    useany = true,
+                },
+                usePlaceholders = true,
+                completeUnimported = true,
+                staticcheck = true,
+                directoryFilters = { "-.git", "-.vscode", "-.idea", "-.vscode-test", "-node_modules" },
+                semanticTokens = true,
+                buildFlags = { "-tags=wireinject", "-tags=tests" },
             },
-            hints = {
-                assignVariableTypes = false,
-                compositeLiteralFields = true,
-                compositeLiteralTypes = true,
-                constantValues = true,
-                functionTypeParameters = true,
-                parameterNames = true,
-                rangeVariableTypes = true,
-            },
-            analyses = {
-                fieldalignment = false,
-                nilness = true,
-                unusedparams = true,
-                unusedwrite = true,
-                useany = true,
-            },
-            usePlaceholders = true,
-            completeUnimported = true,
-            staticcheck = true,
-            directoryFilters = { "-.git", "-.vscode", "-.idea", "-.vscode-test", "-node_modules" },
-            semanticTokens = true,
-            buildFlags = { "-tags=wireinject", "-tags=tests" },
         },
     },
-}
-
-local sumneko = {
-    on_attach = on_attach,
-    capabilities = capabilities,
-    settings = {
-        -- use .luarc.json
+    lua_ls = {
+        on_attach = on_attach,
+        capabilities = capabilities,
+        settings = {
+            -- use .luarc.json
+        },
     },
-}
-
-local eslint = {
-    on_attach = on_attach,
-    capabilities = capabilities,
-    settings = {
-        workingDirectories = { mode = "auto" },
+    eslint = {
+        on_attach = on_attach,
+        capabilities = capabilities,
+        settings = {
+            workingDirectories = { mode = "auto" },
+        },
     },
-}
-
-local graphql = {
-    on_attach = on_attach,
-    capabilities = capabilities,
-    -- need to set root_dir for graphql manually
-    -- root_dir = lspconfig.util.root_pattern(".graphqlconfig", ".graphqlrc", "package.json"),
-}
-
-M.custom_servers = {
-    gopls = gopls,
-    sumneko_lua = sumneko,
-    lua_ls = sumneko,
-    eslint = eslint,
-    graphql = graphql,
+    graphql = {
+        on_attach = on_attach,
+        capabilities = capabilities,
+        -- need to set root_dir for graphql manually
+        -- root_dir = lspconfig.util.root_pattern(".graphqlconfig", ".graphqlrc", "package.json"),
+    },
 }
 
 return M
