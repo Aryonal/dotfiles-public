@@ -9,7 +9,7 @@
     rename = branch -m `git rev-parse --abbrev-ref HEAD`
     cm = commit
     cmm = commit -m
-    amend = commit --amend
+    amend = commit -a --amend --no-edit
     wk = worktree
     dft = difftool
     dfo = diff origin/HEAD --ext-diff

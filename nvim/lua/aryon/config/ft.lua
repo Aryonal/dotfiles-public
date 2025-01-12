@@ -1,3 +1,4 @@
+-- print("[debug] Loading aryon.config.ft")
 local M = {}
 
 local base = {

@@ -65,3 +65,6 @@ local set_cmd = require("utils.vim").set_cmd
 for _, c in ipairs(cmds) do
     set_cmd(c)
 end
+
+-- TODO: remove
+-- require("utils.vim.float").setup()

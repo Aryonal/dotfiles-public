@@ -1,3 +1,6 @@
+local wrap_hl = require("utils.statusline.utils").wrap_hl
+local ctx_get_buf = require("utils.statusline.utils").ctx_get_buf
+
 local M = {
     cfg = {
         hl = {
@@ -11,7 +14,7 @@ local M = {
             },
             tabline = {
                 enabled = true,
-                normal_hl = "TabLine",
+                normal_hl = "TabLineFill",
                 bold = true,
                 diag = true,
             },
@@ -39,18 +42,19 @@ function M.spaces(n)
     return string.rep(" ", n)
 end
 
-function M.winnr(win_id)
-    return string.format("%d", vim.api.nvim_win_get_number(win_id or 0))
+function M.winnr(ctx)
+    return string.format("%d", vim.api.nvim_win_get_number(ctx.win_id or 0))
 end
 
 ---PERF: use cache
-function M.filepath(noname)
-    local path = vim.fn.expand("%:p")
+function M.filepath(ctx, noname)
+    local buf = ctx_get_buf(ctx)
+    local path = vim.api.nvim_buf_get_name(buf)
     if path == "" then
         return noname
     else
-        -- "%" seems not to be so reliable
-        local cwd = vim.fn.getcwd() .. "/"
+        -- "%" seems not to be so reliable, return "%f%m%r" shows full path
+        local cwd = vim.fn.getcwd(ctx.win_id or 0) .. "/"
         path = require("utils.lua").crop(path, cwd)
 
         return path
@@ -92,12 +96,11 @@ end
 --- Returns the current git branch name.
 --- Example:
 ---   ` master`
-function M.gitsigns_b_branch(trunc_len, omit)
-    if trunc_len == nil then
-        trunc_len = 20
-    end
-    if vim.b.gitsigns_status_dict then
-        local branch = vim.b.gitsigns_status_dict.head
+function M.gitsigns_b_branch(ctx, trunc_len, omit)
+    trunc_len = trunc_len or 20
+    local status = vim.b.gitsigns_status_dict
+    if status then
+        local branch = status.head
         if branch == nil then
             return ""
         end
@@ -110,7 +113,8 @@ function M.gitsigns_b_branch(trunc_len, omit)
         if string.len(branch) > trunc_len then
             branch = string.sub(branch, 0, trunc_len) .. "..."
         end
-        return string.format("%s %s", M.cfg.icons.git_branch, branch)
+        local s = string.format("%s %s", M.cfg.icons.git_branch, branch)
+        return s
     end
     return ""
 end
@@ -132,32 +136,35 @@ function M.gitsigns_diff(normal_hl)
 
         local diff = ""
         if added ~= nil and added > 0 then
+            local _added = string.format("+%d", added)
             if enable_hl then
-                diff = diff .. string.format("%%#%s#", normal_hl .. "Added")
+                _added = wrap_hl(_added, normal_hl .. "Added")
             end
-            diff = diff .. string.format("+%d", added)
+            diff = diff .. _added
         end
         if changed ~= nil and changed > 0 then
+            local _changed = string.format("~%d", changed)
             if enable_hl then
-                diff = diff .. string.format("%%#%s#", normal_hl .. "Changed")
+                _changed = wrap_hl(_changed, normal_hl .. "Changed")
             end
-            diff = diff .. string.format("~%d", changed)
+            diff = diff .. _changed
         end
         if removed ~= nil and removed > 0 then
+            local _removed = string.format("-%d", removed)
             if enable_hl then
-                diff = diff .. string.format("%%#%s#", normal_hl .. "Removed")
+                _removed = wrap_hl(_removed, normal_hl .. "Removed")
             end
-            diff = diff .. string.format("-%d", removed)
+            diff = diff .. _removed
         end
 
-        return string.format("%s%%#%s#", diff, normal_hl or "StatusLine")
+        return wrap_hl(diff, nil, normal_hl or "StatusLine")
     end
     return ""
 end
 
-function M.diagnostics(bufnr, normal_hl)
+function M.diagnostics(ctx, normal_hl)
     local res = {}
-    for _, d in ipairs(vim.diagnostic.get(bufnr)) do
+    for _, d in ipairs(vim.diagnostic.get(ctx and ctx.buf or nil)) do
         res[d.severity] = (res[d.severity] or 0) + 1
     end
 
@@ -212,39 +219,60 @@ function M.diagnostics(bufnr, normal_hl)
     if #components == 0 then
         return ""
     end
-    return table.concat(components, " ") .. string.format("%%#%s#", normal_hl or "Normal")
+    return wrap_hl(
+        table.concat(components, " "),
+        nil,
+        normal_hl
+    )
 end
 
-function M.indentation()
+function M.indentation(ctx)
     local spacetab = " Tab "
     local indents = vim.bo.tabstop
-    if vim.bo.expandtab then
+    local expandtab = vim.bo.expandtab
+    local softtabstop = vim.bo.softtabstop
+    local shifts = vim.bo.shiftwidth
+    if ctx.buf then
+        local buf = ctx.buf
+        indents = vim.api.nvim_get_option_value("tabstop", { buf = buf })
+        expandtab = vim.api.nvim_get_option_value("expandtab", { buf = buf })
+        softtabstop = vim.api.nvim_get_option_value("softtabstop", { buf = buf })
+        shifts = vim.api.nvim_get_option_value("shiftwidth", { buf = buf })
+    end
+
+    if expandtab then
         spacetab = " "
-        indents = vim.bo.softtabstop
+        indents = softtabstop
         if indents < 0 then
-            indents = vim.bo.shiftwidth
+            indents = shifts
         end
     end
-    local shifts = vim.bo.shiftwidth
-
     return spacetab .. indents .. ":" .. shifts
 end
 
 -- Function to get file encoding
-function M.file_encoding()
+function M.file_encoding(win_id)
     local fc = vim.bo.fileencoding
+    if win_id then
+        local buf = vim.api.nvim_win_get_buf(win_id)
+        fc = vim.api.nvim_get_option_value("fileencoding", { buf = buf })
+    end
     if fc == "utf-8" or fc == "" then
         return ""
     end
-    return string.format("[%s]", vim.bo.fileencoding)
+    return string.format("[%s]", fc)
 end
 
-function M.file_format()
+function M.file_format(win_id)
     local ff = vim.bo.fileformat
+    if win_id then
+        local buf = vim.api.nvim_win_get_buf(win_id)
+        ff = vim.api.nvim_get_option_value("fileformat", { buf = buf })
+    end
     if ff == "unix" or ff == "" then
         return ""
     end
-    return format_map[vim.bo.fileformat]
+    return format_map[ff]
 end
 
 function M.buffer_flags(bufnr, winid)

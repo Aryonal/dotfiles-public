@@ -36,6 +36,19 @@ function M.setup(cfg)
 
     if not M.cfg.hl.enabled then return end
 
+    M._build()
+
+    local augroup = vim.api.nvim_create_augroup("utils/statusline/hl.lua", {})
+    vim.api.nvim_create_autocmd("ColorScheme", {
+        group = augroup,
+        pattern = "*",
+        callback = function()
+            M._build()
+        end,
+    })
+end
+
+function M._build()
     -- builtin hl --
     local DiagHint = get_source_hl("DiagnosticHint")
     local DiagInfo = get_source_hl("DiagnosticInfo")
@@ -96,6 +109,13 @@ function M.setup(cfg)
     if M.cfg.hl.tabline.enabled then
         local hl = M.cfg.hl.tabline.normal_hl
         local TabLineFill = get_source_hl(hl)
+
+        -- bold text --
+        local TabLineFillBold = vim.tbl_deep_extend("force", {}, TabLineFill, {
+            bold = true,
+        })
+        if M.cfg.hl.statusline.bold then vim.api.nvim_set_hl(0, hl .. "Bold", TabLineFillBold) end
+        -- diag --
         local TabLineFillHint = vim.tbl_deep_extend("force", {}, TabLineFill, {
             fg = DiagHint.fg,
         })
@@ -105,7 +125,7 @@ function M.setup(cfg)
         })
         if M.cfg.hl.tabline.diag then vim.api.nvim_set_hl(0, hl .. "Info", TabLineFillInfo) end
         local TabLineFillWarn = vim.tbl_deep_extend("force", {}, TabLineFill, {
-            fg = DiagHint.fg,
+            fg = DiagWarn.fg,
         })
         if M.cfg.hl.tabline.diag then vim.api.nvim_set_hl(0, hl .. "Warn", TabLineFillWarn) end
         local TabLineFillError = vim.tbl_deep_extend("force", {}, TabLineFill, {

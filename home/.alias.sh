@@ -15,12 +15,12 @@ elif [[ -f /opt/homebrew/opt/coreutils/bin/gls ]]; then
     # requires coreutils
     # $ brew install coreutils
     # For M* mac
-    alias ls="gls --group-directories-first --color"
+    alias ls="/opt/homebrew/opt/coreutils/bin/gls --group-directories-first --color"
 elif [[ -f /usr/local/opt/coreutils/bin/gls ]]; then
     # requires coreutils
     # $ brew install coreutils
     # For Intel mac
-    alias ls="gls --group-directories-first --color"
+    alias ls="/usr/local/opt/coreutils/bin/gls --group-directories-first --color"
 elif ls --group-directories-first . >/dev/null 2>&1; then
     # GNU_LS
     alias ls="ls --group-directories-first --color"

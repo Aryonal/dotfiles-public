@@ -3,6 +3,7 @@ local M = {}
 local cfg = require("aryon.config")
 local ft = require("aryon.config.ft")
 
+--- @param bufnr number: buffer number
 local function lsp_buf_keymaps(bufnr)
     if ft.lsp_on_attach_exclude_map[vim.bo[bufnr].filetype] then
         return
@@ -31,6 +32,8 @@ local function lsp_buf_keymaps(bufnr)
     end
 end
 
+--- @param client vim.lsp.Client: lsp client
+--- @param bufnr number: buffer number
 local function on_attach(client, bufnr)
     -- Enable completion triggered by <c-x><c-o>
     -- vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
@@ -43,7 +46,11 @@ local function on_attach(client, bufnr)
 
     -- default to be on
     if not cfg.lsp.semantic_tokens then
-        client.server_capabilities.semanticTokensProvider = nil
+        -- TODO: setting semanticTokensProvider to nil doesn't work for kotlin-ls
+        if not client.name == "kotlin_language_server" then
+        else
+            client.server_capabilities.semanticTokensProvider = nil
+        end
     end
 
     -- default to be off
@@ -185,6 +192,15 @@ M.custom_servers = {
         capabilities = capabilities,
         -- need to set root_dir for graphql manually
         -- root_dir = lspconfig.util.root_pattern(".graphqlconfig", ".graphqlrc", "package.json"),
+    },
+    kotlin_language_server = {
+        on_attach = on_attach,
+        capabilities = capabilities,
+        settings = {
+            formatting = {
+                formatter = "none", -- none or ktfmt
+            }
+        },
     },
 }
 

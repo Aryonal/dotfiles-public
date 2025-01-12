@@ -49,7 +49,7 @@ end
 
 return {
     "mfussenegger/nvim-lint",
-    event = require("utils.lazy").events.SetB,
+    event = require("utils.lazy").events_presets.LazyFile,
     config = function()
         local lint = require("lint")
         local linters_by_ft = {

@@ -1,3 +1,4 @@
+-- print("[debug] Loading utils.vim")
 local M = {}
 
 -- Create autocmd. Usage: `create_autocmd(opts)`
@@ -203,13 +204,15 @@ end
 -- setup_lsp_float_borders("single")
 -- ```
 --
--- `default_border` is a string of default border style of lspconfig float window. Example: `default_border = "single"`
+---@param default_border string: window border style, e.g. "none", "single", "double", "rounded", "solid"
 function M.setup_lsp_float_borders(default_border)
+    default_border = default_border or "rounded"
     -- border for lsp floating windows
     local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
     ---@diagnostic disable-next-line: duplicate-set-field
     vim.lsp.util.open_floating_preview = function(contents, syntax, opts, ...)
         opts = opts or {}
+        ---@diagnostic disable-next-line: inject-field
         opts.border = opts.border or default_border
         return orig_util_open_floating_preview(contents, syntax, opts, ...)
     end
@@ -218,7 +221,7 @@ end
 -- Setup the LSP diagnostics icons.
 --
 -- `error_sign`, `warn_sign`, `hint_sign`, `info_sign` are strings of the icons. Example: `error_sign = ""`
-function M.setup_lsp_diagnostics_icons_sidebar(error_sign, warn_sign, hint_sign, info_sign)
+function M.setup_lsp_diagnostics_icons(error_sign, warn_sign, hint_sign, info_sign)
     if vim.fn.has("nvim-0.10.0") == 1 then
         -- no need for nvim >= 0.10.0
         return
@@ -243,7 +246,11 @@ end
 --
 -- `diagnostics_prefix` is a string of the prefix of the virtual text. Example: `diagnostics_prefix = "■"`
 -- `virtual_text_spaces` is a number of the spaces between the prefix and the message. Example: `virtual_text_spaces = 2`
-function M.setup_lsp_diagnostics(diagnostics_prefix, virtual_text_spaces, diag_signs)
+---@param enabled boolean: enable virtual text
+---@param diagnostics_prefix? string|function: prefix of the virtual text
+---@param virtual_text_spaces? number: spaces between the prefix and the message
+---@param diag_signs table: table of the diagnostic signs
+function M.setup_lsp_diagnostics(enabled, diagnostics_prefix, virtual_text_spaces, diag_signs)
     if diagnostics_prefix == "dynamic" then
         if vim.fn.has("nvim-0.10.0") == 0 then
             diagnostics_prefix = nil
@@ -264,7 +271,7 @@ function M.setup_lsp_diagnostics(diagnostics_prefix, virtual_text_spaces, diag_s
         },
         underline = true,
         -- virtual_text = false,
-        virtual_text = {
+        virtual_text = enabled and {
             source = "if_many",            -- Or "always"
             spacing = virtual_text_spaces, -- TODO: not working
             prefix = diagnostics_prefix,
@@ -282,6 +289,11 @@ end
 function M.disable_netrw()
     vim.g.loaded_netrw = 1
     vim.g.loaded_netrwPlugin = 1
+end
+
+function M.setup_netrw()
+    vim.g.netrw_banner = 0
+    vim.g.netrw_liststyle = 3
 end
 
 return M

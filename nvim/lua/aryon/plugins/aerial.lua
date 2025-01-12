@@ -1,7 +1,7 @@
 return {
     "stevearc/aerial.nvim",
     enabled = true,
-    event = require("utils.lazy").events.SetB,
+    event = require("utils.lazy").events_presets.LazyFile,
     config = function()
         local bmap = require("utils.vim").set_buffer_keymap
         local c = require("aryon.config").keymaps

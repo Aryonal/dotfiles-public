@@ -4,9 +4,16 @@
 --- ```lua
 --- vim.o.tabline = "%!v:lua.require('utils.statusline').config().tabline_string()"
 --- ```
+
+local stat_utils = require("utils.statusline.utils")
+local ctx_from_win_id = stat_utils.ctx_from_win_id
+
 local M = {
     -- default config
     cfg = {
+        style = {
+            powerline = false,
+        },
         hl = {
             enabled = true,
             statusline = {
@@ -18,7 +25,7 @@ local M = {
             },
             tabline = {
                 enabled = true,
-                normal_hl = "TabLine",
+                normal_hl = "TabLineFill",
                 bold = true,
                 diag = true,
             },
@@ -48,31 +55,34 @@ local M = {
 local comps = require("utils.statusline.components").setup(M.cfg)
 
 function M.statusline_string(win_id)
+    local ctx = ctx_from_win_id(win_id)
+
+    local branch = comps.gitsigns_b_branch(ctx, nil, nil) or ""
     local dyna_info = string.format(
         "%s%s %s %s %s",
-        comps.gitsigns_b_branch(nil, nil),
-        comps.git_g_status(),
-        comps.indentation(),
+        branch,
+        branch ~= "" and comps.git_g_status() or "",
+
+        comps.indentation(ctx),
         comps.file_encoding(),
         comps.file_format()
     )
 
-    local filepath = comps.filepath(M.cfg.icons.noname)
+    local filepath = comps.filepath(ctx, M.cfg.icons.noname)
     if M.cfg.hl.enabled and M.cfg.hl.statusline.enabled and M.cfg.hl.statusline.bold then
-        filepath = string.format(
-            "%%#%sBold#%s%%#%s#",
-            M.cfg.hl.statusline.normal_hl,
+        filepath = stat_utils.wrap_hl(
             filepath,
+            M.cfg.hl.statusline.normal_hl .. "Bold",
             M.cfg.hl.statusline.normal_hl
         )
     end
 
     local statusline = string.format(
         " %s %%<%%q%s%%m%%r%%h%%w %s%%= %s %%= %s %%-15(%%l,%%c%%V%%)%%P ",
-        comps.winnr(win_id),
+        comps.winnr(ctx),
         filepath,
         comps.gitsigns_diff(M.cfg.hl.statusline.normal_hl),
-        comps.diagnostics(0, M.cfg.hl.statusline.normal_hl),
+        comps.diagnostics(ctx, M.cfg.hl.statusline.normal_hl),
         dyna_info
     )
 
@@ -84,17 +94,18 @@ function M.statusline_string(win_id)
 end
 
 function M.inactive_statusline_string(win_id)
+    local ctx = ctx_from_win_id(win_id)
     local statusline = string.format(
         " %s %%<%%q%s%%m%%r%%h%%w%%=  %%-15(%%l,%%c%%V%%)%%P ",
-        comps.winnr(win_id),
-        comps.filepath()
+        comps.winnr(ctx),
+        comps.filepath(ctx, M.cfg.icons.noname)
     )
 
     return statusline
 end
 
 function M.global_statusline_string()
-    return M.statusline_string()
+    return M.statusline_string(0)
 end
 
 function M.nop_statusline_string()
@@ -123,9 +134,19 @@ function M.tabline_string()
     else
         diag_info = " > "
     end
+
+    local cwd = comps.cwd()
+    if M.cfg.hl.enabled and M.cfg.hl.tabline.enabled and M.cfg.hl.tabline.bold then
+        cwd = require("utils.statusline.utils").wrap_hl(
+            cwd,
+            M.cfg.hl.tabline.normal_hl .. "Bold",
+            M.cfg.hl.tabline.normal_hl
+        )
+    end
     return string.format(
-        "%%#TabLineFill#%s%s%s%%#TabLine#%s",
-        comps.cwd(),
+        "%%#%s#%s%s%s%%#TabLine#%s",
+        M.cfg.hl.tabline.normal_hl,
+        cwd,
         git_info,
         diag_info,
         comps.tabs()

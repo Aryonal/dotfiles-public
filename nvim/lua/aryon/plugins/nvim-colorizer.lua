@@ -1,6 +1,6 @@
 return {
     "NvChad/nvim-colorizer.lua",
-    event = require("utils.lazy").events.SetB,
+    event = require("utils.lazy").events_presets.LazyFile,
     config = function()
         -- Exclude some filetypes from highlighting by using `!`
         -- REF: https://github.com/norcalli/nvim-colorizer.lua#customization

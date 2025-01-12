@@ -1,7 +1,7 @@
 return {
     "lewis6991/gitsigns.nvim",
     version = "*", -- To use the latest release
-    event = require("utils.lazy").events.SetB,
+    event = require("utils.lazy").events_presets.LazyFile,
     init = function()
         vim.cmd([[
             hi! link GitSignsCurrentLineBlame Comment

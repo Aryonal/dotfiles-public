@@ -6,30 +6,31 @@ return {
     branch = "v3.x",
     dependencies = {
         "nvim-lua/plenary.nvim",
-        -- "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
+        "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
         "MunifTanjim/nui.nvim",
     },
     keys = {
-        { k.tree.focus, "<cmd>Neotree reveal focus<cr>", desc = "[NeoTree] Focus" },
+        { k.tree.focus,  "<cmd>Neotree reveal focus<cr>",  desc = "[NeoTree] Focus" },
+        { k.tree.toggle, "<cmd>Neotree reveal toggle<cr>", desc = "[NeoTree] Toggle" },
     },
     cmd = {
         "Neotree",
     },
-    -- init = function()
-    --     vim.api.nvim_create_autocmd("BufEnter", {
-    --         -- make a group to be able to delete it later
-    --         group = vim.api.nvim_create_augroup("NeoTreeInit", { clear = true }),
-    --         callback = function()
-    --             local f = vim.fn.expand("%:p")
-    --             if vim.fn.isdirectory(f) ~= 0 then
-    --                 vim.cmd("Neotree current dir=" .. f)
-    --                 -- neo-tree is loaded now, delete the init autocmd
-    --                 vim.api.nvim_clear_autocmds { group = "NeoTreeInit" }
-    --             end
-    --         end
-    --     })
-    --     -- keymaps
-    -- end,
+    init = function()
+        vim.api.nvim_create_autocmd("BufEnter", {
+            -- make a group to be able to delete it later
+            group = vim.api.nvim_create_augroup("NeoTreeInit", { clear = true }),
+            callback = function(args)
+                local is_directory = vim.fn.isdirectory(args.file) == 1
+                if is_directory then
+                    vim.cmd.cd(args.file)
+                    vim.cmd("Neotree current")
+                    -- neo-tree is loaded now, delete the init autocmd
+                    vim.api.nvim_clear_autocmds { group = "NeoTreeInit" }
+                end
+            end
+        })
+    end,
     config = function()
         local icons = require("share.icons")
 
@@ -51,7 +52,8 @@ return {
                             filename = selection[1]
                         end
                         -- any way to open the file without triggering auto-close event of neo-tree?
-                        require("neo-tree.sources.filesystem").navigate(state, state.path, filename, function() end)
+                        ---@diagnostic disable-next-line: missing-parameter
+                        require("neo-tree.sources.filesystem").navigate(state, state.path, filename)
                     end)
                     return true
                 end,
@@ -62,22 +64,18 @@ return {
             popup_border_style = require("aryon.config").ui.float.border, -- use default nui style
             hide_root_node = false,
             event_handlers = {
-                {
-                    event = "neo_tree_window_after_open",
-                    handler = function(args)
-                        if args.position == "left" or args.position == "right" then
-                            vim.cmd("wincmd =")
-                        end
-                    end,
-                },
-                {
-                    event = "neo_tree_window_after_close",
-                    handler = function(args)
-                        if args.position == "left" or args.position == "right" then
-                            vim.cmd("wincmd =")
-                        end
-                    end,
-                },
+                -- {
+                --     event = "neo_tree_window_after_open",
+                --     handler = function(args)
+                --         vim.cmd("wincmd =")
+                --     end,
+                -- },
+                -- {
+                --     event = "neo_tree_window_after_close",
+                --     handler = function(args)
+                --         vim.cmd("wincmd =")
+                --     end,
+                -- },
             },
             default_component_configs = {
                 container = {
@@ -125,9 +123,9 @@ return {
             --     end,
             -- },
             window = {
-                position = "left",     -- float, current, left...
+                position = "current",     -- float, current, left...
                 auto_expand_width = true, -- adaptive width
-                width = 10,
+                width = 40,
                 popup = {
                     -- position = { col = "0", row = "2" },
                     -- position = {
@@ -153,69 +151,41 @@ return {
                     -- this command supports BASH style brace expansion ("x{a,b,c}" -> xa,xb,xc). see `:h neo-tree-file-actions` for details
                     -- some commands may take optional config options, see `:h neo-tree-mappings` for details
                     -- show_path one of "none", "relative", "absolute"
+                    ["<"] = "prev_source",
+                    ["<2-LeftMouse>"] = "open", -- "open" or "open_with_window_picker",
+                    ["<BS>"] = "close_node",
+                    ["<cr>"] = "open",          -- "open" or "open_with_window_picker",
+                    [">"] = "next_source",
+                    ["c"] = "copy",             -- takes text input for destination, also accepts the optional config.show_path option like "add":
+                    ["e"] = "rename",
+                    ["l"] = "focus_preview",
+                    ["m"] = "move", -- takes text input for destination, also accepts the optional config.show_path option like "add".
+                    ["p"] = "paste_from_clipboard",
+                    ["x"] = "cut_to_clipboard",
+                    ["y"] = "copy_to_clipboard",
+                    [k.ed.fold] = { "toggle_node" },
                     [k.file.add] = { "add", config = { show_path = "relative" } },
-                    [k.file.add_dir] = "add_directory", -- also accepts the optional config.show_path option like "add". this also supports BASH style brace expansion.
+                    [k.file.add_dir] = "add_directory",      -- also accepts the optional config.show_path option like "add". this also supports BASH style brace expansion.
                     [k.file.delete] = "delete",
+                    [k.file.open_in_split] = "open_split",   -- "open_split" or "split_with_window_picker",
+                    [k.file.open_in_tab] = "open_tabnew",
+                    [k.file.open_in_vsplit] = "open_vsplit", -- "open_vsplit" or "vsplit_with_window_picker",
+                    [k.file.refresh_list[1]] = "refresh",
+                    [k.file.refresh_list[2]] = "refresh",
                     [k.file.rename] = "rename",
-                    -- [k.vim.float.close[1]] = "revert_preview",
                     [k.vim.float.close[1]] = "close_window",
                     [k.vim.float.close[2]] = "close_window",
                     [k.vim.float.close[3]] = "close_window",
-                    -- [k.vim.float.close[1]] = false,
-                    -- [k.vim.float.close[2]] = false,
-                    -- [k.vim.float.close[3]] = false,
-                    -- [k.vim.terminal.toggle] = "close_window", -- "close_window",
-                    [k.file.refresh_list[1]] = "refresh",
-                    [k.file.refresh_list[2]] = "refresh",
-                    [k.file.open_in_split] = "open_split",   -- "open_split" or "split_with_window_picker",
-                    [k.file.open_in_vsplit] = "open_vsplit", -- "open_vsplit" or "vsplit_with_window_picker",
-                    [k.file.open_in_tab] = "open_tabnew",
-                    -- [k.tree.focus] = "jump_previous",
-                    -- ["<tab>"] = { "toggle_node" },
-                    [k.ed.fold] = { "toggle_node" },
-                    ["<2-LeftMouse>"] = "open", -- "open" or "open_with_window_picker",
-                    -- ["<cr>"] = "open_drop",
-                    ["<cr>"] = "open",          -- "open" or "open_with_window_picker",
+                    -- disables
                     ["<esc>"] = false,
-                    ["<BS>"] = "close_node",
-                    --["P"] = "toggle_preview", -- enter preview mode, which shows the current node without focusing
-                    ["C"] = "", -- default "close_node"
-                    -- ["P"] = { "toggle_preview", config = { use_float = true } },
-                    ["P"] = "",
-                    ["c"] = "copy", -- takes text input for destination, also accepts the optional config.show_path option like "add":
-                    -- ["c"] = {
-                    --  "copy",
-                    --  config = {
-                    --    show_path = "none" -- "none", "relative", "absolute"
-                    --  }
-                    --}
-                    ["e"] = "rename",
-                    ["l"] = "focus_preview",
-                    ["p"] = "paste_from_clipboard",
-                    ["S"] = "",     -- default "split_with_window_picker",
-                    ["s"] = "",     -- default "vsplit_with_window_picker",
-                    ["t"] = "",     -- default "open_tabnew"
-                    ["m"] = "move", -- takes text input for destination, also accepts the optional config.show_path option like "add".
-                    ["w"] = "",     -- "open_with_window_picker",
-                    ["x"] = "cut_to_clipboard",
-                    ["y"] = "copy_to_clipboard",
-                    -- ["z"] = "close_all_nodes",
-                    --["Z"] = "expand_all_nodes",
-                    ["z"] = "",
-                    -- ["?"] = "show_help",
                     ["?"] = false, -- in buffer search
-                    ["<"] = "prev_source",
-                    [">"] = "next_source",
-                    -- toggle source
-                    -- ["f"] = function()
-                    --     vim.api.nvim_exec("Neotree focus filesystem reveal", true)
-                    -- end,
-                    -- ["b"] = function()
-                    --     vim.api.nvim_exec("Neotree focus buffers reveal", true)
-                    -- end,
-                    -- ["g"] = function()
-                    --     vim.api.nvim_exec("Neotree focus git_status reveal", true)
-                    -- end,
+                    ["C"] = "",    -- default "close_node"
+                    ["P"] = "",
+                    ["S"] = "",    -- default "split_with_window_picker",
+                    ["s"] = "",    -- default "vsplit_with_window_picker",
+                    ["t"] = "",    -- default "open_tabnew"
+                    ["w"] = "",    -- "open_with_window_picker",
+                    ["z"] = "",
                 },
             },
             nesting_rules = {},
@@ -246,26 +216,27 @@ return {
                 follow_current_file = { -- This will find and focus the file in the active buffer every
                     enabled = true,
                 },
-                use_libuv_file_watcher = true, -- This will use the OS level file watchers to detect changes
-                hijack_netrw_behavior = "open_current",
+                use_libuv_file_watcher = true,      -- This will use the OS level file watchers to detect changes
+                hijack_netrw_behavior = "disabled", -- disabled, open_current, open_default
                 window = {
                     -- position = "float",
                     mappings = {
-                        [k.tree.cd_parent] = "navigate_up",
-                        [k.tree.cd] = "set_root",
                         ["H"] = "toggle_hidden",
+                        [k.tree.cd] = "set_root",
+                        [k.tree.cd_parent] = "navigate_up",
+                        [k.tree.git_next] = "next_git_modified",
+                        [k.tree.git_previous] = "prev_git_modified",
+                        [k.tree.grep_node] = "telescope_grep",
+                        [k.tree.search_node] = "telescope_find",
+                        -- disabled
+                        ["/"] = false,
+                        ["<C-o>"] = false,
                         ["D"] = "",
                         ["f"] = "",
-                        ["/"] = false,
-                        [k.tree.git_previous] = "prev_git_modified",
-                        [k.tree.git_next] = "next_git_modified",
-                        [k.tree.search_node] = "telescope_find",
-                        [k.tree.grep_node] = "telescope_grep",
-                        -- ["<C-o>"] = "jump_previous",
-                        ["<C-o>"] = false,
                     },
                 },
                 commands = {
+                    -- FIXME: jump to neo-tree file after pressing enter in telescope
                     telescope_find = function(state)
                         local node = state.tree:get_node()
                         local path = node:get_id()
@@ -290,9 +261,7 @@ return {
                 window = {
                     mappings = {
                         ["bd"] = "buffer_delete",
-                        -- ["<bs>"] = "navigate_up",
                         [k.tree.cd] = "set_root",
-                        -- ["<esc>"] = "close_window",
                     },
                 },
             },
@@ -339,92 +308,94 @@ return {
                 enabled = true,
                 required_width = 10, -- min width of window required to show this column
             },
-            renderers = {
-                directory = {
-                    {
-                        "container",
-                        content = {
-                            -- optimize order
-                            { "file_size",     zindex = 10, align = "left" },
-                            -- { "type",          zindex = 10, align = "left" },
-                            { "last_modified", zindex = 10, align = "left" },
-                            { "created",       zindex = 10, align = "left" },
-                            { "indent",        zindex = 10 },
-                        },
-                    },
-                    { "icon" },
-                    { "current_filter" },
-                    {
-                        "container",
-                        content = {
-                            { "name",      zindex = 10 },
-                            {
-                                "symlink_target",
-                                zindex = 10,
-                                highlight = "NeoTreeSymbolicLinkTarget",
-                            },
-                            {
-                                "git_status",
-                                zindex = 10,
-                                align = "left",
-                                -- hide_when_expanded = true,
-                            },
-                            { "clipboard", zindex = 10 },
-                            {
-                                "diagnostics",
-                                zindex = 20,
-                                align = "right",
-                                -- errors_only = true,
-                                -- hide_when_expanded = true,
-                            },
-                        },
-                    },
-                },
-                file = {
-                    {
-                        "container",
-                        content = {
-                            -- optimize order
-                            { "file_size",     zindex = 10, align = "left" },
-                            -- { "type",          zindex = 10, align = "left" },
-                            { "last_modified", zindex = 10, align = "left" },
-                            { "created",       zindex = 10, align = "left" },
-                            { "indent",        zindex = 10, align = "left" },
-                        },
-                    },
-                    { "icon" },
-                    {
-                        "container",
-                        content = {
-                            { "name",        zindex = 10 },
-                            {
-                                "symlink_target",
-                                zindex = 10,
-                                highlight = "NeoTreeSymbolicLinkTarget",
-                            },
-                            { "git_status",  zindex = 10, align = "left" },
-                            { "clipboard",   zindex = 10 },
-                            { "bufnr",       zindex = 10 },
-                            { "modified",    zindex = 20, align = "right" },
-                            { "diagnostics", zindex = 20, align = "right" },
-                        },
-                    },
-                },
-            },
+            -- renderers = {
+            --     directory = {
+            --         {
+            --             "container",
+            --             content = {
+            --                 -- optimize order
+            --                 { "file_size",     zindex = 10, align = "left" },
+            --                 -- { "type",          zindex = 10, align = "left" },
+            --                 { "last_modified", zindex = 10, align = "left" },
+            --                 { "created",       zindex = 10, align = "left" },
+            --                 { "indent",        zindex = 10 },
+            --             },
+            --         },
+            --         { "icon" },
+            --         { "current_filter" },
+            --         {
+            --             "container",
+            --             content = {
+            --                 { "name",      zindex = 10 },
+            --                 {
+            --                     "symlink_target",
+            --                     zindex = 10,
+            --                     highlight = "NeoTreeSymbolicLinkTarget",
+            --                 },
+            --                 {
+            --                     "git_status",
+            --                     zindex = 10,
+            --                     align = "left",
+            --                     -- hide_when_expanded = true,
+            --                 },
+            --                 { "clipboard", zindex = 10 },
+            --                 {
+            --                     "diagnostics",
+            --                     zindex = 20,
+            --                     align = "right",
+            --                     -- errors_only = true,
+            --                     -- hide_when_expanded = true,
+            --                 },
+            --             },
+            --         },
+            --     },
+            --     file = {
+            --         {
+            --             "container",
+            --             content = {
+            --                 -- optimize order
+            --                 { "file_size",     zindex = 10, align = "left" },
+            --                 -- { "type",          zindex = 10, align = "left" },
+            --                 { "last_modified", zindex = 10, align = "left" },
+            --                 { "created",       zindex = 10, align = "left" },
+            --                 { "indent",        zindex = 10, align = "left" },
+            --             },
+            --         },
+            --         { "icon" },
+            --         {
+            --             "container",
+            --             content = {
+            --                 { "name",        zindex = 10 },
+            --                 {
+            --                     "symlink_target",
+            --                     zindex = 10,
+            --                     highlight = "NeoTreeSymbolicLinkTarget",
+            --                 },
+            --                 { "git_status",  zindex = 10, align = "left" },
+            --                 { "clipboard",   zindex = 10 },
+            --                 { "bufnr",       zindex = 10 },
+            --                 { "modified",    zindex = 20, align = "right" },
+            --                 { "diagnostics", zindex = 20, align = "right" },
+            --             },
+            --         },
+            --     },
+            -- },
         })
 
-        -- local custom_aug = vim.api.nvim_create_augroup("aryon/plugin/neo-tree.lua", { clear = true })
+        local custom_aug = vim.api.nvim_create_augroup("aryon/plugin/neo-tree.lua", { clear = true })
 
-        -- vim.api.nvim_create_autocmd({ "BufEnter" }, {
-        --     pattern = { "neo-tree git_status*", "neo-tree buffers*", "neo-tree filesystem*" },
-        --     group = custom_aug,
-        --     desc = "Neo-tree centralizes cursor",
-        --     callback = function()
-        --         vim.cmd([[
-        --             setlocal scrolloff=99
-        --         ]])
-        --     end,
-        -- })
+        vim.api.nvim_create_autocmd({ "BufEnter" }, {
+            pattern = { "neo-tree git_status*", "neo-tree buffers*", "neo-tree filesystem*" },
+            group = custom_aug,
+            desc = "Neo-tree centralizes cursor",
+            callback = function(args)
+                vim.keymap.set("n", "<C-e>", "5<C-e>", { silent = true, buffer = args.buffer })
+                vim.keymap.set("n", "<C-y>", "5<C-y>", { silent = true, buffer = args.buffer })
+                vim.cmd([[
+                    setlocal scrolloff=99
+                ]])
+            end,
+        })
 
         -- require("lsp-file-operations").setup()
     end,

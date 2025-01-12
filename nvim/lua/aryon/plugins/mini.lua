@@ -8,7 +8,7 @@ return {
     {
         "echasnovski/mini.splitjoin",
         version = false,
-        event = require("utils.lazy").events.SetB,
+        event = require("utils.lazy").events_presets.LazyFile,
         keys = {
             {
                 "<leader>j",

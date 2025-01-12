@@ -6,7 +6,7 @@ return {
             library = {
                 -- See the configuration section for more details
                 -- Load luvit types when the `vim.uv` word is found
-                { path = "luvit-meta/library", words = { "vim%.uv" } },
+                { path = "${3rd}/luv/library", words = { "vim%.uv" } },
             },
         },
     },
@@ -24,7 +24,7 @@ return {
         dependencies = {
             "williamboman/mason.nvim",
         },
-        event = require("utils.lazy").events.setA,
+        event = require("utils.lazy").events_presets.setA,
         config = function()
             local mason_lspconfig = require("mason-lspconfig")
 
@@ -41,14 +41,6 @@ return {
             "williamboman/mason-lspconfig.nvim",
         },
         config = function()
-            -- border for LspInfo window
-            -- REF: https://neovim.discourse.group/t/lspinfo-window-border/1566/2
-            local win = require("lspconfig.ui.windows")
-            win.default_options = {
-                border = require("aryon.config").ui.float.border,
-            }
-
-
             local lspconfig = require("lspconfig")
             local ok, mason_lspconfig = pcall(require, "mason-lspconfig")
             if not ok then

@@ -4,8 +4,8 @@ local cfg = require("aryon.config")
 
 -- setup customized UI for lsp float, e.g. hover
 uvim.setup_lsp_float_borders(cfg.ui.float.border)
-uvim.setup_lsp_diagnostics_icons_sidebar(signs.error, signs.warn, signs.hint, signs.info)
-uvim.setup_lsp_diagnostics(signs.diagnostics_prefix, cfg.ui.virtual_text_space, {
+uvim.setup_lsp_diagnostics_icons(signs.error, signs.warn, signs.hint, signs.info)
+uvim.setup_lsp_diagnostics(false, signs.diagnostics_prefix, cfg.ui.virtual_text_space, {
     [vim.diagnostic.severity.ERROR] = signs.error,
     [vim.diagnostic.severity.WARN] = signs.warn,
     [vim.diagnostic.severity.HINT] = signs.hint,

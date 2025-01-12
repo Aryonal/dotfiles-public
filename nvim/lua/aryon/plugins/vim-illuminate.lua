@@ -1,6 +1,6 @@
 return {
     "RRethy/vim-illuminate", -- To highlight occurrences under cursor
-    event = require("utils.lazy").events.SetB,
+    event = require("utils.lazy").events_presets.LazyFile,
     init = function()
         vim.cmd([[
             hi! link IlluminatedWordRead CursorLine

@@ -3,7 +3,7 @@ local config = require("aryon.config").vim
 
 local custom_aug = vim.api.nvim_create_augroup("aryon/autocmd.lua", { clear = true })
 
-if true then
+if false then
     vim.api.nvim_create_autocmd({ "VimEnter" }, {
         group = custom_aug,
         desc = "Update cwd based on argument",
@@ -24,6 +24,11 @@ if true then
 
                 -- change to the directory
                 vim.cmd.cd(args.file)
+
+                local ok, _ = pcall(require, "neo-tree")
+                if ok then
+                    vim.cmd("Neotree current")
+                end
             end
 
             if is_real_file then
@@ -45,12 +50,12 @@ vim.api.nvim_create_autocmd({ "TermOpen" }, {
     callback = function(ev)
         vim.wo.number = false
         vim.wo.wrap = true
+        vim.wo.statuscolumn = ""
 
         -- FIXME: some issue with telescope planets, but not big deal
         vim.cmd [[
             startinsert
         ]]
-
     end
 })
 

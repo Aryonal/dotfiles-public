@@ -77,6 +77,7 @@ local themes = {
             })
 
             vim.cmd("colorscheme github_dark_dimmed")
+            -- vim.cmd("colorscheme github_light_default")
         end
     },
 }

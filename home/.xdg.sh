@@ -1,6 +1,6 @@
 #! /bin/sh
 # XDG configuration
-# $ tail .bashrc # or .zshrc
+# $ tail .profile # or .zprofile
 # [ -f /path/to/.xdg.sh ] && source /path/to/.xdg.sh
 # e.g.
 # [ -f ${ZDOTDIR:-$HOME}/.xdg.sh ] && source ${ZDOTDIR:-$HOME}/.xdg.sh

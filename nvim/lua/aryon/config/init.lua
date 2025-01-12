@@ -1,3 +1,4 @@
+-- print("[debug] Loading aryon.config")
 ---configs to be shared across components,
 ---do not put everything here
 local cfg = {
@@ -21,7 +22,7 @@ local cfg = {
     },
     vim = {
         default_delay_ms = 300,
-        auto_load_session_local = true,
+        auto_load_session_local = false,
         auto_save_session_local = true,
     },
     ui = {
@@ -105,7 +106,7 @@ local cfg = {
             item_enter = "<CR>",
             item_preview = "<Tab>",
             search_node = "<C-f>",
-            toggle = "<leader><leader>",
+            toggle = [[<C-p>]],
         },
         -- file browser
         file = {

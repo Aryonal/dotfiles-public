@@ -5,7 +5,7 @@ return {
             "nvim-treesitter/nvim-treesitter-textobjects",
         },
         build = ":TSUpdate",
-        event = require("utils.lazy").events.SetA,
+        event = require("utils.lazy").events_presets.SetA,
         config = function()
             ---@diagnostic disable-next-line: missing-fields
             require("nvim-treesitter.configs").setup({
@@ -77,22 +77,22 @@ return {
     {
         "nvim-treesitter/nvim-treesitter-context",
         enabled = true,
-        event = require("utils.lazy").events.SetB,
-        init = function()
-            vim.cmd([[
-                hi! link TreesitterContext CursorLine
-            ]])
-            require("utils.vim").create_autocmd({
-                events = { "ColorScheme" },
-                group_name = "aryon/nvim-treesitter.lua",
-                desc = "Link TreesitterContext to CursorLine",
-                callback = function()
-                    vim.cmd([[
-                        hi! link TreesitterContext CursorLine
-                    ]])
-                end,
-            })
-        end,
+        event = require("utils.lazy").events_presets.LazyFile,
+        -- init = function()
+        --     vim.cmd([[
+        --         hi! link TreesitterContext CursorLine
+        --     ]])
+        --     require("utils.vim").create_autocmd({
+        --         events = { "ColorScheme" },
+        --         group_name = "aryon/nvim-treesitter.lua",
+        --         desc = "Link TreesitterContext to CursorLine",
+        --         callback = function()
+        --             vim.cmd([[
+        --                 hi! link TreesitterContext CursorLine
+        --             ]])
+        --         end,
+        --     })
+        -- end,
         config = function()
             require("treesitter-context").setup({
                 -- max_lines = 0, -- How many lines the window should span. Values <= 0 mean no limit.

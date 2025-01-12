@@ -11,7 +11,7 @@ return {
         {
             require("aryon.config").keymaps.lsp.format,
             function()
-                require("conform").format({ lsp_fallback = true, async = true, undojoin = true })
+                require("conform").format({ lsp_format = "prefer", async = true, undojoin = true })
             end,
             mode = { "n", "v" },
             desc = "[Conform] Format",

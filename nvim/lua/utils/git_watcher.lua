@@ -1,4 +1,4 @@
-local debounce = require("utils/lua").debounce
+local debounce = require("utils.lua").debounce
 
 ---git utility functions
 local G = {}
@@ -37,7 +37,7 @@ function G:start()
 
     vim.api.nvim_create_autocmd({ "VimEnter" }, {
         group = au,
-        desc = "[utils/git.lua] stop wather",
+        desc = "[utils/git.lua] start wather",
         pattern = "*",
         callback = function()
             self:_watch(vim.uv.cwd())
@@ -82,7 +82,7 @@ local function git_root(path)
             return path
         end
         if path == "/" then
-            print("[utils/git] not git repository: " .. orig_path)
+            print("[debug] utils/git_watcher.lua: not git repository: " .. orig_path)
             return nil
         end
         path = vim.fn.fnamemodify(path, ":h")
@@ -116,7 +116,7 @@ local function watch_fs(path, recursive, ignore_fn, process_fn)
             if ignore_fn(filename) then
                 return
             end
-            -- print(vim.uv.now() .. "[utils/git][debug] fs_event: process " .. filename)
+            -- print(vim.uv.now() .. "[debug] utils/git_watcher.lua: fs_event: process " .. filename)
 
             process_fn()
         end
@@ -156,7 +156,7 @@ function G:_watch(path)
     -- stop and start new fs_event watcher
     self.git_dir = root
 
-    print("[utils/git][debug] refresh watcher: " .. root)
+    print("[debug] utils/git_watcher.lua: refresh watcher: " .. root)
 
     -- stop anyway
     self:_stop()
