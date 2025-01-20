@@ -88,7 +88,7 @@ return {
                     folder_empty = icons.arrow_void,
                     -- The next two settings are only a fallback, if you use nvim-web-devicons and configure default icons there
                     -- then these will never be used.
-                    default = "", -- icons.file_default,
+                    -- default = icons.file_default, -- icons.file_default,
                     highlight = "NeoTreeFileIcon",
                 },
                 modified = {
@@ -388,11 +388,12 @@ return {
             pattern = { "neo-tree git_status*", "neo-tree buffers*", "neo-tree filesystem*" },
             group = custom_aug,
             desc = "Neo-tree centralizes cursor",
-            callback = function(args)
-                vim.keymap.set("n", "<C-e>", "5<C-e>", { silent = true, buffer = args.buffer })
-                vim.keymap.set("n", "<C-y>", "5<C-y>", { silent = true, buffer = args.buffer })
+            callback = function()
+                vim.keymap.set("n", "<C-e>", "5<C-e>", { silent = true, buffer = true })
+                vim.keymap.set("n", "<C-y>", "5<C-y>", { silent = true, buffer = true })
                 vim.cmd([[
                     setlocal scrolloff=99
+                    setlocal colorcolumn=""
                 ]])
             end,
         })

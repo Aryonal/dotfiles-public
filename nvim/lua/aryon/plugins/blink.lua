@@ -25,6 +25,7 @@ return {
                 ["<S-Tab>"] = { "select_prev", "fallback" },
                 ["<Up>"] = { "select_prev", "fallback" },
                 ["<C-p>"] = { "select_prev", "fallback" },
+                ["<CR>"] = { "accept", "fallback" },
                 -- others
                 ["<C-y>"] = { "scroll_documentation_up", "fallback" },
                 ["<C-e>"] = { "scroll_documentation_down", "fallback" },
@@ -95,7 +96,7 @@ return {
             },
             completion = {
                 list = {
-                    selection = "auto_insert",
+                    selection = { preselect = false, auto_insert = true },
                 },
                 documentation = {
                     window = {

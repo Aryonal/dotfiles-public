@@ -47,7 +47,7 @@ local function on_attach(client, bufnr)
     -- default to be on
     if not cfg.lsp.semantic_tokens then
         -- TODO: setting semanticTokensProvider to nil doesn't work for kotlin-ls
-        if not client.name == "kotlin_language_server" then
+        if client.name == "kotlin_language_server" then
         else
             client.server_capabilities.semanticTokensProvider = nil
         end
