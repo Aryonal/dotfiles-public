@@ -4,11 +4,11 @@
     st = status -bsu
     unstage = reset HEAD
     lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+    c = commit
+    cm = commit -m
     ck = checkout
     br = branch
     rename = branch -m `git rev-parse --abbrev-ref HEAD`
-    cm = commit
-    cmm = commit -m
     amend = commit -a --amend --no-edit
     wk = worktree
     dft = difftool

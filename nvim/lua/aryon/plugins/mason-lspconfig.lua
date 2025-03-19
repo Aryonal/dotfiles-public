@@ -39,6 +39,7 @@ return {
         dependencies = {
             "williamboman/mason.nvim",
             "williamboman/mason-lspconfig.nvim",
+            "netmute/ctags-lsp.nvim",
         },
         config = function()
             local lspconfig = require("lspconfig")
@@ -63,6 +64,11 @@ return {
 
                 lspconfig[server].setup(cfg)
             end
+
+            local cfg = lsp.default
+            cfg.filetypes = require("aryon.config").ctags.languages
+
+            lspconfig.ctags_lsp.setup(cfg)
         end,
     },
 }

@@ -16,6 +16,11 @@ local cfg = {
     colors = {
         background = "dark",
     },
+    ctags = {
+        languages = {
+            "kotlin",
+        },
+    },
     lsp = {
         semantic_tokens = false,
         inlay_hints = false,
@@ -63,7 +68,7 @@ local cfg = {
             hover = "K",
             goto_definition = "gd",
             goto_references = "gr",
-            goto_implementations = "gi",
+            goto_implementations = "gI",
             goto_type_defenitions = "gD",
             show_diagnostics_inline = "<leader>e",
             show_diagnostics_float_buffer = "<leader>q",

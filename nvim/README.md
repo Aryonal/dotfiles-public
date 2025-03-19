@@ -1,7 +1,7 @@
 # Neovim configs & Lua playground
 
 ```
-Validated on neovim 0.10.0
+Validated on neovim 0.10.4
 ```
 
 ## Keymaps
@@ -18,3 +18,5 @@ use `WhichKey` to find all keymaps.
 - (optional) rust (cargo)
 - (optional) fzf
 - (optional) nerd-fonts
+- (optional) universal-ctags
+- (optional) ctags-lsp

@@ -60,3 +60,6 @@ o.splitbelow = true
 -- :h sessionoptions
 -- default "blank,buffers,curdir,folds,help,tabpages,winsize,terminal"
 -- o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,terminal"
+
+-- ctags
+o.tags = "./tags;,tags;"

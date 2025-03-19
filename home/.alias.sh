@@ -184,4 +184,7 @@ if command -v n &> /dev/null; then
     export PATH=$N_PREFIX/bin:$PATH
 fi
 
+# cargo
+[[ -f $HOME/.cargo/env ]] && . "$HOME/.cargo/env"
+
 alias rm="echo 'use trash instead'"

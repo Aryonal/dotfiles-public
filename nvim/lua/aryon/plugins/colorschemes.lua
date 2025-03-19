@@ -44,6 +44,14 @@ local themes = {
             vim.cmd("colorscheme tokyonight-night")
         end,
     },
+    {
+        "EdenEast/nightfox.nvim",
+        enabled = false,
+        config = function()
+            require('nightfox').setup()
+            vim.cmd("colorscheme nightfox")
+        end
+    },
 }
 
 for i, plugin in ipairs(themes) do

@@ -28,6 +28,11 @@ local function previewer_maker_factory(previewers, factory_opts)
     end
 end
 
+local function with_theme(opts)
+    opts.theme = "ivy"
+    return opts
+end
+
 return {
     {
         "nvim-telescope/telescope.nvim",
@@ -45,17 +50,19 @@ return {
                     "lewis6991/gitsigns.nvim",
                 }
             },
+            { "nvim-telescope/telescope-ui-select.nvim" },
         },
+        event = "VeryLazy", -- for hijack vim.ui.select
         keys = {
             {
                 ";t",
-                "<cmd>Telescope<CR>",
-                desc = "[Telescope] Builtin",
+                "<cmd>Telescope tags<CR>",
+                desc = "[Telescope] Tags",
             },
             {
-                ";a",
-                "<cmd>Telescope aerial<CR>",
-                desc = "[Telescope] Aerial",
+                ";T",
+                "<cmd>Telescope current_buffer_tags<CR>",
+                desc = "[Telescope] Current buffer tags",
             },
             {
                 ";g",
@@ -161,23 +168,6 @@ return {
                 "<cmd>Telescope lsp_type_definitions<CR>",
                 desc = "[LSP] Type definitions",
             },
-            -- copilot chat
-            -- {
-            --     ";ch",
-            --     function()
-            --         local actions = require("CopilotChat.actions")
-            --         require("CopilotChat.integrations.telescope").pick(actions.help_actions())
-            --     end,
-            --     desc = "[CopilotChat] Help actions",
-            -- },
-            -- {
-            --     ";cp",
-            --     function()
-            --         local actions = require("CopilotChat.actions")
-            --         require("CopilotChat.integrations.telescope").pick(actions.prompt_actions())
-            --     end,
-            --     desc = "[CopilotChat] Prompt actions",
-            -- },
         },
         cmd = {
             "Telescope",
@@ -272,39 +262,26 @@ return {
                     wrap_results = true,
                 },
                 pickers = {
-                    builtin = {
-                        -- theme = "dropdown",
+                    builtin = with_theme {
                         initial_mode = "insert",
                     },
-                    buffers = {
-                        -- theme = "dropdown",
+                    buffers = with_theme {
                         initial_mode = "insert",
                         show_all_buffers = true,
                     },
-                    find_files = {
-                        -- theme = "dropdown",
+                    find_files = with_theme {
                         initial_mode = "insert",
                         find_command = { -- find_files respects gitignore
                             "fd",
                             "--hidden",
                             "--exclude=.git/",
                             "--type=f",
-                            -- "rg",
-                            -- "--files",
-                            -- "--smart-case",
-                            -- "--hidden",      -- add hidden file grep
-                            -- "--glob=!.git/", -- REF: https://github.com/BurntSushi/ripgrep/discussions/1578#discussioncomment-1723394
-                            -- "--glob=!submodules/",
-                            -- "--glob=!node_modules/",
-                            -- "--glob=!vendor/",
                         },
                     },
-                    commands = {
-                        -- theme = "dropdown",
+                    commands = with_theme {
                         initial_mode = "insert",
                     },
-                    git_status = {
-                        -- theme = "dropdown",
+                    git_status = with_theme {
                         git_icons = {
                             added = icons.git_add,
                             changed = icons.git_unstaged,
@@ -315,51 +292,44 @@ return {
                             untracked = icons.git_untracked,
                         },
                     },
-                    live_grep = {
-                        -- theme = "dropdown",
+                    live_grep = with_theme {
                         initial_mode = "insert",
                     },
-                    grep_string = {
-                        -- theme = "dropdown",
-                        initial_mode = "normal",
+                    grep_string = with_theme {
+                        show_line = false, -- doesn't work
+                        initial_mode = "insert",
+                        wrap_results = false,
                     },
-                    help_tags = {
-                        -- theme = "dropdown",
+                    help_tags = with_theme {
                         initial_mode = "insert",
                     },
-                    lsp_implementations = {
-                        -- theme = "dropdown",
+                    lsp_implementations = with_theme {
                         show_line = false,   -- show only filename and loc
                         jump_type = "never", -- never jump
                     },
-                    lsp_definitions = {
-                        -- theme = "dropdown",
+                    lsp_definitions = with_theme {
                         show_line = false,
                         jump_type = "never",
                     },
-                    lsp_references = {
-                        -- theme = "dropdown",
+                    lsp_references = with_theme {
                         show_line = false,
                         jump_type = "never",
                         include_current_line = false,
                     },
-                    diagnostics = {
-                        -- theme = "dropdown",
+                    diagnostics = with_theme {
                         show_line = false,
                     },
-                    resume = {
-                        -- theme = "dropdown",
+                    resume = with_theme {
                         initial_mode = "normal",
                     },
-                    current_buffer_fuzzy_find = {
-                        theme = "dropdown",
+                    current_buffer_fuzzy_find = with_theme {
                         initial_mode = "insert",
-                        show_line = false,
                     },
+                    tags = with_theme {},
+                    current_buffer_tags = with_theme {},
                 },
                 extensions = {
-                    live_grep_args = {
-                        -- theme = "dropdown",
+                    live_grep_args = with_theme {
                         show_line = false,
                         initial_mode = "insert",
                         auto_quoting = true, -- enable/disable auto-quoting
@@ -376,8 +346,7 @@ return {
                         override_file_sorter = true,    -- override the file sorter
                         case_mode = "smart_case",       -- or "ignore_case" or "respect_case"
                     },
-                    lazy = {
-                        -- theme = "dropdown",
+                    lazy = with_theme {
                         -- Whether or not to show the icon in the first column
                         show_icon = true,
                         -- Mappings for the actions
@@ -392,6 +361,11 @@ return {
                         },
                         -- Other telescope configuration options
                     },
+                    ["ui-select"] = {
+                        require("telescope.themes").get_ivy {
+                            initial_mode = "insert",
+                        }
+                    },
                 },
             })
 
@@ -401,6 +375,7 @@ return {
             telescope.load_extension("fzf")
             telescope.load_extension("live_grep_args")
             telescope.load_extension("git_signs")
+            telescope.load_extension("ui-select")
 
             local set_abbr_batch = require("utils.vim").batch_set_abbr
             local abbrs = {
