@@ -42,18 +42,6 @@ return {
             },
             sources = {
                 default = { "lsp", "path", "snippets", "buffer", "copilot", "markdown" },
-                cmdline = function()
-                    local type = vim.fn.getcmdtype()
-                    -- Search forward and backward
-                    if type == "/" or type == "?" then
-                        return { "buffer" }
-                    end
-                    -- Commands
-                    if type == ":" then
-                        return { "cmdline" }
-                    end
-                    return {}
-                end,
                 providers = {
                     markdown = {
                         name = "RenderMarkdown",
@@ -121,6 +109,33 @@ return {
                         }
 
                     },
+                },
+            },
+            cmdline = {
+                enabled = true,
+                sources = function()
+                    local type = vim.fn.getcmdtype()
+                    -- Search forward and backward
+                    if type == "/" or type == "?" then
+                        return { "buffer" }
+                    end
+                    -- Commands
+                    if type == ":" then
+                        return { "cmdline" }
+                    end
+                    return {}
+                end,
+                keymap = {
+                    preset = "inherit",
+
+                    ["<CR>"] = { "accept_and_enter", "fallback" },
+                },
+                completion = {
+                    menu = { auto_show = true },
+                    list = {
+                        selection = { preselect = false, auto_insert = true },
+                    },
+
                 },
             },
         },

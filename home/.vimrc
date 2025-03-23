@@ -69,7 +69,7 @@ nnoremap ge :tabprev<CR>
 
 nnoremap <C-\> :e .<CR>
 
-nnoremap sn :nohl<CR>
+nnoremap <Esc><Esc> :nohl<CR>
 
 " inoremap <C-w> <C-o>vbd
 inoremap <C-a> <C-o>I

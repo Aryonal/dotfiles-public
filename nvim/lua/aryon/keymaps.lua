@@ -4,6 +4,7 @@ local cfg = require("aryon.config").keymaps
 -- local all_modes = { "n", "i", "v", "t", "c" }
 
 local fixed_bindings = {
+
     -- DON'TS
     -- { "d",         [["_d]],             desc = "Do Not Cut",           mode = { "n", "v" } },
     -- { "<C-h>",     "<Left>",            desc = "Left",                 mode = all_modes },
@@ -11,6 +12,7 @@ local fixed_bindings = {
     -- { "<C-k>",     "<Up>",              desc = "Up",                   mode = all_modes },
     -- { "<C-l>",     "<Right>",           desc = "Right",                mode = all_modes },
     -- { [[<Esc>]],   [[<C-\><C-n>]],      desc = "[Term] Normal mode",   mode = "t" },
+
     { "+",          "<C-a>",             desc = "Incr" },
     { "-",          "<C-x>",             desc = "Decr" },
     { "<C-[>",      "<Esc>",             desc = "Esc",                  mode = { "i", "n" } },
@@ -23,16 +25,13 @@ local fixed_bindings = {
     { "c",          [["_c]],             desc = "Do Not Cut",           mode = { "n", "v" } },
     { "ge",         "<cmd>tabp<CR>",     desc = "[Tab] Previous" },
     { "gt",         "<cmd>tabnext<CR>",  desc = "[Tab] Next" },
-    -- { "p",         [["_dP]],            desc = "Do Not Cut",           mode = "v" }, -- use P
-    { "sn",         "<cmd>nohl<CR>",     desc = "No search highlight" },
     { "te",         "<C-w>s<C-w>T",      desc = "[Tab] New from buffer" },
-    { "<C-w>t",     "<C-w>s<C-w>T",      desc = "[Tab] New from buffer" },
     { "tn",         "<cmd>tabnew<CR>",   desc = "[Tab] New" },
     { "tq",         "<cmd>tabclose<CR>", desc = "[Tab] Close" },
     { "tt",         "<cmd>sp +term<CR>", desc = "[Term] New" },
     { cfg.ed.fold,  "za",                desc = "Toggle folding" },
 
-    -- { [[<C-\>]],   [[<C-\><C-n>]],      desc = "[Term] Normal mode",   mode = "t" },
+    { "<Esc><Esc>", "<cmd>nohl<CR>",     desc = "No search highlight",  mode = { "n" } },
     { "<Esc><Esc>", [[<C-\><C-n>]],      desc = "[Term] Normal mode",   mode = "t" },
     { "<BS>",       "<C-g>u<BS>",        desc = "Keep insert",          mode = "v" },
 }

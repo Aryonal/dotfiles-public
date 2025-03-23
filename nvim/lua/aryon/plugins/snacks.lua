@@ -22,6 +22,10 @@ return {
                 enabled = true,
                 left = { "mark", "sign" }, -- priority of signs on the left (high to low)
                 right = { "git", "fold" }, -- priority of signs on the right (high to low)
+                git = {
+                    -- patterns to match Git signs
+                    patterns = { "GitSign", "MiniDiffSign" },
+                },
             },
             words = { enabled = false },
         },
