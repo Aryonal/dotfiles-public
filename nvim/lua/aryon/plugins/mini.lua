@@ -1,14 +1,8 @@
 return {
     {
-        "echasnovski/mini.icons",
-        enabled = false,
-        lazy = true,
+        "echasnovski/mini.nvim",
         version = "*",
-    },
-    {
-        "echasnovski/mini.splitjoin",
-        version = false,
-        event = require("utils.lazy").events_presets.LazyFile,
+        event = "VeryLazy",
         keys = {
             {
                 "<leader>j",
@@ -17,33 +11,31 @@ return {
                 end,
                 desc = "[SplitJoin] Toggle",
             },
+            {
+                "gJ",
+                function() require("mini.splitjoin").toggle() end,
+                desc = "[SplitJoin] Toggle",
+            },
         },
         config = function()
+            -- trailspace
+            require("mini.trailspace").setup()
+
+            -- splitjoin
             require("mini.splitjoin").setup({
                 mappings = {
                     toggle = "",
                 }
             })
 
-            local set_cmd = require("utils.vim").set_cmd
-            local set_abbr = require("utils.vim").set_abbr
-
-            set_cmd({
+            require("utils.vim").set_cmd({
                 cmd = "SplitJoinToggle",
                 desc = "[SplitJoin] Toggle",
-                exec = function()
-                    require("mini.splitjoin").toggle()
-                end,
+                abbr = "sj",
+                exec = function() require("mini.splitjoin").toggle() end,
             })
-            set_abbr("sj", "SplitJoinToggle")
-        end,
-    },
-    {
-        "echasnovski/mini.pairs",
-        enabled = true,
-        version = false,
-        event = "InsertEnter",
-        config = function()
+
+            -- pairs
             require("mini.pairs").setup({
                 modes = { insert = true, command = false, terminal = false },
                 mappings = {
@@ -63,37 +55,6 @@ return {
                     ["`"] = { action = "closeopen", pair = "``", neigh_pattern = " [\n ]", register = { cr = false } },
                 },
             })
-        end
-    },
-    {
-        "echasnovski/mini.statusline",
-        version = "*",
-        enabled = false,
-        config = function()
-            local stl = require("utils.statusline")
-            local cfg = require("aryon.config")
-
-            require("mini.statusline").setup(
-            -- No need to copy this inside `setup()`. Will be used automatically.
-                {
-                    -- Content of statusline as functions which return statusline string. See
-                    -- `:h statusline` and code of default contents (used instead of `nil`).
-                    content = {
-                        -- Content for active window
-                        active = stl.setup(cfg.ui.statusline).statusline_string,
-                        -- Content for inactive window(s)
-                        inactive = stl.setup(cfg.ui.statusline).inactive_statusline_string,
-                    },
-
-                    -- Whether to use icons by default
-                    use_icons = false,
-
-                    -- Whether to set Vim's settings for statusline (make it always shown with
-                    -- 'laststatus' set to 2).
-                    -- To use global statusline, set this to `false` and 'laststatus' to 3.
-                    set_vim_settings = true,
-                }
-            )
-        end
+        end,
     },
 }

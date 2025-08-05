@@ -3,11 +3,15 @@ local keymaps = {
     diff_head = "<leader>do",
     close = "<leader>dc",
     history_current_file = "<leader>dh",
+    history = "<leader>dH",
 }
 
 return {
     "sindrets/diffview.nvim", -- tool for git diff view
     enabled = true,
+    dependencies = {
+        "nvim-lua/plenary.nvim",
+    },
     cmd = {
         "DiffviewOpen",
         "DiffviewFileHistory",
@@ -33,59 +37,31 @@ return {
             "<cmd>DiffviewFileHistory %%<CR>",
             desc = "[Diffview] Current file history",
         },
+        {
+            keymaps.history,
+            "<cmd>DiffviewFileHistory<CR>",
+            desc = "[Diffview] History",
+        },
     },
-    dependencies = "nvim-lua/plenary.nvim",
     config = function()
         local actions = require("diffview.actions")
-        local signs = require("share.icons")
+        local icons = require("assets.icons")
 
         require("diffview").setup({
             -- diff_binaries = false,    -- Show diffs for binaries
             -- enhanced_diff_hl = false, -- See ':h diffview-config-enhanced_diff_hl'
             use_icons = false, -- Requires nvim-web-devicons
             icons = {
-                -- Only applies when use_icons is true.
-                folder_closed = signs.arrow_right,
-                folder_open = signs.arrow_open,
-                -- folder_closed = "",
-                -- folder_open = "",
+                folder_closed = icons.arrow_right,
+                folder_open = icons.arrow_open,
             },
             signs = {
-                fold_closed = signs.arrow_right,
-                fold_open = signs.arrow_open,
+                fold_closed = icons.arrow_right,
+                fold_open = icons.arrow_open,
             },
-            -- file_panel = {
-            --   listing_style = "tree",             -- One of 'list' or 'tree'
-            --   tree_options = {                    -- Only applies when listing_style is 'tree'
-            --     flatten_dirs = true,              -- Flatten dirs that only contain one single dir
-            --     folder_statuses = "only_folded",  -- One of 'never', 'only_folded' or 'always'.
-            --   },
-            --   win_config = {                      -- See ':h diffview-config-win_config'
-            --     position = "left",
-            --     width = 35,
-            --   },
-            -- },
-            -- file_history_panel = {
-            --   log_options = {   -- See ':h diffview-config-log_options'
-            --     single_file = {
-            --       diff_merges = "combined",
-            --     },
-            --     multi_file = {
-            --       diff_merges = "first-parent",
-            --     },
-            --   },
-            --   win_config = {    -- See ':h diffview-config-win_config'
-            --     position = "bottom",
-            --     height = 16,
-            --   },
-            -- },
-            -- commit_log_panel = {
-            --   win_config = {},  -- See ':h diffview-config-win_config'
-            -- },
-            -- default_args = {    -- Default args prepended to the arg-list for the listed commands
-            --   DiffviewOpen = {},
-            --   DiffviewFileHistory = {},
-            -- },
+            default_args = { -- Default args prepended to the arg-list for the listed commands
+                DiffviewOpen = { "--imply-local" },
+            },
             -- hooks = {},         -- See ':h diffview-config-hooks'
             keymaps = {
                 disable_defaults = false, -- Disable the default keymaps
@@ -99,17 +75,17 @@ return {
                     { "n", "<C-x>",      actions.goto_file_split,           { desc = "Open the file in a new split" } },
                     { "n", "<C-w>gf",    false },
                     { "n", "<C-t>",      actions.goto_file_tab,             { desc = "Open the file in a new tabpage" } },
-                    { "n", "g?",         false },
+                    { "n", "g?",         actions.help({ "view", "diff1" }), { desc = "Open the help panel" } },
                     { "n", "?",          actions.help({ "view", "diff1" }), { desc = "Open the help panel" } },
                 },
                 diff1 = {
                     -- Mappings in single window diff layouts
-                    { "n", "g?", false },
+                    { "n", "g?", actions.help({ "view", "diff1" }), { desc = "Open the help panel" } },
                     { "n", "?",  actions.help({ "view", "diff1" }), { desc = "Open the help panel" } },
                 },
                 diff2 = {
                     -- Mappings in 2-way diff layouts
-                    { "n", "g?", false },
+                    { "n", "g?", actions.help({ "view", "diff2" }), { desc = "Open the help panel" } },
                     { "n", "?",  actions.help({ "view", "diff2" }), { desc = "Open the help panel" } },
                 },
                 diff3 = {
@@ -126,7 +102,7 @@ return {
                     --     actions.diffget("theirs"),
                     --     { desc = "Obtain the diff hunk from the THEIRS version of the file" },
                     -- },
-                    { "n", "g?", false },
+                    { "n", "g?", actions.help({ "view", "diff3" }), { desc = "Open the help panel" } },
                     { "n", "?",  actions.help({ "view", "diff3" }), { desc = "Open the help panel" } },
                 },
                 diff4 = {
@@ -149,7 +125,7 @@ return {
                     --     actions.diffget("theirs"),
                     --     { desc = "Obtain the diff hunk from the THEIRS version of the file" },
                     -- },
-                    { "n", "g?", false },
+                    { "n", "g?", actions.help({ "view", "diff4" }), { desc = "Open the help panel" } },
                     { "n", "?",  actions.help({ "view", "diff4" }), { desc = "Open the help panel" } },
                 },
                 file_panel = {
@@ -180,12 +156,12 @@ return {
                     { "n", "<C-x>",      actions.goto_file_split,            { desc = "Open the file in a new split" } },
                     { "n", "<C-w>gf",    false },
                     { "n", "<C-t>",      actions.goto_file_tab,              { desc = "Open the file in a new tabpage" } },
-                    { "n", "g?",         false },
+                    { "n", "g?",         actions.help("file_history_panel"), { desc = "Open the help panel" } },
                     { "n", "?",          actions.help("file_history_panel"), { desc = "Open the help panel" } },
                 },
                 option_panel = {
                     { "n", "q",  actions.close,                { desc = "Close the panel" } },
-                    { "n", "g?", false },
+                    { "n", "g?", actions.help("option_panel"), { desc = "Open the help panel" } },
                     { "n", "?",  actions.help("option_panel"), { desc = "Open the help panel" } },
                 },
                 help_panel = {

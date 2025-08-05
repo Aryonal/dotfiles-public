@@ -1,21 +1,23 @@
 [core]
     editor = nvim
 [alias]
-    st = status -bsu
-    unstage = reset HEAD
-    lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
-    c = commit
-    cm = commit -m
-    ck = checkout
-    br = branch
-    rename = branch -m `git rev-parse --abbrev-ref HEAD`
     amend = commit -a --amend --no-edit
-    wk = worktree
-    dft = difftool
+    br = branch
+    c = commit
+    ck = checkout
+    cm = commit -m
+    df = diff --ext-diff
     dfo = diff origin/HEAD --ext-diff
+    dft = difftool
     last = show HEAD --ext-diff
+    lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
     recent = log -p --ext-diff
-    sync = !git add -A && git status && git commit -m \""sync: $(date '+%Y-%m-%d %H:%M')"\"
+    rename = branch -m `git rev-parse --abbrev-ref HEAD`
+    st = status -bsu
+    p = pull
+    ps = push
+    unstage = reset HEAD
+    wk = worktree
 
 [color]
     pager = true
@@ -23,10 +25,13 @@
     tool = difftastic
 [difftool]
     prompt = false
-[difftool "difftastic"]
-    cmd = difft "$LOCAL" "$REMOTE"
 [pager]
     difftool = true
+[difftool "difftastic"]
+    cmd = difft "$LOCAL" "$REMOTE"
+[difftool "nvimdiff"]
+    ; must turn off pager
+    cmd = "nvim -d \"$LOCAL\" \"$REMOTE\""
 
 [filter "lfs"]
     clean = git-lfs clean -- %f

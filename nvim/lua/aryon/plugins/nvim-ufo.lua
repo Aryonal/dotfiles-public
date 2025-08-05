@@ -1,11 +1,11 @@
 ---@diagnostic disable: unused-local
 return {
     "kevinhwang91/nvim-ufo",
+    enabled = false,
     version = "*",
     dependencies = {
         "kevinhwang91/promise-async",
         "williamboman/mason-lspconfig.nvim", -- it should be setup after lsp is set
-        "neovim/nvim-lspconfig",
         "nvim-treesitter/nvim-treesitter",
     },
     event = require("utils.lazy").events_presets.LazyFile,
@@ -14,13 +14,14 @@ return {
         vim.o.foldlevel = 99   -- Using ufo provider need a large value, feel free to decrease the value
         vim.o.foldlevelstart = 99
         vim.o.foldenable = true
-        vim.o.fillchars = [[fold: ,foldopen:,foldsep: ,foldclose:]]
+        vim.o.fillchars = [[fold: ,foldopen:,foldsep: ,foldclose:>]]
+        -- vim.o.fillchars = [[fold: ,foldopen:,foldsep: ,foldclose:]]
 
         ---@diagnostic disable-next-line: missing-fields
         require("ufo").setup({
             fold_virt_text_handler = function(virtText, lnum, endLnum, width, truncate)
                 local newVirtText = {}
-                local suffix = (" %d "):format(endLnum - lnum + 1)
+                local suffix = ("... %d lines "):format(endLnum - lnum + 1)
                 local sufWidth = vim.fn.strdisplaywidth(suffix)
                 local targetWidth = width - sufWidth
                 local curWidth = 0
@@ -42,20 +43,15 @@ return {
                     end
                     curWidth = curWidth + chunkWidth
                 end
-                table.insert(newVirtText, { suffix, "MoreMsg" })
+
+                -- -- fill the rest of line with "-"
+                -- if curWidth < targetWidth then
+                --     suffix = suffix .. ("-"):rep(targetWidth - curWidth)
+                -- end
+                table.insert(newVirtText, { suffix, "UfoFoldedEllipsis" }) -- or "MoreMsg"
                 return newVirtText
             end,
-            -- use treesitter
-            -- provider_selector = function(bufnr, filetype, buftype)
-            --     return { "treesitter", "indent" }
-            -- end,
         })
-
-        -- TODO: use statuscol to remove the depth number
-        -- require("statuscol").setup({
-        --     foldfunc = "builtin",
-        --     setopt = true,
-        -- })
 
         -- TODO: use global keymapping settings
         vim.keymap.set("n", require("aryon.config").keymaps.lsp.hover, function()

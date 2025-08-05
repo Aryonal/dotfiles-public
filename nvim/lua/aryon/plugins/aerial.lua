@@ -10,7 +10,7 @@ return {
             -- Priority list of preferred backends for aerial.
             -- This can be a filetype map (see :help aerial-filetype-map)
             backends = { "lsp", "treesitter", "markdown", "man" },
-            icons = require("share.icons").lsp_kind,
+            icons = require("assets.icons").lsp_kind,
             filter_kind = {
                 -- "Array",
                 -- "Boolean",
@@ -20,7 +20,7 @@ return {
                 -- "Enum",
                 -- "EnumMember",
                 -- "Event",
-                -- "Field",
+                "Field",
                 -- "File",
                 "Function",
                 "Interface",
@@ -33,7 +33,7 @@ return {
                 -- "Object",
                 -- "Operator",
                 -- "Package",
-                -- "Property",
+                "Property",
                 -- "String",
                 -- "Struct",
                 -- "TypeParameter",

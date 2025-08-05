@@ -1,65 +1,80 @@
-local o = vim.o   -- options
-local wo = vim.wo -- window options
--- local bo = vim.bo -- buffer options
+vim.cmd([[
+" Common setups across editors
+
+" language ja_JP
+
+" Set global options
+set autoindent
+set autoread
+set dir=/tmp
+set expandtab
+set hidden
+set hlsearch
+set ignorecase
+set incsearch
+set infercase
+" set laststatus=2
+set mouse=a
+set smartcase
+set swapfile
+set title
+set inccommand=split
+" set spell
+" set spelllang=en
+
+" Indentation
+set smartindent
+set shiftwidth=4
+set tabstop=4
+set softtabstop=4
+set breakindent
+
+" NonText
+" set list
+" set listchars+=space:⋅
+" set listchars+=eol:↴
+" set listchars+=tab:»·
+
+set colorcolumn=80
+set termguicolors
+set bg=dark " Assuming bg is dark
+
+set equalalways
+
+set wildignore+=*/node_modules/*,*/vendor/*
+" set shortmess+=I " disable :intro
+
+" Window-local options
+" set cursorcolumn
+set cursorline
+set number
+set norelativenumber
+set wrap
+
+" Window split
+set splitright
+set splitbelow
+
+" Session options
+" set sessionoptions=blank,buffers,curdir,folds,help,tabpages,winsize,terminal
+
+" Ctags
+set tags=./tags;,tags;
+]])
+
+--- Override base.vim
+local o = vim.o -- options
 
 local style = require("aryon.config").code_style
-local bg = require("aryon.config").colors.background
 
--- global options
--- o.updatetime = 1000 -- the timeout for CursorHold
-o.scrolloff = 3 -- keep cursor vertically centralized
-o.autoindent = true
-o.autoread = true
-o.dir = "/tmp"
-o.expandtab = true
-o.hidden = true
-o.hlsearch = true
-o.ignorecase = true
-o.incsearch = true
-o.infercase = true
-o.laststatus = 2
-o.mouse = "a"
-o.smartcase = true
-o.swapfile = true
-o.title = true
--- o.spell = true
--- o.spelllang = "en"
-
--- Indentation
-o.smartindent = true
-o.shiftwidth = 4
-o.tabstop = 4
-o.softtabstop = 4
-
--- NonText
-vim.opt.list = true
--- vim.opt.listchars:append("space:⋅")
--- vim.opt.listchars:append("eol:↴")
-vim.opt.listchars:append("tab:» ") -- ⇥
-
+o.scrolloff = 3 -- keep cursor vertically centralized]])
 o.colorcolumn = tostring(style.MAX_LENGTH)
-o.termguicolors = true
--- o.bg = bg
+o.undofile = true
+-- o.showmode = false -- don't show mode in command line
 
-o.equalalways = true
+o.list = true
+vim.opt.listchars = { tab = "» ", nbsp = "␣", trail = "·", extends = "›", precedes = "‹" }
 
-vim.opt.wildignore:append({ "*/node_modules/*", "*/vendor/*" })
--- vim.opt.shortmess:append({ I = true }) -- disable :intro
-
--- window-local options
--- wo.cursorcolumn = true
-wo.cursorline = true
-wo.number = true
-wo.relativenumber = false
-wo.wrap = true
-
--- window split
-o.splitright = true
-o.splitbelow = true
-
--- :h sessionoptions
--- default "blank,buffers,curdir,folds,help,tabpages,winsize,terminal"
--- o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,terminal"
-
--- ctags
-o.tags = "./tags;,tags;"
+-- cursor
+-- Set cursor shapes and blinking
+-- vim.opt.guicursor = "n-v-c:block-Cursor/lCursor-blinkon1,i-ci:ver25-Cursor/lCursor-blinkon1,r-cr:hor20-Cursor/lCursor-blinkon1"

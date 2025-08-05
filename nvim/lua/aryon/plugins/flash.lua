@@ -2,14 +2,20 @@ return {
     {
         "folke/flash.nvim",
         enabled = true,
-        event = require("utils.lazy").events_presets.SetA,
+        event = require("utils.lazy").events_presets.LazyFileAndVeryLazy,
         keys = {
-            { "s",     mode = { "n", "x", "o" }, function() require("flash").jump() end,              desc = "Flash" },
-            -- { "S",     mode = { "n", "x", "o" }, function() require("flash").treesitter() end,        desc = "Flash Treesitter" }, -- conflict with surround
+            { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end,       desc = "Flash" },
+            { "S", mode = { "n" },           function() require("flash").treesitter() end, desc = "Flash Treesitter" }, -- conflict with surround in visual
             -- { "r",     mode = "o",               function() require("flash").remote() end,            desc = "Remote Flash" },
             -- { "R",     mode = { "o", "x" },      function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
             -- { "<c-s>", mode = { "c" },           function() require("flash").toggle() end,            desc = "Toggle Flash Search" },
         },
-        opts = {},
+        opts = {
+            modes = {
+                char = {
+                    enabled = false, -- f F t T ; ,
+                }
+            }
+        },
     }
 }

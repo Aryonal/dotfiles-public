@@ -1,5 +1,5 @@
-local wrap_hl = require("utils.statusline.utils").wrap_hl
-local ctx_get_buf = require("utils.statusline.utils").ctx_get_buf
+local wrap_hl = require("customs.statusline.utils").wrap_hl
+local ctx_get_buf = require("customs.statusline.utils").ctx_get_buf
 
 local M = {
     cfg = {

@@ -137,15 +137,49 @@ then
     alias tl="tmux ls"
     alias ts="tmux new -s"
 
-    function tm () {
+    function t () {
+        # helper with -h or --help
+        if [[ $1 == "-h" || $1 == "--help" ]]; then
+            echo "Usage: tm [session_name]"
+            echo ""
+            echo "<session_name>\tName of the new session. If not provided, an existing session will be attached."
+            echo "\t\tIf a directory can be found with the name using z, new session will be in that directory."
+            echo ""
+            echo "This command can be used in a tmux session as well."
+            return 0
+        fi
+
+
+        # if $TMUX is set, make new session command detached: tmux new-session -d
+        if [[ -n $TMUX ]]; then
+            local __ts="tmux new-session -d -s"
+            local __sw="tmux switch-client -t"
+
+            if ! [[ -n $@ ]]; then
+                echo "already in TMUX"
+                return 0
+            elif tmux list-sessions -F \#S | grep $1 &> /dev/null; then
+                tmux switch-client -t $1
+                return $?
+            else
+                if command -v z &> /dev/null; then
+                    (z $1 && eval $__ts $1) &>/dev/null && eval $__sw $1  || eval $__ts $1 && eval $__sw $1
+                    return $?
+                fi
+                eval $__ts $1 && eval $__sw $1
+                return $?
+            fi
+            return 0
+        fi
+
         if ! [[ -n $@ ]]; then
             if tmux list-sessions &> /dev/null; then
                 tmux attach
                 return $?
             fi
-            tmux
+            tmux new-session
             return $?
-        elif tmux list-sessions | grep $1 &> /dev/null; then
+        elif tmux list-sessions -F \#S | grep $1 &> /dev/null; then
             tmux attach -d -t $1
             return $?
         else
@@ -153,7 +187,7 @@ then
                 (z $1 && tmux new-session -s $1) &>/dev/null || tmux new-session -s $1
                 return $?
             fi
-            tmux new-session -s $1
+            eval $__ts -s $1
             return $?
         fi
     }
@@ -169,13 +203,12 @@ if command -v nvim &>/dev/null; then
     export KUBE_EDITOR="nvim"
     export EDITOR="nvim"
     alias vi=nvim
+    alias v=nvim
 
-    # alias vim=nvim
-fi
-
-# fzf
-if command -v fzf &> /dev/null; then
-    eval "$(fzf --zsh)"
+    # flaky?
+    alias vs="nvim +LoadSession"
+    alias vd="nvim +'DiffviewOpen --imply-local'"
+    alias vdo="nvim +'DiffviewOpen origin/HEAD --imply-local'"
 fi
 
 # n
@@ -183,6 +216,55 @@ if command -v n &> /dev/null; then
     export N_PREFIX="${XDG_DATA_HOME:-$HOME/.local/share}/n"
     export PATH=$N_PREFIX/bin:$PATH
 fi
+
+# fzf
+# Open in tmux popup if on tmux, otherwise use --height mode
+export FZF_CTRL_T_COMMAND='fd
+    --hidden
+    --follow
+    --exclude=.git
+    --exclude=.cache
+    --exclude=node_modules
+    --exclude=vendor
+    --exclude=__pycache__
+    --exclude=*.egg-info
+    --exclude=*.egg
+    --exclude=*.pyc
+    --exclude=*.pyo
+    --exclude=*.swp
+    --exclude=*.swo'
+export FZF_CTRL_T_OPTS="
+    --height 50%
+    --layout reverse
+    --border top
+    --preview
+        'if [[ -f {} ]]; then
+            if [[ \$(file --mime {}) =~ binary ]]; then
+                echo {} is a binary file
+            else
+                bat --style=numbers --color=always --line-range :500 {} 2>/dev/null || cat {}
+            fi
+        elif [[ -d {} ]]; then
+            ls -la --color=always {}
+        fi'
+    --preview-window=right:50%
+    --bind 'ctrl-a:select-all+accept'
+    --bind 'ctrl-o:execute($EDITOR {})'
+    --bind 'ctrl-/:toggle-preview'
+    --bind 'ctrl-y:preview-half-page-up'
+    --bind 'ctrl-e:preview-half-page-down'
+    --ansi"
+export FZF_CTRL_R_OPTS="$FZF_CTRL_T_OPTS --preview-window=hidden"
+export FZF_CTRL_G_OPTS="$FZF_CTRL_T_OPTS
+    --preview '
+        git diff HEAD --color=always {-1} 2>/dev/null ||
+            git diff HEAD --color=always --cached {-1} 2>/dev/null ||
+            bat --style=numbers --color=always --line-range :500 {-1} 2>/dev/null ||
+            cat {-1} 2>/dev/null ||
+            echo Unable to preview file: {-1}'
+    --bind 'ctrl-o:execute($EDITOR {-1})'
+    --bind 'enter:execute($EDITOR {-1})'
+"
 
 # cargo
 [[ -f $HOME/.cargo/env ]] && . "$HOME/.cargo/env"

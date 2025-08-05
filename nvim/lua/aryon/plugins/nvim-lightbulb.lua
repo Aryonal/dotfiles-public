@@ -10,7 +10,7 @@ return {
             },
             virtual_text = {
                 enabled = true,
-                text = require("share.icons").code_action_virt_text,
+                text = require("assets.icons").code_action_virt_text,
                 pos = "eol",
                 hl = "LightBulbVirtualText",
                 hl_mode = "combine",

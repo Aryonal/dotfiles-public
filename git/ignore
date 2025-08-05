@@ -21,3 +21,5 @@ kls_database.db
 
 # ctags
 tags
+
+**/.claude/settings.local.json

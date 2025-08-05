@@ -46,7 +46,7 @@ bindkey '^W' default-backward-delete-word
 # git clone --depth=1 https://github.com/agkozak/zsh-z $XDG_DATA_HOME/zsh/zsh-z
 [ -f $XDG_DATA_HOME/zsh/zsh-z/zsh-z.plugin.zsh ] && source $XDG_DATA_HOME/zsh/zsh-z/zsh-z.plugin.zsh
 [ -d $XDG_STATE_HOME/zsh ] || mkdir -p $XDG_STATE_HOME/zsh
-ZSHZ_DATA=$XDG_STATE_HOME/zsh/.z
+export ZSHZ_DATA=$XDG_STATE_HOME/zsh/.z
 
 # add p10k
 # REF: https://github.com/romkatv/powerlevel10k
@@ -57,7 +57,7 @@ ZSHZ_DATA=$XDG_STATE_HOME/zsh/.z
 # REF: https://github.com/zsh-users/zsh-autosuggestions
 # git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions $XDG_DATA_HOME/zsh/zsh-autosuggestions
 [ -f $XDG_DATA_HOME/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh ] && source $XDG_DATA_HOME/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
-ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
+export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
 # bindkey '^F' autosuggest-accept
 # bindkey '^E' autosuggest-accept
 
@@ -74,9 +74,112 @@ zstyle ":completion:*" menu select
 # git clone --depth=1 https://github.com/zsh-users/zsh-syntax-highlighting $XDG_DATA_HOME/zsh/zsh-syntax-highlighting
 [ -f $XDG_DATA_HOME/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ] && source $XDG_DATA_HOME/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
-# Use fzf key bindings
-# # Set up fzf key bindings and fuzzy completion
-# source <(fzf --zsh)
+
+function install-zsh-plugins() {
+    if [[ ! -d $XDG_DATA_HOME/zsh/zsh-completions ]]; then
+        echo "Installing zsh-completions..."
+        git clone --depth=1 https://github.com/zsh-users/zsh-completions $XDG_DATA_HOME/zsh/zsh-completions
+    else
+        echo "zsh-completions already installed"
+    fi
+
+    if [[ ! -d $XDG_DATA_HOME/zsh/zsh-z ]]; then
+        echo "\n\nInstalling zsh-z..."
+        git clone --depth=1 https://github.com/agkozak/zsh-z $XDG_DATA_HOME/zsh/zsh-z
+    else
+        echo "zsh-z already installed"
+    fi
+
+    if [[ ! -d $XDG_DATA_HOME/zsh/powerlevel10k ]]; then
+        echo "\n\nInstalling powerlevel10k..."
+        git clone --depth=1 https://github.com/romkatv/powerlevel10k.git $XDG_DATA_HOME/zsh/powerlevel10k
+    else
+        echo "powerlevel10k already installed"
+    fi
+
+    if [[ ! -d $XDG_DATA_HOME/zsh/zsh-autosuggestions ]]; then
+        echo "\n\nInstalling zsh-autosuggestions..."
+        git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions $XDG_DATA_HOME/zsh/zsh-autosuggestions
+    else
+        echo "zsh-autosuggestions already installed"
+    fi
+
+    if [[ ! -d $XDG_DATA_HOME/zsh/zsh-syntax-highlighting ]]; then
+        echo "\n\nInstalling zsh-syntax-highlighting..."
+        git clone --depth=1 https://github.com/zsh-users/zsh-syntax-highlighting $XDG_DATA_HOME/zsh/zsh-syntax-highlighting
+    else
+        echo "zsh-syntax-highlighting already installed"
+    fi
+
+    echo "\nDone"
+}
+
+
+function upgrade-zsh-plugins() {
+    if [[ -d $XDG_DATA_HOME/zsh/zsh-completions ]]; then
+        echo "Upgrading zsh-completions..."
+        (cd $XDG_DATA_HOME/zsh/zsh-completions && git pull)
+    fi
+
+    if [[ -d $XDG_DATA_HOME/zsh/powerlevel10k ]]; then
+        echo "\n\nUpgrading powerlevel10k..."
+        (cd $XDG_DATA_HOME/zsh/powerlevel10k && git pull)
+    fi
+
+    if [[ -d $XDG_DATA_HOME/zsh/zsh-autosuggestions ]]; then
+        echo "\n\nUpgrading zsh-autosuggestions..."
+        (cd $XDG_DATA_HOME/zsh/zsh-autosuggestions && git pull)
+    fi
+
+    if [[ -d $XDG_DATA_HOME/zsh/zsh-syntax-highlighting ]]; then
+        echo "\n\nUpgrading zsh-syntax-highlighting..."
+        (cd $XDG_DATA_HOME/zsh/zsh-syntax-highlighting && git pull)
+    fi
+
+    if [[ -d $XDG_DATA_HOME/zsh/zsh-z ]]; then
+        echo "\n\nUpgrading zsh-z..."
+        (cd $XDG_DATA_HOME/zsh/zsh-z && git pull)
+    fi
+
+    echo "\nDone"
+}
+
+# starship prompt
+# if command -v starship &> /dev/null; then
+#     eval "$(starship init zsh)"
+#
+#     export STARSHIP_CACHE=$XDG_CACHE_HOME/starship/cache
+# fi
+
+# fzf
+if command -v fzf &> /dev/null; then
+    source <(fzf --zsh)
+
+    # REF: https://github.com/junegunn/fzf-git.sh/blob/main/fzf-git.sh
+    _fzf_git_check() {
+        git rev-parse HEAD > /dev/null 2>&1 && return
+
+        [[ -n $TMUX ]] && tmux display-message "Not in a git repository"
+        return 1
+    }
+
+    __fzf_git_status() {
+        if ! git rev-parse --git-dir > /dev/null 2>&1; then
+            echo "Not in a git repository"
+            return 1
+        fi
+        git status --porcelain | FZF_DEFAULT_OPTS=$FZF_CTRL_G_OPTS fzf
+    }
+    # REF: https://github.com/junegunn/fzf/blob/master/shell/key-bindings.zsh
+    fzf-git-status-widget() {
+      __fzf_git_status
+      local ret=$?
+      zle reset-prompt
+      return $ret
+    }
+    zle -N fzf-git-status-widget
+    bindkey '^G' fzf-git-status-widget
+fi
 
 # use p10k instead
 # git prompt

@@ -112,7 +112,7 @@ return {
 
                 -- Actions
                 bmap({
-                    "<leader>hp",
+                    "<leader>p",
                     gs.preview_hunk,
                     desc = "[Gitsigns] Preview hunk",
                 }, bufnr)

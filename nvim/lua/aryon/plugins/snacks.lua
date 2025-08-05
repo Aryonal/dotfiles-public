@@ -9,12 +9,14 @@ return {
             -- refer to the configuration section below
             bigfile = { enabled = false },
             dashboard = { enabled = false },
+            image = { enabled = false },
             indent = {
                 enabled = false,
                 animate = { enabled = false },
                 scope = { enabled = false },
             },
             input = { enabled = false },
+            lazygit = { enabled = false },
             notifier = { enabled = false },
             quickfile = { enabled = false },
             scroll = { enabled = false },

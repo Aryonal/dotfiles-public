@@ -1,7 +1,4 @@
----@diagnostic disable: unused-function, unused-local
-local config = require("aryon.config").vim
-
-local custom_aug = vim.api.nvim_create_augroup("aryon/autocmd.lua", { clear = true })
+local custom_aug = vim.api.nvim_create_augroup("aryon/autocmds.lua", { clear = true })
 
 if false then
     vim.api.nvim_create_autocmd({ "VimEnter" }, {
@@ -51,25 +48,9 @@ vim.api.nvim_create_autocmd({ "TermOpen" }, {
         vim.wo.number = false
         vim.wo.wrap = true
         vim.wo.statuscolumn = ""
-
-        -- FIXME: some issue with telescope planets, but not big deal
-        vim.cmd [[
-            startinsert
-        ]]
     end
 })
 
-vim.api.nvim_create_autocmd({ "TermClose" }, {
-    group = custom_aug,
-    desc = "Close window on terminal close",
-    callback = function(ev)
-        local cr = vim.api.nvim_replace_termcodes("<cr>", true, false, true)
-        vim.api.nvim_feedkeys(cr, "t", false)
-    end
-})
-
--- highlight yanked text for 200ms using the "Visual" highlight group
--- REF: https://github.com/craftzdog/dotfiles-public/blob/cf96bcffa1120d0116e9dcf34e8540b0f254ad41/.config/nvim/lua/craftzdog/highlights.lua#L8
 vim.api.nvim_create_autocmd({ "TextYankPost" }, {
     group = custom_aug,
     desc = "Highlight text after yank",

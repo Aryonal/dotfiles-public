@@ -1,11 +1,12 @@
 return {
     "RRethy/vim-illuminate", -- To highlight occurrences under cursor
     event = require("utils.lazy").events_presets.LazyFile,
+    enabled = true,
     init = function()
         vim.cmd([[
-            hi! link IlluminatedWordRead CursorLine
-            hi! link IlluminatedWordWrite CursorLine
-            hi! link IlluminatedWordText CursorLine
+            hi! link IlluminatedWordRead LspReferenceText
+            hi! link IlluminatedWordWrite LspReferenceText
+            hi! link IlluminatedWordText LspReferenceText
         ]])
         require("utils.vim").create_autocmd({
             events = { "ColorScheme" },
@@ -13,16 +14,15 @@ return {
             desc = "Link IlluminatedWord* to Visual",
             callback = function()
                 vim.cmd([[
-                    hi! link IlluminatedWordRead CursorLine
-                    hi! link IlluminatedWordWrite CursorLine
-                    hi! link IlluminatedWordText CursorLine
+                    hi! link IlluminatedWordRead LspReferenceText
+                    hi! link IlluminatedWordWrite LspReferenceText
+                    hi! link IlluminatedWordText LspReferenceText
                 ]])
             end,
         })
     end,
     config = function()
         local ft = require("aryon.config.ft")
-        local cfg = require("aryon.config")
 
         -- default configuration
         require("illuminate").configure({
@@ -33,7 +33,7 @@ return {
                 "regex",
             },
             -- delay: delay in milliseconds
-            delay = cfg.vim.default_delay_ms,
+            delay = 600,
             -- filetype_overrides: filetype specific overrides.
             -- The keys are strings to represent the filetype while the values are tables that
             -- supports the same keys passed to .configure except for filetypes_denylist and filetypes_allowlist

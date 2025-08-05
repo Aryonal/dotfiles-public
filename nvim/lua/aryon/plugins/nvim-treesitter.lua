@@ -1,100 +1,90 @@
 return {
     {
+        -- Dependencies
+        -- - tree-sitter cli
+        -- - cc
+        -- - node >= 23.0
         "nvim-treesitter/nvim-treesitter",
-        dependencies = {
-            "nvim-treesitter/nvim-treesitter-textobjects",
-        },
+        branch = "main",
         build = ":TSUpdate",
-        event = require("utils.lazy").events_presets.SetA,
+        lazy = false,
         config = function()
-            ---@diagnostic disable-next-line: missing-fields
-            require("nvim-treesitter.configs").setup({
-                ensure_installed = "all",
-                sync_install = false,
-                ignore_install = { "phpdoc" },
-                indent = { enable = true },
-                highlight = {
-                    -- `false` will disable the whole extension
-                    enable = true,
-                    -- NOTE: these are the names of the parsers and not the filetype. (for example if you want to
-                    -- disable highlighting for the `tex` filetype, you need to include `latex` in this list as this is
-                    -- the name of the parser)
-                    -- list of language that will be disabled
-                    -- disable = { "go", "lua" }, -- use lsp
-                    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-                    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-                    -- Using this option may slow down your editor, and you may see some duplicate highlights.
-                    -- Instead of true it can also be a list of languages
-                    additional_vim_regex_highlighting = false,
-                },
-                textobjects = {
-                    select = {
-                        enable = true,
-                        -- Automatically jump forward to textobj, similar to targets.vim
-                        lookahead = true,
-                        keymaps = {
-                            -- You can use the capture groups defined in textobjects.scm
-                            ["af"] = { query = "@function.outer", desc = "[TS] outer function" },
-                            ["if"] = { query = "@function.inner", desc = "[TS] inner function" },
-                            ["ab"] = { query = "@block.outer", desc = "[TS] outer block" },
-                            ["ib"] = { query = "@block.inner", desc = "[TS] inner block" },
-                            ["ac"] = { query = "@call.outer", desc = "[TS] outer call" },
-                            ["ic"] = { query = "@call.inner", desc = "[TS] inner call" },
-                        },
-                        include_surrounding_whitespace = false,
-                    },
-                    move = {
-                        enable = true,
-                        set_jumps = true, -- whether to set jumps in the jumplist
-                        goto_next_start = {
-                            ["]f"] = { query = "@function.outer", desc = "[TS] Next function start" },
-                            ["]r"] = { query = "@return.outer", desc = "[TS] Next return start" },
-                            ["]]"] = { query = "@fold", query_group = "folds", desc = "[TS] Next fold" },
-                        },
-                        goto_next_end = {
-                            ["]F"] = { query = "@function.inner", desc = "[TS] Next function end" },
-                            ["]R"] = { query = "@return.inner", desc = "[TS] Next return end" },
-                        },
-                        goto_previous_start = {
-                            ["[f"] = { query = "@function.outer", desc = "[TS] Previous function start" },
-                            ["[r"] = { query = "@return.outer", desc = "[TS] Previous return start" },
-                            ["[["] = { query = "@fold", query_group = "folds", desc = "[TS] Previous fold" },
-                        },
-                        goto_previous_end = {
-                            ["[F"] = { query = "@function.inner", desc = "[TS] Previous function end" },
-                            ["[R"] = { query = "@return.inner", desc = "[TS] Previous return end" },
-                        },
-                        -- Below will go to either the start or the end, whichever is closer.
-                        -- Use if you want more granular movements
-                        -- Make it even more gradual by adding multiple queries and regex.
-                        goto_next = {},
-                        goto_previous = {},
-                    },
-                },
+            local ensureInstalled = {
+                "all",
+            }
+            local alreadyInstalled = require("nvim-treesitter.config").get_installed()
+            local parsersToInstall = vim.iter(ensureInstalled)
+                :filter(function(parser) return not vim.tbl_contains(alreadyInstalled, parser) end)
+                :totable()
+            require("nvim-treesitter").install(parsersToInstall)
+
+            -- auto-start highlights & indentation
+            vim.api.nvim_create_autocmd("FileType", {
+                desc = "Enable treesitter highlighting",
+                callback = function(ctx)
+                    -- highlights
+                    local hasStarted = pcall(vim.treesitter.start) -- errors for filetypes with no parser
+
+                    -- indent
+                    local noIndent = {}
+                    if hasStarted and not vim.list_contains(noIndent, ctx.match) then
+                        vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+                    end
+                end,
             })
         end,
+    },
+    {
+        "nvim-treesitter/nvim-treesitter-textobjects",
+        branch = "main",
+        event = require("utils.lazy").events_presets.LazyFile,
+        config = function()
+            -- configuration
+            require("nvim-treesitter-textobjects").setup {
+                select = {
+                    lookahead = true,
+                    selection_modes = {
+                        ["@parameter.outer"] = "v", -- charwise
+                        ["@function.outer"] = "V",  -- linewise
+                        ["@class.outer"] = "<c-v>", -- blockwise
+                    },
+                    include_surrounding_whitespace = false,
+                },
+            }
+
+            -- keymaps
+            -- You can use the capture groups defined in `textobjects.scm`
+            vim.keymap.set({ "x", "o" }, "af", function()
+                require "nvim-treesitter-textobjects.select".select_textobject("@function.outer", "textobjects")
+            end)
+            vim.keymap.set({ "x", "o" }, "if", function()
+                require "nvim-treesitter-textobjects.select".select_textobject("@function.inner", "textobjects")
+            end)
+            vim.keymap.set({ "x", "o" }, "ac", function()
+                require "nvim-treesitter-textobjects.select".select_textobject("@class.outer", "textobjects")
+            end)
+            vim.keymap.set({ "x", "o" }, "ic", function()
+                require "nvim-treesitter-textobjects.select".select_textobject("@class.inner", "textobjects")
+            end)
+            -- You can also use captures from other query groups like `locals.scm`
+            vim.keymap.set({ "x", "o" }, "as", function()
+                require "nvim-treesitter-textobjects.select".select_textobject("@local.scope", "locals")
+            end)
+
+            -- move
+        end
     },
     {
         "nvim-treesitter/nvim-treesitter-context",
         enabled = true,
         event = require("utils.lazy").events_presets.LazyFile,
-        -- init = function()
-        --     vim.cmd([[
-        --         hi! link TreesitterContext CursorLine
-        --     ]])
-        --     require("utils.vim").create_autocmd({
-        --         events = { "ColorScheme" },
-        --         group_name = "aryon/nvim-treesitter.lua",
-        --         desc = "Link TreesitterContext to CursorLine",
-        --         callback = function()
-        --             vim.cmd([[
-        --                 hi! link TreesitterContext CursorLine
-        --             ]])
-        --         end,
-        --     })
-        -- end,
         config = function()
             require("treesitter-context").setup({
+                min_window_height = 32,
+                separator = "─",
+                -- Line used to calculate context.
+                -- Choices: 'cursor', 'topline'
+                mode = "topline",
                 -- max_lines = 0, -- How many lines the window should span. Values <= 0 mean no limit.
                 patterns = { -- Match patterns for TS nodes. These get wrapped to match at word boundaries.
                     -- For all filetypes
@@ -113,6 +103,50 @@ return {
                     },
                 },
             })
+        end,
+    },
+    {
+        "aaronik/treewalker.nvim",
+        event = require("utils.lazy").events_presets.LazyFile,
+
+        -- The following options are the defaults.
+        -- Treewalker aims for sane defaults, so these are each individually optional,
+        -- and setup() does not need to be called, so the whole opts block is optional as well.
+        opts = {
+            -- Whether to briefly highlight the node after jumping to it
+            highlight = true,
+
+            -- How long should above highlight last (in ms)
+            highlight_duration = 250,
+
+            -- The color of the above highlight. Must be a valid vim highlight group.
+            -- (see :h highlight-group for options)
+            highlight_group = "CursorLine",
+
+            -- Whether to create a visual selection after a movement to a node.
+            -- If true, highlight is disabled and a visual selection is made in
+            -- its place.
+            select = false,
+
+            -- Whether the plugin adds movements to the jumplist -- true | false | 'left'
+            --  true: All movements more than 1 line are added to the jumplist. This is the default,
+            --        and is meant to cover most use cases. It's modeled on how { and } natively add
+            --        to the jumplist.
+            --  false: Treewalker does not add to the jumplist at all
+            --  "left": Treewalker only adds :Treewalker Left to the jumplist. This is usually the most
+            --          likely one to be confusing, so it has its own mode.
+            jumplist = true,
+        },
+        config = function(_, opts)
+            require("treewalker").setup(opts)
+
+            -- keymaps
+            local map = vim.keymap.set
+            local opts = { noremap = true, silent = true }
+            map("n", "[{", "<cmd>Treewalker Left<cr>", opts)
+            map("n", "]}", "<cmd>Treewalker Right<cr>", opts)
+            map("n", "[[", "<cmd>Treewalker Up<cr>", opts)
+            map("n", "]]", "<cmd>Treewalker Down<cr>", opts)
         end,
     },
 }

@@ -18,10 +18,13 @@ local base = {
     "no-neck-pain",
     "null-ls-info",
     "toggleterm",
+    "AvanteSelectedFiles",
+    "AvanteInput",
+    "Avante",
+    "AvanteTodos",
 }
 
 local extended = vim.list_extend({
-    "neo-tree",
     "help",
     "",
 }, base)

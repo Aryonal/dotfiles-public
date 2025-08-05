@@ -8,6 +8,9 @@ require("utils.vim").disable_netrw()
 -- For lazy.nvim keys setup
 vim.g.mapleader = require("aryon.config").keymaps.leader
 
+-- For global config
+vim.g.aryon_config = require("aryon.config")
+
 -- load plugins first
 local plugins = require("utils.loader").load("aryon.plugins", true)
 

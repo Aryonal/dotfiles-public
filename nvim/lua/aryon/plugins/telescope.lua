@@ -1,9 +1,11 @@
+-- # vim: ft=lua
+
 local c = require("aryon.config").keymaps
 
 local previewer_maker_default_opts = {
-    disable_large_file = true,
-    large_file_threshold = 100000,
-    -- disable_binary = false,
+    -- disable_large_file = true,
+    -- large_file_threshold = 1000000,
+    disable_binary = false,
 }
 
 local previewer_factory_default_opts = previewer_maker_default_opts
@@ -33,9 +35,12 @@ local function with_theme(opts)
     return opts
 end
 
+vim.g.has_telescope = false
+
 return {
     {
         "nvim-telescope/telescope.nvim",
+        enabled = vim.g.has_telescope,
         dependencies = {
             { "nvim-lua/plenary.nvim" },
             { "tsakirist/telescope-lazy.nvim" },
@@ -51,6 +56,7 @@ return {
                 }
             },
             { "nvim-telescope/telescope-ui-select.nvim" },
+            { "nvim-telescope/telescope-frecency.nvim" },
         },
         event = "VeryLazy", -- for hijack vim.ui.select
         keys = {
@@ -85,11 +91,11 @@ return {
                 "<cmd>Telescope find_files<CR>",
                 desc = "[Telescope] Find files",
             },
-            -- {
-            --     ";d",
-            --     ":Telescope file_browser<CR>",
-            --     desc = "[Telescope] File browser",
-            -- },
+            {
+                ";F",
+                "<cmd>Telescope frecency theme=ivy<CR>",
+                desc = "[Telescope] Frecency",
+            },
             {
                 ";s",
                 "<cmd>Telescope grep_string<CR>",
@@ -108,19 +114,24 @@ return {
                 desc = "[Telescope] Live grep",
             },
             {
-                ";R",
+                ";/",
                 "<cmd>Telescope current_buffer_fuzzy_find<CR>",
                 desc = "[Telescope] Current buffer live grep",
             },
             {
                 ";q",
-                "<cmd>Telescope diagnostics<CR>",
-                desc = "[Telescope] Diagnostics",
+                "<cmd>Telescope quickfix<CR>",
+                desc = "[Telescope] Quickfix",
             },
             {
                 ";d",
                 "<cmd>Telescope diagnostics<CR>",
                 desc = "[Telescope] Diagnostics",
+            },
+            {
+                ";D",
+                "<cmd>Telescope diagnostics bufnr=0<CR>",
+                desc = "[Telescope] Diagnostics (buffer)",
             },
             {
                 ";m",
@@ -157,14 +168,21 @@ return {
                 c.lsp.goto_references,
                 "<cmd>Telescope lsp_references<CR>",
                 desc = "[LSP] References",
+                nowait = true,
             },
             {
-                c.lsp.goto_implementations,
+                c.lsp.goto_references_default,
+                "<cmd>Telescope lsp_references<CR>",
+                desc = "[LSP] References",
+                nowait = true,
+            },
+            {
+                c.lsp.goto_implementations_default,
                 "<cmd>Telescope lsp_implementations<CR>",
                 desc = "[LSP] Implementations",
             },
             {
-                c.lsp.goto_type_defenitions,
+                c.lsp.goto_type_defenitions_default,
                 "<cmd>Telescope lsp_type_definitions<CR>",
                 desc = "[LSP] Type definitions",
             },
@@ -172,37 +190,12 @@ return {
         cmd = {
             "Telescope",
         },
-        init = function()
-            vim.cmd([[
-            hi! link TelescopeBorder FloatBorder
-            hi! link TelescopePromptBorder FloatBorder
-            hi! link TelescopeResultsBorder FloatBorder
-            hi! link TelescopePreviewBorder FloatBorder
-
-            hi! link TelescopePromptCounter FloatNornal
-        ]])
-            require("utils.vim").create_autocmd({
-                events = { "ColorScheme" },
-                group_name = "aryon/telescope.lua",
-                desc = "Link Telescope Hihglights",
-                callback = function()
-                    vim.cmd([[
-                    hi! link TelescopeBorder FloatBorder
-                    hi! link TelescopePromptBorder FloatBorder
-                    hi! link TelescopeResultsBorder FloatBorder
-                    hi! link TelescopePreviewBorder FloatBorder
-
-                    hi! link TelescopePromptCounter FloatNornal
-                ]])
-                end,
-            })
-        end,
         config = function()
             local telescope = require("telescope")
             local actions = require("telescope.actions")
             local previewers = require("telescope.previewers")
             -- local trouble_ok, trouble = pcall(require, "trouble.providers.telescope")
-            local icons = require("share.icons")
+            local icons = require("assets.icons")
 
             local lga_actions = require("telescope-live-grep-args.actions")
 
@@ -211,9 +204,8 @@ return {
 
             telescope.setup({
                 defaults = {
-                    initial_mode = "normal",
+                    initial_mode = "insert",
                     buffer_previewer_maker = maker,
-                    -- border = false,
                     mappings = {
                         n = {
                             ["<C-e>"] = actions.preview_scrolling_down,
@@ -252,8 +244,8 @@ return {
                         "--line-number",
                         "--column",
                         "--smart-case",
-                        "--hidden",      -- add hidden file grep
-                        "--glob=!.git/", -- REF: https://github.com/BurntSushi/ripgrep/discussions/1578#discussioncomment-1723394
+                        "--hidden",
+                        "--glob=!.git/",
                         "--glob=!submodules/",
                         "--glob=!node_modules/",
                         "--glob=!vendor/",
@@ -262,13 +254,9 @@ return {
                     wrap_results = true,
                 },
                 pickers = {
-                    builtin = with_theme {
-                        initial_mode = "insert",
-                    },
-                    buffers = with_theme {
-                        initial_mode = "insert",
-                        show_all_buffers = true,
-                    },
+                    builtin = with_theme {},
+                    highlights = with_theme {},
+                    buffers = with_theme { show_all_buffers = true },
                     find_files = with_theme {
                         initial_mode = "insert",
                         find_command = { -- find_files respects gitignore
@@ -276,11 +264,18 @@ return {
                             "--hidden",
                             "--exclude=.git/",
                             "--type=f",
+                            "--follow",
+                            "--exclude=.git",
+                            "--exclude=node_modules",
+                            "--exclude=vendor",
+                            "--exclude=submodules",
+                            "--exclude=.cache",
+                            "--exclude=.idea",
+                            "--exclude=.vscode",
+                            "--exclude=.DS_Store",
                         },
                     },
-                    commands = with_theme {
-                        initial_mode = "insert",
-                    },
+                    commands = with_theme {},
                     git_status = with_theme {
                         git_icons = {
                             added = icons.git_add,
@@ -291,23 +286,29 @@ return {
                             unmerged = icons.git_unmerged,
                             untracked = icons.git_untracked,
                         },
+                        mappings = {
+                            n = {
+                                ["<C-e>"] = actions.preview_scrolling_down,
+                                ["<C-y>"] = actions.preview_scrolling_up,
+                            },
+                        },
                     },
-                    live_grep = with_theme {
-                        initial_mode = "insert",
-                    },
+                    live_grep = with_theme {},
                     grep_string = with_theme {
                         show_line = false, -- doesn't work
                         initial_mode = "insert",
                         wrap_results = false,
                     },
-                    help_tags = with_theme {
-                        initial_mode = "insert",
-                    },
+                    help_tags = with_theme {},
                     lsp_implementations = with_theme {
                         show_line = false,   -- show only filename and loc
                         jump_type = "never", -- never jump
                     },
                     lsp_definitions = with_theme {
+                        show_line = false,
+                        jump_type = "never",
+                    },
+                    lsp_type_definitions = with_theme {
                         show_line = false,
                         jump_type = "never",
                     },
@@ -322,13 +323,13 @@ return {
                     resume = with_theme {
                         initial_mode = "normal",
                     },
-                    current_buffer_fuzzy_find = with_theme {
-                        initial_mode = "insert",
-                    },
+                    current_buffer_fuzzy_find = with_theme {},
                     tags = with_theme {},
                     current_buffer_tags = with_theme {},
+                    quickfix = with_theme {},
                 },
                 extensions = {
+                    frecency = with_theme {},
                     live_grep_args = with_theme {
                         show_line = false,
                         initial_mode = "insert",
@@ -336,7 +337,7 @@ return {
                         mappings = {         -- extend mappings
                             i = {
                                 -- ["<C-k>"] = lga_actions.quote_prompt(),
-                                ["<C-i>"] = lga_actions.quote_prompt({ postfix = " --iglob " }),
+                                ["<C-i>"] = lga_actions.quote_prompt({ postfix = " -g " }),
                             },
                         },
                     },
@@ -376,11 +377,12 @@ return {
             telescope.load_extension("live_grep_args")
             telescope.load_extension("git_signs")
             telescope.load_extension("ui-select")
+            telescope.load_extension("frecency")
 
             local set_abbr_batch = require("utils.vim").batch_set_abbr
             local abbrs = {
                 {
-                    name = "tel",
+                    name = "ff",
                     cmd = "Telescope",
                     desc = "Telescope",
                 },

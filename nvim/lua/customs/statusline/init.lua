@@ -2,10 +2,17 @@
 --- This module provides utility functions for statusline components.
 --- Example usage:
 --- ```lua
---- vim.o.tabline = "%!v:lua.require('utils.statusline').config().tabline_string()"
+--- -- Setup with optional configuration overrides
+--- require("customs.statusline").setup({
+---   -- config overrides, e.g., icons = { git_branch = "" }
+--- })
+---
+--- -- If needed, manually assign statusline or tabline:
+--- vim.o.tabline = "%!v:lua.require('customs.statusline').tabline.string()"
+--- vim.o.statusline = "%!v:lua.require('customs.statusline').statusline.string(0)"
 --- ```
 
-local stat_utils = require("utils.statusline.utils")
+local stat_utils = require("customs.statusline.utils")
 local ctx_from_win_id = stat_utils.ctx_from_win_id
 
 local M = {
@@ -52,7 +59,9 @@ local M = {
     },
 }
 
-local comps = require("utils.statusline.components").setup(M.cfg)
+-- Load components module and initialize with default config
+local components = require("customs.statusline.components")
+local comps = components.setup(M.cfg)
 
 function M.statusline_string(win_id)
     local ctx = ctx_from_win_id(win_id)
@@ -137,7 +146,7 @@ function M.tabline_string()
 
     local cwd = comps.cwd()
     if M.cfg.hl.enabled and M.cfg.hl.tabline.enabled and M.cfg.hl.tabline.bold then
-        cwd = require("utils.statusline.utils").wrap_hl(
+        cwd = require("customs.statusline.utils").wrap_hl(
             cwd,
             M.cfg.hl.tabline.normal_hl .. "Bold",
             M.cfg.hl.tabline.normal_hl
@@ -156,7 +165,7 @@ end
 function M.ensure_statuslines(augroup)
     if M.cfg.statusline.global then
         vim.o.laststatus = 3
-        vim.o.statusline = "%!v:lua.require('utils.statusline').global_statusline_string()"
+        vim.o.statusline = "%!v:lua.require('customs.statusline').global_statusline_string()"
         return
     end
     -- REF: mini.statusline
@@ -172,8 +181,8 @@ function M.ensure_statuslines(augroup)
                 vim.wo[win_id].statusline = M.nop_statusline_string()
             else
                 vim.wo[win_id].statusline = (win_id == cur_win_id) and
-                    "%!v:lua.require('utils.statusline').statusline_string(" .. win_id .. ")"
-                    or "%!v:lua.require('utils.statusline').inactive_statusline_string(" .. win_id .. ")"
+                    "%!v:lua.require('customs.statusline').statusline_string(" .. win_id .. ")"
+                    or "%!v:lua.require('customs.statusline').inactive_statusline_string(" .. win_id .. ")"
             end
         end
     end)
@@ -188,7 +197,7 @@ function M.ensure_statuslines(augroup)
 end
 
 function M.ensure_tabline()
-    vim.o.tabline = "%!v:lua.require('utils.statusline').tabline_string()"
+    vim.o.tabline = "%!v:lua.require('customs.statusline').tabline_string()"
     vim.o.showtabline = 2
 end
 
@@ -206,8 +215,8 @@ function M.ensure_winbar(augroup)
                 vim.wo[win_id].winbar = nil
             else
                 vim.wo[win_id].winbar = (win_id == cur_win_id) and
-                    "%!v:lua.require('utils.statusline').winbar_string()"
-                    or "%!v:lua.require('utils.statusline').inactive_winbar_string()"
+                    "%!v:lua.require('customs.statusline').winbar_string()"
+                    or "%!v:lua.require('customs.statusline').inactive_winbar_string()"
             end
         end
     end)
@@ -222,15 +231,43 @@ function M.ensure_winbar(augroup)
 end
 
 function M.setup(cfg)
-    -- hl --
-    require("utils.statusline.hl").setup(M.cfg)
-
-    if cfg == nil then
-        return M
+    -- Merge user configuration into defaults
+    if cfg ~= nil then
+        M.cfg = vim.tbl_deep_extend("force", M.cfg, cfg)
     end
-    M.cfg = vim.tbl_deep_extend("force", M.cfg, cfg)
+
+    -- Setup highlights
+    require("customs.statusline.hl").setup(M.cfg)
+
+    -- Re-initialize components with updated config
+    comps = components.setup(M.cfg)
+
+    -- Ensure autocommands for statusline, tabline, and winbar
+    -- M.ensure_statuslines()
+    -- M.ensure_tabline()
+    -- M.ensure_winbar()
 
     return M
 end
+
+-- Structured module API
+-- Group related functionality under nested tables
+M.statusline = {
+    string = M.statusline_string,
+    inactive = M.inactive_statusline_string,
+    global = M.global_statusline_string,
+    nop = M.nop_statusline_string,
+    ensure = M.ensure_statuslines,
+}
+M.tabline = {
+    string = M.tabline_string,
+    ensure = M.ensure_tabline,
+}
+M.winbar = {
+    string = M.winbar_string,
+    inactive = M.inactive_winbar_string,
+    ensure = M.ensure_winbar,
+}
+M.config = M.cfg
 
 return M

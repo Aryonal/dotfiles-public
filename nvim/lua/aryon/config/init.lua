@@ -1,6 +1,6 @@
 -- print("[debug] Loading aryon.config")
----configs to be shared across components,
----do not put everything here
+-- somehow works like vim.g
+-- TODO: use vim.g to pass the config, and create a Config class for definition
 local cfg = {
     code_style = {
         MAX_LENGTH = 120, -- magic number
@@ -16,11 +16,6 @@ local cfg = {
     colors = {
         background = "dark",
     },
-    ctags = {
-        languages = {
-            "kotlin",
-        },
-    },
     lsp = {
         semantic_tokens = false,
         inlay_hints = false,
@@ -33,8 +28,9 @@ local cfg = {
     ui = {
         virtual_text_space = 1,
         float = {
-            border = "rounded", -- :help nvim_open_win()
-            highlights = "NormalFloat:NormalFloat,Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None",
+            border = "none", -- :help nvim_open_win()
+            lsp_hover_border = "rounded",
+            highlights = "NormalFloat:NormalFloat,Normal:Normal,FloatBorder:FloatBorder",
         },
         statusline = {
             global = false,
@@ -47,6 +43,13 @@ local cfg = {
         winbar = {
             excluded_ft = require("aryon.config.ft").winbar_exclude,
         },
+        blink = {
+            custom_ui = {
+                enabled = true,
+                border = "rounded",
+                winhighlight = "NormalFloat:NormalFloat,Normal:Normal,FloatBorder:FloatBorder",
+            }
+        }
     },
     ---only to avoid conflicts
     keymaps = {
@@ -67,9 +70,10 @@ local cfg = {
         lsp = {
             hover = "K",
             goto_definition = "gd",
-            goto_references = "gr",
-            goto_implementations = "gI",
-            goto_type_defenitions = "gD",
+            goto_references = "gR",
+            goto_references_default = "grr",
+            goto_implementations_default = "gri",
+            goto_type_defenitions_default = "grt",
             show_diagnostics_inline = "<leader>e",
             show_diagnostics_float_buffer = "<leader>q",
             format = "<leader>f",

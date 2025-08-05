@@ -5,15 +5,25 @@ local lazylock = vim.fn.stdpath("config") .. "/lazy-lock.json"
 
 -- Install lazy.nvim if not exists.
 local function init()
-    if not vim.uv.fs_stat(lazypath) then
-        vim.fn.system({
+    if not (vim.uv or vim.loop).fs_stat(lazypath) then
+        local lazyrepo = "https://github.com/folke/lazy.nvim.git"
+        local out = vim.fn.system({
             "git",
             "clone",
             "--filter=blob:none",
-            "https://github.com/folke/lazy.nvim.git",
-            "--branch=stable", -- latest stable release
-            lazypath,
+            "--branch=stable",
+            lazyrepo,
+            lazypath
         })
+        if vim.v.shell_error ~= 0 then
+            vim.api.nvim_echo({
+                { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
+                { out,                            "WarningMsg" },
+                { "\nPress any key to exit..." },
+            }, true, {})
+            vim.fn.getchar()
+            os.exit(1)
+        end
     end
     vim.opt.rtp:prepend(lazypath)
 end
@@ -99,17 +109,17 @@ local default_opts = {
 -- setup(plugins, opts)
 -- ```
 local function setup(plugins, opts)
-    opts = opts or default_opts
+    opts = vim.tbl_deep_extend("force", default_opts, opts or {})
     plugins = get_lazy_plugins(plugins)
     require("lazy").setup(plugins, opts)
 end
 
 return {
     events_presets = {
-        SetA = { "BufReadPre", "BufWritePre", "BufNewFile", "VeryLazy" },
         -- LazyFile
         LazyFile = { "BufReadPost", "BufWritePost", "BufNewFile" },
-        SetC = { "InsertEnter", "CmdlineEnter" },
+        LazyFileAndVeryLazy = { "BufReadPre", "BufWritePre", "BufNewFile", "VeryLazy" },
+        BeforeInsert = { "InsertEnter", "CmdlineEnter" },
     },
     default_opts = default_opts,
     setup = setup,

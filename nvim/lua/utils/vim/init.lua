@@ -52,20 +52,17 @@ function M.batch_set_abbr(abbrs)
     end
 end
 
+---@class Command
+---@field cmd string: command name
+---@field desc string: command description
+---@field abbr? string: command abbreviation
+---@field key? string: key mapping for the command
+---@field exec function: function to execute when the command is called
+---@field opts? table: options for the command, see `h: nvim_create_user_command`
+
 -- Set command. Usage: `set_cmd(cmd)`
---
--- Structure of `cmd`
--- ```
--- {
---    cmd = "CommandName",
---    desc = "",
---    abbr = "",
---    exec = function () { print("hello") },
---    opts = {},
--- }
--- ```
---
 -- See: `h: nvim_create_user_command`
+---@param cmd Command: command structure
 function M.set_cmd(cmd)
     local opts = cmd.opts or M.default_cmd_opts
     opts.desc = cmd.desc or opts.desc or ""
@@ -76,7 +73,11 @@ function M.set_cmd(cmd)
         M.set_abbr(cmd.abbr, cmd.cmd)
     end
 
-    ---TODO: add keymap setting
+    if cmd.key ~= nil then
+        vim.keymap.set("n", cmd.key, function()
+            cmd.exec()
+        end, { desc = cmd.desc or cmd.cmd, noremap = true, silent = true })
+    end
 end
 
 -- Replacing keymap.set. Usage: `set_keymap(bind)`
@@ -221,6 +222,7 @@ end
 -- Setup the LSP diagnostics icons.
 --
 -- `error_sign`, `warn_sign`, `hint_sign`, `info_sign` are strings of the icons. Example: `error_sign = ""`
+---@deprecated
 function M.setup_lsp_diagnostics_icons(error_sign, warn_sign, hint_sign, info_sign)
     if vim.fn.has("nvim-0.10.0") == 1 then
         -- no need for nvim >= 0.10.0
@@ -247,10 +249,10 @@ end
 -- `diagnostics_prefix` is a string of the prefix of the virtual text. Example: `diagnostics_prefix = "■"`
 -- `virtual_text_spaces` is a number of the spaces between the prefix and the message. Example: `virtual_text_spaces = 2`
 ---@param enabled boolean: enable virtual text
----@param diagnostics_prefix? string|function: prefix of the virtual text
+---@param diagnostics_prefix? string|function: prefix of the virtual text, "dynamic" means dynamic prefix based on severity
 ---@param virtual_text_spaces? number: spaces between the prefix and the message
 ---@param diag_signs table: table of the diagnostic signs
-function M.setup_lsp_diagnostics(enabled, diagnostics_prefix, virtual_text_spaces, diag_signs)
+function M.setup_lsp_diagnostics_virtual_text(enabled, diagnostics_prefix, virtual_text_spaces, diag_signs)
     if diagnostics_prefix == "dynamic" then
         if vim.fn.has("nvim-0.10.0") == 0 then
             diagnostics_prefix = nil
@@ -297,3 +299,4 @@ function M.setup_netrw()
 end
 
 return M
+

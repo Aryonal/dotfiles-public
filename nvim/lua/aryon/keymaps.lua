@@ -1,111 +1,118 @@
+vim.cmd([[
+" Keymaps
+let mapleader = ','
+
+" DON'Ts
+" nnoremap d "_d           " Do Not Cut
+" vnoremap d "_d           " Do Not Cut
+" nnoremap <C-h> <Left>    " Left
+" nnoremap <C-j> <Down>    " Down
+" nnoremap <C-k> <Up>      " Up
+" nnoremap <C-l> <Right>   " Right
+" tnoremap <Esc> <C-\><C-n> " [Term] Normal mode
+
+" Basic keymaps
+nnoremap + <C-a>
+nnoremap - <C-x>
+nnoremap <C-[> <Esc>
+inoremap <C-[> <Esc>
+nnoremap <C-e> 3<C-e>
+vnoremap <C-e> 3<C-e>
+nnoremap <C-w>+ 5<C-w>+
+nnoremap <C-w>- 5<C-w>-
+nnoremap <C-w>< 5<C-w><
+nnoremap <C-w>> 5<C-w>>
+nnoremap <C-y> 3<C-y>
+vnoremap <C-y> 3<C-y>
+nnoremap c "_c
+vnoremap c "_c
+nnoremap ge :tabp<CR>
+nnoremap gt :tabnext<CR>
+nnoremap te <C-w>s<C-w>T
+nnoremap tn :tabnew<CR>
+nnoremap tq :tabclose<CR>
+nnoremap tt :tabnew +term<CR>
+nnoremap <Space> za
+nnoremap <Esc> :nohl<CR>
+vnoremap <BS> <C-g>u<BS>
+nnoremap Y y$
+
+" Insert mode bindings
+" Readline
+inoremap <C-a> <C-o>^
+cnoremap <C-a> <C-o>^
+inoremap <C-b> <Left>
+cnoremap <C-b> <Left>
+inoremap <C-d> <C-o>x
+cnoremap <C-d> <C-o>x
+inoremap <C-e> <End>
+cnoremap <C-e> <End>
+inoremap <C-f> <Right>
+cnoremap <C-f> <Right>
+inoremap <C-k> <C-o>D
+inoremap <C-n> <Down>
+inoremap <C-p> <Up>
+" Others
+inoremap <Tab> <C-t>
+inoremap <S-Tab> <C-d>
+
+" Window navigation
+nnoremap <Down> <C-w>j
+nnoremap <C-j> <C-w>j
+nnoremap <Left> <C-w>h
+nnoremap <C-h> <C-w>h
+nnoremap <Right> <C-w>l
+nnoremap <C-l> <C-w>l
+nnoremap <Up> <C-w>k
+nnoremap <C-k> <C-w>k
+nnoremap <C-w>o <C-w>\|<C-w>_
+nnoremap <C-w>z <C-w>\|<C-w>_
+nnoremap <C-w>\ <C-w>v
+nnoremap <C-w>- <C-w>s
+
+" Typo corrections
+cnoremap Wa wa
+
+" Quickfix mappings
+nnoremap ]q :cnext<CR>
+nnoremap [Q :cfirst<CR>
+nnoremap [q :cNext<CR>
+nnoremap ]Q :clast<CR>
+
+" Tab number mappings
+nnoremap <leader>1 1gt
+nnoremap <leader>2 2gt
+nnoremap <leader>3 3gt
+nnoremap <leader>4 4gt
+nnoremap <leader>5 5gt
+nnoremap <leader>6 6gt
+nnoremap <leader>7 7gt
+nnoremap <leader>8 8gt
+nnoremap <leader>9 9gt
+
+" Window number mappings
+nnoremap <C-w>1 1<C-w>w
+nnoremap <C-w>2 2<C-w>w
+nnoremap <C-w>3 3<C-w>w
+nnoremap <C-w>4 4<C-w>w
+nnoremap <C-w>5 5<C-w>w
+nnoremap <C-w>6 6<C-w>w
+nnoremap <C-w>7 7<C-w>w
+nnoremap <C-w>8 8<C-w>w
+nnoremap <C-w>9 9<C-w>w
+]])
+
 -- print("[debug] Loading aryon.keymaps")
 local cfg = require("aryon.config").keymaps
-
--- local all_modes = { "n", "i", "v", "t", "c" }
-
-local fixed_bindings = {
-
-    -- DON'TS
-    -- { "d",         [["_d]],             desc = "Do Not Cut",           mode = { "n", "v" } },
-    -- { "<C-h>",     "<Left>",            desc = "Left",                 mode = all_modes },
-    -- { "<C-j>",     "<Down>",            desc = "Down",                 mode = all_modes },
-    -- { "<C-k>",     "<Up>",              desc = "Up",                   mode = all_modes },
-    -- { "<C-l>",     "<Right>",           desc = "Right",                mode = all_modes },
-    -- { [[<Esc>]],   [[<C-\><C-n>]],      desc = "[Term] Normal mode",   mode = "t" },
-
-    { "+",          "<C-a>",             desc = "Incr" },
-    { "-",          "<C-x>",             desc = "Decr" },
-    { "<C-[>",      "<Esc>",             desc = "Esc",                  mode = { "i", "n" } },
-    { "<C-e>",      "3<C-e>",            desc = "Scroll down (Faster)", mode = { "n", "v" } },
-    { "<C-w>+",     "5<C-w>+",           desc = "[Win] Height incr" },
-    { "<C-w>-",     "5<C-w>-",           desc = "[Win] Height decr" },
-    { "<C-w><",     "5<C-w><",           desc = "[Win] Width decr " },
-    { "<C-w>>",     "5<C-w>>",           desc = "[Win] Width incr " },
-    { "<C-y>",      "3<C-y>",            desc = "Scroll up (Faster)",   mode = { "n", "v" } },
-    { "c",          [["_c]],             desc = "Do Not Cut",           mode = { "n", "v" } },
-    { "ge",         "<cmd>tabp<CR>",     desc = "[Tab] Previous" },
-    { "gt",         "<cmd>tabnext<CR>",  desc = "[Tab] Next" },
-    { "te",         "<C-w>s<C-w>T",      desc = "[Tab] New from buffer" },
-    { "tn",         "<cmd>tabnew<CR>",   desc = "[Tab] New" },
-    { "tq",         "<cmd>tabclose<CR>", desc = "[Tab] Close" },
-    { "tt",         "<cmd>sp +term<CR>", desc = "[Term] New" },
-    { cfg.ed.fold,  "za",                desc = "Toggle folding" },
-
-    { "<Esc><Esc>", "<cmd>nohl<CR>",     desc = "No search highlight",  mode = { "n" } },
-    { "<Esc><Esc>", [[<C-\><C-n>]],      desc = "[Term] Normal mode",   mode = "t" },
-    { "<BS>",       "<C-g>u<BS>",        desc = "Keep insert",          mode = "v" },
-}
-
-local ins_bindings = {
-    { "<C-a>",   "<C-o>I", desc = "[I] Insert at beg",  mode = "i" },
-    { "<C-b>",   "<C-o>b", desc = "[I] Move backward",  mode = "i" },
-    { "<C-d>",   "<C-o>x", desc = "[I] Delete forward", mode = "i" },
-    { "<C-e>",   "<C-o>A", desc = "[I] Insert end",     mode = "i" },
-    { "<C-f>",   "<C-o>w", desc = "[I] Move forward",   mode = "i" },
-    { "<C-k>",   "<C-o>D", desc = "[I] Delete til end", mode = "i" },
-    -- non-emacs
-    { "<Tab>",   "<C-t>",  desc = "[I] >>",             mode = "i" },
-    { "<S-Tab>", "<C-d>",  desc = "[I] <<",             mode = "i" },
-}
-
-local win_bindings = {
-    { { "<Down>", "<C-j>" },  "<C-w>j",       desc = "[Win] Navigate down" },
-    { { "<Left>", "<C-h>" },  "<C-w>h",       desc = "[Win] Navigate left" },
-    { { "<Right>", "<C-l>" }, "<C-w>l",       desc = "[Win] Navigate right" },
-    { { "<Up>", "<C-k>" },    "<C-w>k",       desc = "[Win] Navigate up" },
-    { { "<C-w>o", "<C-w>z" }, "<C-w>|<C-w>_", desc = "[Win] Expand buffer" },
-    { [[<C-w>\]],             "<C-w>v",       desc = "[Win] vsplit" },
-    { [[<C-w>-]],             "<C-w>s",       desc = "[Win] split" },
-}
 
 local global_lsp_bindings = {
     { cfg.lsp.show_diagnostics_inline, vim.diagnostic.open_float, desc = "[LSP] Diagnostics (float)" },
     { cfg.motion.buffer.diag_next,     vim.diagnostic.goto_next,  desc = "[LSP] Next Diagnostic" },
     { cfg.motion.buffer.diag_prev,     vim.diagnostic.goto_prev,  desc = "[LSP] Previous Diagnostic" },
 }
-
-local typos = {
-    { "Wa", "wa", desc = "[Typo] wa", mode = "c" },
-}
-
-local others = {
-    { cfg.motion.quickfix.next,  "<cmd>cnext<CR>",  desc = "[QF] Next",  mode = "n" },
-    { cfg.motion.quickfix.first, "<cmd>cfirst<CR>", desc = "[QF] First", mode = "n" },
-    { cfg.motion.quickfix.prev,  "<cmd>cNext<CR>",  desc = "[QF] Prev",  mode = "n" },
-    { cfg.motion.quickfix.last,  "<cmd>clast<CR>",  desc = "[QF] Last",  mode = "n" },
-}
-
---<leader> + number to quick jump tab
-for i = 1, 9 do
-    table.insert(fixed_bindings, {
-        "<leader>" .. tostring(i),
-        tostring(i) .. "gt",
-        desc = "[Tab] Jump to tab" .. tostring(i),
-        mode = { "n" },
-    })
-end
-
---<C-w> + number to quick jump window
-for i = 1, 9 do
-    table.insert(fixed_bindings, {
-        "<C-w>" .. tostring(i),
-        tostring(i) .. "<C-w>w",
-        desc = "[Win] Jump to window" .. tostring(i),
-        mode = { "n" },
-    })
-end
-
 local bindings = {}
 
-vim.list_extend(bindings, fixed_bindings)
-vim.list_extend(bindings, ins_bindings)
-vim.list_extend(bindings, win_bindings)
 vim.list_extend(bindings, global_lsp_bindings)
-vim.list_extend(bindings, typos)
-vim.list_extend(bindings, others)
 
 local maps = require("utils.vim").batch_set_keymap
 maps(bindings)
-
--- vim.keymap.del("s", "p")
--- vim.keymap.del("s", "c")
