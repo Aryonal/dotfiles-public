@@ -1,22 +1,19 @@
 # Neovim configs & Lua playground
 
 ```
-Validated on neovim 0.10.4
+Validated on neovim 0.11.3
 ```
-
-## Keymaps
-
-use `WhichKey` to find all keymaps.
 
 ## Dependencies
 
 - ripgrep
 - fd
-- node (recommend `n` as version manager)
-- luarocks
+- tree-sitter-cli
+- fzf
+- node
+- (optional) luarocks
 - (optional) go
 - (optional) rust (cargo)
-- (optional) fzf
 - (optional) nerd-fonts
 - (optional) universal-ctags
 - (optional) ctags-lsp
