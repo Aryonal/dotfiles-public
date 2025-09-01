@@ -2,6 +2,8 @@
 # $ tail .zshrc
 # [ -f ${ZDOTDIR:-$HOME}/.zsh.zsh ] && source ${ZDOTDIR:-$HOME}/.zsh.zsh
 
+export LOADED_ZSH_ZSH=1
+
 set -o emacs # use C-X C-V to vi mode
 
 XDG_DATA_HOME=${XDG_DATA_HOME:-$HOME/.local/share}
@@ -14,6 +16,8 @@ XDG_STATE_HOME=${XDG_STATE_HOME:-$HOME/.local/state}
 # $ export ZDOTDIR=$HOME/.config/zsh
 [[ -f $XDG_STATE_HOME/zsh/history ]] || mkdir -p $XDG_STATE_HOME/zsh
 export HISTFILE="$XDG_STATE_HOME"/zsh/history
+export HISTSIZE=10000000
+export SAVEHIST=10000000
 
 # options
 # REF: https://github.com/rothgar/mastering-zsh
@@ -150,36 +154,6 @@ function upgrade-zsh-plugins() {
 #
 #     export STARSHIP_CACHE=$XDG_CACHE_HOME/starship/cache
 # fi
-
-# fzf
-if command -v fzf &> /dev/null; then
-    source <(fzf --zsh)
-
-    # REF: https://github.com/junegunn/fzf-git.sh/blob/main/fzf-git.sh
-    _fzf_git_check() {
-        git rev-parse HEAD > /dev/null 2>&1 && return
-
-        [[ -n $TMUX ]] && tmux display-message "Not in a git repository"
-        return 1
-    }
-
-    __fzf_git_status() {
-        if ! git rev-parse --git-dir > /dev/null 2>&1; then
-            echo "Not in a git repository"
-            return 1
-        fi
-        git status --porcelain | FZF_DEFAULT_OPTS=$FZF_CTRL_G_OPTS fzf
-    }
-    # REF: https://github.com/junegunn/fzf/blob/master/shell/key-bindings.zsh
-    fzf-git-status-widget() {
-      __fzf_git_status
-      local ret=$?
-      zle reset-prompt
-      return $ret
-    }
-    zle -N fzf-git-status-widget
-    bindkey '^G' fzf-git-status-widget
-fi
 
 # use p10k instead
 # git prompt

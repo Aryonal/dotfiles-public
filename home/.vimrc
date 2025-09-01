@@ -68,7 +68,7 @@ set wildignore+=*/node_modules/*,*/vendor/*
 " set cursorcolumn
 set cursorline
 set number
-set norelativenumber
+set relativenumber
 set wrap
 
 " Window split
@@ -121,8 +121,8 @@ nnoremap Y y$
 
 " Insert mode bindings
 " Readline
-inoremap <C-a> <C-o>^
-cnoremap <C-a> <C-o>^
+inoremap <C-a> <Home>
+cnoremap <C-a> <Home>
 inoremap <C-b> <Left>
 cnoremap <C-b> <Left>
 inoremap <C-d> <C-o>x
@@ -151,9 +151,6 @@ nnoremap <C-w>o <C-w>\|<C-w>_
 nnoremap <C-w>z <C-w>\|<C-w>_
 nnoremap <C-w>\ <C-w>v
 nnoremap <C-w>- <C-w>s
-
-" Typo corrections
-cnoremap Wa wa
 
 " Quickfix mappings
 nnoremap ]q :cnext<CR>

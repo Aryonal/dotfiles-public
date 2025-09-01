@@ -1,4 +1,4 @@
-local cfg = require("aryon.config")
+local cfg = require("config")
 
 return {
     on_attach = function(client, bufnr)
@@ -19,7 +19,7 @@ return {
         -- REF: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/extras/lang/go.lua#L23-L56
         gopls = {
             gofumpt = true,
-            ["local"] = cfg.code_style.go.org_prefix,
+            ["local"] = cfg.style.go.org_prefix,
             codelenses = {
                 gc_details = false,
                 generate = true,

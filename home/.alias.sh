@@ -5,6 +5,8 @@
 # e.g.
 # [ -f ${ZDOTDIR:-$HOME}/.alias.sh ] && source ${ZDOTDIR:-$HOME}/.alias.sh
 
+export LOADED_SHELL_ALIASES=1
+
 # user local binaries
 export PATH=$PATH:$HOME/.local/bin:$HOME/.bin
 
@@ -47,7 +49,8 @@ alias :w="echo saved!"
 alias :wa="echo saved!"
 alias :wq="echo saved!"
 alias ..='cd ..'
-alias ....='cd ../..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
 
 # Search through your command history and print the top 10 commands
 alias history-stat='history 0 | awk ''{print $2}'' | sort | uniq -c | sort -n -r | head'
@@ -208,7 +211,7 @@ if command -v nvim &>/dev/null; then
     # flaky?
     alias vs="nvim +LoadSession"
     alias vd="nvim +'DiffviewOpen --imply-local'"
-    alias vdo="nvim +'DiffviewOpen origin/HEAD --imply-local'"
+    alias vdo="nvim +'DiffviewOpen origin/HEAD...HEAD --imply-local'"
 fi
 
 # n
@@ -216,55 +219,6 @@ if command -v n &> /dev/null; then
     export N_PREFIX="${XDG_DATA_HOME:-$HOME/.local/share}/n"
     export PATH=$N_PREFIX/bin:$PATH
 fi
-
-# fzf
-# Open in tmux popup if on tmux, otherwise use --height mode
-export FZF_CTRL_T_COMMAND='fd
-    --hidden
-    --follow
-    --exclude=.git
-    --exclude=.cache
-    --exclude=node_modules
-    --exclude=vendor
-    --exclude=__pycache__
-    --exclude=*.egg-info
-    --exclude=*.egg
-    --exclude=*.pyc
-    --exclude=*.pyo
-    --exclude=*.swp
-    --exclude=*.swo'
-export FZF_CTRL_T_OPTS="
-    --height 50%
-    --layout reverse
-    --border top
-    --preview
-        'if [[ -f {} ]]; then
-            if [[ \$(file --mime {}) =~ binary ]]; then
-                echo {} is a binary file
-            else
-                bat --style=numbers --color=always --line-range :500 {} 2>/dev/null || cat {}
-            fi
-        elif [[ -d {} ]]; then
-            ls -la --color=always {}
-        fi'
-    --preview-window=right:50%
-    --bind 'ctrl-a:select-all+accept'
-    --bind 'ctrl-o:execute($EDITOR {})'
-    --bind 'ctrl-/:toggle-preview'
-    --bind 'ctrl-y:preview-half-page-up'
-    --bind 'ctrl-e:preview-half-page-down'
-    --ansi"
-export FZF_CTRL_R_OPTS="$FZF_CTRL_T_OPTS --preview-window=hidden"
-export FZF_CTRL_G_OPTS="$FZF_CTRL_T_OPTS
-    --preview '
-        git diff HEAD --color=always {-1} 2>/dev/null ||
-            git diff HEAD --color=always --cached {-1} 2>/dev/null ||
-            bat --style=numbers --color=always --line-range :500 {-1} 2>/dev/null ||
-            cat {-1} 2>/dev/null ||
-            echo Unable to preview file: {-1}'
-    --bind 'ctrl-o:execute($EDITOR {-1})'
-    --bind 'enter:execute($EDITOR {-1})'
-"
 
 # cargo
 [[ -f $HOME/.cargo/env ]] && . "$HOME/.cargo/env"

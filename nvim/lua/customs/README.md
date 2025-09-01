@@ -1,3 +1,0 @@
-# Custom
-
-DIY plugins, playground

@@ -17,3 +17,7 @@ Validated on neovim 0.11.3
 - (optional) nerd-fonts
 - (optional) universal-ctags
 - (optional) ctags-lsp
+- (optional) viu
+- (optional) chafa
+- (optional) ueberzugpp
+- (optional) imagemagick
