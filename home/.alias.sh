@@ -143,7 +143,7 @@ then
     function t () {
         # helper with -h or --help
         if [[ $1 == "-h" || $1 == "--help" ]]; then
-            echo "Usage: tm [session_name]"
+            echo "Usage: t [session_name]"
             echo ""
             echo "<session_name>\tName of the new session. If not provided, an existing session will be attached."
             echo "\t\tIf a directory can be found with the name using z, new session will be in that directory."
@@ -203,6 +203,13 @@ command -v git &>/dev/null && alias g="git"
 # nvim & vim
 # set nvim as default editor
 if command -v nvim &>/dev/null; then
+    function nvim() {
+        if [ -n "$NVIM" ]; then
+            echo "no nesting nvim"
+        else
+            command nvim "$@"
+        fi
+    }
     export KUBE_EDITOR="nvim"
     export EDITOR="nvim"
     alias vi=nvim
@@ -223,4 +230,7 @@ fi
 # cargo
 [[ -f $HOME/.cargo/env ]] && . "$HOME/.cargo/env"
 
-alias rm="echo 'use trash instead'"
+function rm() {
+    echo "rm is disabled. Use 'trash' command instead."
+    return 1
+}

@@ -1,21 +1,11 @@
-if vim.g.neovide then
-    vim.o.guifont = "JetBrainsMono NFM:h12"
-    vim.g.neovide_scroll_animation_length = 0.1
-    vim.opt.linespace = 2
-end
+vim.g.mapleader = ","
 
--- disable netrw
-require("x.helper.vim").disable_netrw()
+-- vim.g.debug = true
 
--- For lazy.nvim keys setup
-vim.g.mapleader = require("config").keymaps.leader
+if vim.g.debug then print("[debug] sourcing init.lua") end
 
-require("x.helper.lazy").init()
+require("load-config")
+require("mini-deps-bootstrap")
+-- require("rocks-bootstrap")
 
--- load plugins first
-local lazy_plugins = require("x.helper.loader").load("lua/plugin/**/*.lua")
-local opts = require("x.helper.lazy").default_opts
-opts.ui.border = require("config").ui.float.border
-require("x.helper.lazy").setup(lazy_plugins, opts)
-
-require("x.helper.loader").load("lua/aryon/**/*.lua")
+require("load-exrc")

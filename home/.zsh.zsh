@@ -83,39 +83,45 @@ function install-zsh-plugins() {
     if [[ ! -d $XDG_DATA_HOME/zsh/zsh-completions ]]; then
         echo "Installing zsh-completions..."
         git clone --depth=1 https://github.com/zsh-users/zsh-completions $XDG_DATA_HOME/zsh/zsh-completions
+        echo
     else
         echo "zsh-completions already installed"
     fi
 
     if [[ ! -d $XDG_DATA_HOME/zsh/zsh-z ]]; then
-        echo "\n\nInstalling zsh-z..."
+        echo "Installing zsh-z..."
         git clone --depth=1 https://github.com/agkozak/zsh-z $XDG_DATA_HOME/zsh/zsh-z
+        echo
     else
         echo "zsh-z already installed"
     fi
 
     if [[ ! -d $XDG_DATA_HOME/zsh/powerlevel10k ]]; then
-        echo "\n\nInstalling powerlevel10k..."
+        echo "Installing powerlevel10k..."
         git clone --depth=1 https://github.com/romkatv/powerlevel10k.git $XDG_DATA_HOME/zsh/powerlevel10k
+        echo
     else
         echo "powerlevel10k already installed"
     fi
 
     if [[ ! -d $XDG_DATA_HOME/zsh/zsh-autosuggestions ]]; then
-        echo "\n\nInstalling zsh-autosuggestions..."
+        echo "Installing zsh-autosuggestions..."
         git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions $XDG_DATA_HOME/zsh/zsh-autosuggestions
+        echo
     else
         echo "zsh-autosuggestions already installed"
     fi
 
     if [[ ! -d $XDG_DATA_HOME/zsh/zsh-syntax-highlighting ]]; then
-        echo "\n\nInstalling zsh-syntax-highlighting..."
+        echo "Installing zsh-syntax-highlighting..."
         git clone --depth=1 https://github.com/zsh-users/zsh-syntax-highlighting $XDG_DATA_HOME/zsh/zsh-syntax-highlighting
+        echo
     else
         echo "zsh-syntax-highlighting already installed"
     fi
 
-    echo "\nDone"
+    echo
+    echo "Done"
 }
 
 
@@ -123,29 +129,34 @@ function upgrade-zsh-plugins() {
     if [[ -d $XDG_DATA_HOME/zsh/zsh-completions ]]; then
         echo "Upgrading zsh-completions..."
         (cd $XDG_DATA_HOME/zsh/zsh-completions && git pull)
+        echo
     fi
 
     if [[ -d $XDG_DATA_HOME/zsh/powerlevel10k ]]; then
-        echo "\n\nUpgrading powerlevel10k..."
+        echo "Upgrading powerlevel10k..."
         (cd $XDG_DATA_HOME/zsh/powerlevel10k && git pull)
+        echo
     fi
 
     if [[ -d $XDG_DATA_HOME/zsh/zsh-autosuggestions ]]; then
-        echo "\n\nUpgrading zsh-autosuggestions..."
+        echo "Upgrading zsh-autosuggestions..."
         (cd $XDG_DATA_HOME/zsh/zsh-autosuggestions && git pull)
+        echo
     fi
 
     if [[ -d $XDG_DATA_HOME/zsh/zsh-syntax-highlighting ]]; then
-        echo "\n\nUpgrading zsh-syntax-highlighting..."
+        echo "Upgrading zsh-syntax-highlighting..."
         (cd $XDG_DATA_HOME/zsh/zsh-syntax-highlighting && git pull)
+        echo
     fi
 
     if [[ -d $XDG_DATA_HOME/zsh/zsh-z ]]; then
-        echo "\n\nUpgrading zsh-z..."
+        echo "Upgrading zsh-z..."
         (cd $XDG_DATA_HOME/zsh/zsh-z && git pull)
+        echo
     fi
 
-    echo "\nDone"
+    echo "Done"
 }
 
 # starship prompt

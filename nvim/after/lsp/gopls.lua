@@ -1,9 +1,7 @@
-local cfg = require("config")
-
 return {
     on_attach = function(client, bufnr)
         -- gopls semantic tokens support
-        if not cfg.lsp.semantic_tokens then
+        if not Config or not Config.lsp_semantic_tokens then
             return
         end
         if not client.server_capabilities.semanticTokensProvider then
@@ -19,7 +17,6 @@ return {
         -- REF: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/extras/lang/go.lua#L23-L56
         gopls = {
             gofumpt = true,
-            ["local"] = cfg.style.go.org_prefix,
             codelenses = {
                 gc_details = false,
                 generate = true,

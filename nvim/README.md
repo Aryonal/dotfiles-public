@@ -1,7 +1,7 @@
-# Neovim configs & Lua playground
+# Neovim
 
 ```
-Validated on neovim 0.11.3
+neovim 0.11.4
 ```
 
 ## Dependencies

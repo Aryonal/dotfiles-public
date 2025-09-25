@@ -5,10 +5,12 @@
     br = branch
     c = commit
     ck = checkout
+    ca = commit -a
     cm = commit -m
-    df = diff --ext-diff
-    dfo = diff origin/HEAD --ext-diff
-    dft = difftool
+    cma = commit -m -a
+    d = diff --ext-diff
+    do = diff origin/HEAD --ext-diff
+    dt = difftool
     last = show HEAD --ext-diff
     lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
     recent = log -p --ext-diff

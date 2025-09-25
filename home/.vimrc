@@ -55,9 +55,8 @@ set breakindent
 " set listchars+=eol:↴
 " set listchars+=tab:»·
 
-set colorcolumn=80
+set colorcolumn=100
 set termguicolors
-set bg=dark " Assuming bg is dark
 
 set equalalways
 
@@ -68,7 +67,7 @@ set wildignore+=*/node_modules/*,*/vendor/*
 " set cursorcolumn
 set cursorline
 set number
-set relativenumber
+"set relativenumber
 set wrap
 
 " Window split
@@ -94,8 +93,8 @@ let mapleader = ','
 " tnoremap <Esc> <C-\><C-n> " [Term] Normal mode
 
 " Basic keymaps
-nnoremap + <C-a>
-nnoremap - <C-x>
+"nnoremap + <C-a>
+"nnoremap - <C-x>
 nnoremap <C-[> <Esc>
 inoremap <C-[> <Esc>
 nnoremap <C-e> 3<C-e>
@@ -110,10 +109,6 @@ nnoremap c "_c
 vnoremap c "_c
 nnoremap ge :tabp<CR>
 nnoremap gt :tabnext<CR>
-nnoremap te <C-w>s<C-w>T
-nnoremap tn :tabnew<CR>
-nnoremap tq :tabclose<CR>
-nnoremap tt :tabnew +term<CR>
 nnoremap <Space> za
 nnoremap <Esc> :nohl<CR>
 vnoremap <BS> <C-g>u<BS>
@@ -135,8 +130,8 @@ inoremap <C-k> <C-o>D
 inoremap <C-n> <Down>
 inoremap <C-p> <Up>
 " Others
-inoremap <Tab> <C-t>
-inoremap <S-Tab> <C-d>
+"inoremap <Tab> <C-t>
+"inoremap <S-Tab> <C-d>
 
 " Window navigation
 nnoremap <Down> <C-w>j
@@ -155,8 +150,12 @@ nnoremap <C-w>- <C-w>s
 " Quickfix mappings
 nnoremap ]q :cnext<CR>
 nnoremap [Q :cfirst<CR>
-nnoremap [q :cNext<CR>
+nnoremap [q :cprev<CR>
 nnoremap ]Q :clast<CR>
+nnoremap ]l :lnext<CR>
+nnoremap [L :lfirst<CR>
+nnoremap [l :lprev<CR>
+nnoremap ]L :llast<CR>
 
 " Tab number mappings
 nnoremap <leader>1 1gt
@@ -180,14 +179,44 @@ nnoremap <C-w>7 7<C-w>w
 nnoremap <C-w>8 8<C-w>w
 nnoremap <C-w>9 9<C-w>w
 
+command WQ wq
+command Wq wq
+command W w
+command Q q
+command Qa qa
+
+nnoremap <leader>tq :tabclose<CR>
+nnoremap <leader>te :tabe %<CR>
+nnoremap <leader>tn :tabnew<CR>
+nnoremap <leader>tt :tabnew +term<CR>
+
+nnoremap - :e %:h<CR>
+nnoremap _ :e .<CR>
+nnoremap <leader>R :%s/\<<C-r><C-w>\>//gc<left><left><left>
+
+cnoreabbrev <expr> tq (getcmdtype() ==# ':' && getcmdline() ==# 'tq') ? 'tabclose' : 'tq'
+cnoreabbrev <expr> te (getcmdtype() ==# ':' && getcmdline() ==# 'te') ? 'tabe %' : 'te'
+cnoreabbrev <expr> tn (getcmdtype() ==# ':' && getcmdline() ==# 'tn') ? 'tabnew' : 'tn'
+cnoreabbrev <expr> tt (getcmdtype() ==# ':' && getcmdline() ==# 'tt') ? 'tabnew +term' : 'tt'
+
+nnoremap <leader>er :e .<CR>
+nnoremap <leader>ep :e %:~:.:h<CR>
+
+cnoreabbrev <expr> er (getcmdtype() ==# ':' && getcmdline() ==# 'er') ? 'e .' : 'er'
+cnoreabbrev <expr> ep (getcmdtype() ==# ':' && getcmdline() ==# 'ep') ? 'e %:~:.:h' : 'ep'
+
 " tree
 let g:netrw_liststyle = 3
 
 " Appearance
 set background=dark
-colorscheme industry
+colorscheme habamax " good themes: dessert,habamax,lunaperche, sorbet
+                    " light themes: morning, shine
 
 syntax on
+
+set laststatus=2
+set showtabline=2
 
 " clipboard
 set clipboard+=unnamedplus
